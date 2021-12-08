@@ -136,6 +136,14 @@ if __name__ == "__main__":
             "dev": [
                 "pre-commit",
                 "pytest-cov",
+                "bumpversion",
+            ]
+            + [
+                r.strip()
+                for r in (Path("docs") / "requirements.txt")
+                .read_text("utf-8")
+                .splitlines()
+                if not r.startswith("-r")
             ],
         },
         platforms=["Linux", "MacOSX"],
