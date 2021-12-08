@@ -26,6 +26,8 @@ install:
 	python -m pip install .
 
 install-dev:
+	git fetch
+	git checkout dev
 	python -m pip install -e '.[dev]'
 	pre-commit install
 
