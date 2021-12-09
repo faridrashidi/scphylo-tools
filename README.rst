@@ -44,8 +44,8 @@ scPhylo-tools: a toolkit for single-cell tumor phylogenetic analysis
     :target: https://scphylo-tools.readthedocs.io
     :alt: Docs Status
 
-.. |Pre-commit| image:: https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white&style=flat-square
-    :target: https://github.com/pre-commit/pre-commit
+.. |Pre-commit| image:: https://img.shields.io/badge/pre--commit.ci-passing-brightgreen?logo=pre-commit&logoColor=white&style=flat-square
+    :target: https://results.pre-commit.ci/latest/github/faridrashidi/scphylo-tools/master
     :alt: Pre-commit
 
 .. |Code Style| image:: https://img.shields.io/badge/code%20style-black-000000.svg?logo=visualstudiocode&logoColor=FFFFFF&style=flat-square
