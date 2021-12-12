@@ -24,14 +24,6 @@ import scphylo as scp
     type=float,
 )
 @click.option(
-    "--method",
-    "-m",
-    default="both",
-    type=click.Choice(["both", "fn"]),
-    show_default=True,
-    help="Method of the HUNTRESS",
-)
-@click.option(
     "--n_threads",
     "-p",
     default=1,
@@ -39,10 +31,10 @@ import scphylo as scp
     show_default=True,
     help="Number of threads.",
 )
-def huntress(genotype_file, alpha, beta, method, n_threads):
+def huntress(genotype_file, alpha, beta, n_threads):
     """HUNTRESS.
 
-    scphylo huntress input.SC 0.0001 0.1 -m both -p 8
+    scphylo huntress input.SC 0.0001 0.1 -p 8
     """
     outfile = os.path.splitext(genotype_file)[0]
 
@@ -50,9 +42,7 @@ def huntress(genotype_file, alpha, beta, method, n_threads):
     scp.settings.logfile = f"{outfile}.huntress.log"
 
     df_in = scp.io.read(genotype_file)
-    df_out = scp.tl.huntress(
-        df_in, alpha=alpha, beta=beta, kind=method, n_threads=n_threads
-    )
+    df_out = scp.tl.huntress(df_in, alpha=alpha, beta=beta, n_threads=n_threads)
     scp.io.write(df_out, f"{outfile}.huntress.CFMatrix")
 
     return None

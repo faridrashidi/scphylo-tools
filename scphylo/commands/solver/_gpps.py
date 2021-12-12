@@ -95,6 +95,8 @@ def gpps(
     scp.settings.logfile = f"{outfile}.gpps.log"
 
     df_in = scp.io.read(genotype_file)
+    if alpha == 0:
+        alpha = 0.000000000001
     df_out = scp.tl.gpps(
         df_in,
         alpha=alpha,

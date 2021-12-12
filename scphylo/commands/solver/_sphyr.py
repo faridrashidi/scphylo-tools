@@ -53,6 +53,8 @@ def sphyr(genotype_file, alpha, beta, n_restarts, n_threads):
     scp.settings.logfile = f"{outfile}.sphyr.log"
 
     df_in = scp.io.read(genotype_file)
+    if alpha == 0:
+        alpha = 0.000000000001
     df_out = scp.tl.sphyr(
         df_in, alpha=alpha, beta=beta, n_restarts=n_restarts, n_threads=n_threads
     )
