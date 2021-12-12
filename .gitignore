@@ -149,4 +149,5 @@ Thumbs.db
 # GUROBI
 gurobi.log
 
-# Temporary
+# Trisicell specific
+scphylo.*
