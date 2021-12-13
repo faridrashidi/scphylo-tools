@@ -1,0 +1,15 @@
+furo
+ipython
+memory_profiler
+nbsphinx
+nbsphinx-link
+pydata_sphinx_theme
+pyenchant
+pypandoc
+sphinx
+sphinx-autodoc-typehints
+sphinx_copybutton
+sphinx_gallery
+sphinx_rtd_theme
+sphinxcontrib-bibtex
+typing_extensions
