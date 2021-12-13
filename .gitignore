@@ -150,5 +150,5 @@ Thumbs.db
 # GUROBI
 gurobi.log
 
-# Trisicell specific
+# Repo specific
 scphylo.*
