@@ -13,6 +13,7 @@ from scphylo.commands.solver._onconem import onconem
 from scphylo.commands.solver._phiscs import phiscsb, phiscsi
 from scphylo.commands.solver._scistree import scistree
 from scphylo.commands.solver._scite import scite
+from scphylo.commands.solver._siclonefit import siclonefit
 from scphylo.commands.solver._sphyr import sphyr
 
 
@@ -55,3 +56,4 @@ cli_solver.add_command(grmt)
 cli_solver.add_command(sphyr)
 cli_solver.add_command(gpps)
 cli_solver.add_command(onconem)
+cli_solver.add_command(siclonefit)

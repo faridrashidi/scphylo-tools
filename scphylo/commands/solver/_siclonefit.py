@@ -7,7 +7,7 @@ from joblib import Parallel, delayed
 import scphylo as scp
 
 
-@click.command(short_help="Run SCITE.")
+@click.command(short_help="Run SiCloneFit.")
 @click.argument(
     "genotype_file",
     required=True,
@@ -28,7 +28,7 @@ import scphylo as scp
 @click.option(
     "--n_iters",
     "-l",
-    default=1000000,
+    default=600,
     type=int,
     show_default=True,
     help="Number of iterations.",
@@ -66,14 +66,15 @@ import scphylo as scp
     show_default=True,
     help="Smooth rate for the experiment part.",
 )
-def scite(
+def siclonefit(
     genotype_file, alpha, beta, n_iters, n_restarts, experiment, time_limit, smooth_rate
 ):
-    """SCITE.
+    """SiCloneFit.
 
-    Tree inference for single-cell data :cite:`SCITE`.
+    Bayesian inference of population structure, genotype, and phylogeny of tumor clones
+    from single-cell genome sequencing data :cite:`SiCloneFit`.
 
-    scphylo scite input.SC 0.0001 0.1 -l 1000000 -r 3 -e -t 86400 -s 2
+    scphylo siclonefit input.SC 0.0001 0.1 -l 1000000 -r 3 -e -t 86400 -s 2
     """
     outfile = os.path.splitext(genotype_file)[0]
 
@@ -81,29 +82,29 @@ def scite(
 
     df_in = scp.io.read(genotype_file)
     if not experiment:
-        scp.settings.logfile = f"{outfile}.scite.log"
-        df_out = scp.tl.scite(
+        scp.settings.logfile = f"{outfile}.siclonefit.log"
+        df_out = scp.tl.siclonefit(
             df_in,
             alpha=alpha,
             beta=beta,
             n_iters=n_iters,
             n_restarts=n_restarts,
         )
-        scp.io.write(df_out, f"{outfile}.scite.CFMatrix")
+        scp.io.write(df_out, f"{outfile}.siclonefit.CFMatrix")
     else:
-        scp.settings.logfile = f"{outfile}.scite.log"
-        df_out, running_time, _, _ = scp.tl.scite(
+        scp.settings.logfile = f"{outfile}.siclonefit.log"
+        df_out, running_time, _, _ = scp.tl.siclonefit(
             df_in,
             alpha=alpha,
             beta=beta,
-            n_iters=30000,
+            n_iters=500,
             n_restarts=1,
             experiment=True,
         )
-        n_iters = int(smooth_rate * 30000 * time_limit / running_time)
+        n_iters = int(smooth_rate * 500 * time_limit / running_time)
 
         def run(i):
-            do, r, s, b = scp.tl.scite(
+            do, r, cf, nll = scp.tl.siclonefit(
                 df_in,
                 alpha=alpha,
                 beta=beta,
@@ -111,23 +112,29 @@ def scite(
                 n_restarts=1,
                 experiment=True,
             )
-            return do, r, s, b
+            return do, r, cf, nll
 
         output = Parallel(n_jobs=n_restarts)(delayed(run)(i) for i in range(n_restarts))
 
-        scores = [x[2] for x in output]
-        betas = [x[3] for x in output]
-        best_i = np.argmax(scores)
+        scores = [x[3] for x in output]
+        iscfs = [x[2] for x in output]
+        best_i = np.Inf
+        best = np.Inf
+        for i, items in enumerate(zip(scores, iscfs)):
+            score, iscf = items
+            if iscf and score < best:
+                best_i = i
+                best = score
         df_out = output[best_i][0]
 
         scp.ul.stat(df_in, df_out, alpha, beta, output[best_i][1])
-        scp.logg.info(f"score: {output[best_i][2]}")
-        scp.logg.info(f"beta: {output[best_i][3]}")
+        scp.logg.info(f"score: {output[best_i][3]}")
+        scp.logg.info(f"iscf: {output[best_i][2]}")
         scp.logg.info(f"n_iters: {n_iters}")
         scp.logg.info(f"scores: {','.join(list(map(str, scores)))}")
-        scp.logg.info(f"betas: {','.join(list(map(str, betas)))}")
+        scp.logg.info(f"iscfs: {','.join(list(map(str, iscfs)))}")
         scp.logg.info(f"picked: {best_i}")
 
-        scp.io.write(df_out, f"{outfile}.scite.CFMatrix")
+        scp.io.write(df_out, f"{outfile}.siclonefit.CFMatrix")
 
     return None

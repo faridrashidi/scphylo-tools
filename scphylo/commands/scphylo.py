@@ -4,6 +4,7 @@ import click
 
 import scphylo as scp
 from scphylo.commands.caller import cli_caller
+from scphylo.commands.methyl import cli_methyl
 from scphylo.commands.solver import cli_solver
 from scphylo.commands.utils import cli_utils
 
@@ -42,3 +43,4 @@ def cli():
 cli.add_command(cli_solver)
 cli.add_command(cli_caller)
 cli.add_command(cli_utils)
+cli.add_command(cli_methyl)
