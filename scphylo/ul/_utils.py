@@ -74,7 +74,7 @@ def log_flip(df_in, df_out):
     scp.logg.info(f"rates -- NA: {na_rate:.3f}")
 
 
-def calc_score_tree(df_in, df_out, alpha, beta):
+def calc_nll_matrix(df_in, df_out, alpha, beta):
     if alpha == 0 or beta == 0:
         return None
     columns = np.intersect1d(df_in.columns, df_out.columns)
@@ -99,15 +99,15 @@ def calc_score_tree(df_in, df_out, alpha, beta):
             objective -= numZeros * np.log(1 - alpha) + numOnes * (
                 np.log(alpha) + np.log((1 - beta) / alpha)
             )
-    scp.logg.info(f"score -- NLL: {-objective}")
-    return None
+    return -objective
 
 
 def stat(df_in, df_out, alpha, beta, running_time):
     log_input(df_in)
     log_output(df_out, running_time)
     log_flip(df_in, df_out)
-    calc_score_tree(df_in, df_out, alpha, beta)
+    nll = calc_nll_matrix(df_in, df_out, alpha, beta)
+    scp.logg.info(f"score -- NLL: {nll}")
 
 
 def get_param(filename):
