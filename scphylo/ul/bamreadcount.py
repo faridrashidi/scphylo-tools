@@ -14,7 +14,7 @@ def get_nucleotides(line):
     char[line.split()[6].split(":")[0]] = int(line.split()[6].split(":")[1])
     char[line.split()[7].split(":")[0]] = int(line.split()[7].split(":")[1])
     char[line.split()[8].split(":")[0]] = int(line.split()[8].split(":")[1])
-    cov = sum([char[a] for a in ["A", "C", "G", "T", "N"]])
+    cov = sum(char[a] for a in ["A", "C", "G", "T", "N"])
     return ref, char, cov
 
 

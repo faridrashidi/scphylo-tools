@@ -110,8 +110,8 @@ def stat(df_in, df_out, alpha, beta, running_time):
     scp.logg.info(f"score -- NLL: {nll}")
 
 
-def get_param(filename):
-    def _get_param_helper(param):
+def parse_params_file(filename):
+    def _parse_params_file_helper(param):
         try:
             value = basename.split(f"{param}_")[1]
             if "-" in value:
@@ -138,25 +138,14 @@ def get_param(filename):
         "d",
         "l",
     ]:
-        value = _get_param_helper(param)
+        value = _parse_params_file_helper(param)
         if value is not None:
             data[param] = value
-    # data["s"] = int(basename.split("s_")[1].split("-")[0])
-    # data["m"] = int(basename.split("-")[2].split("_")[1])
-    # data["h"] = int(basename.split("-")[3].split("_")[1])
-    # data["minVAF"] = float(basename.split("-")[4].split("_")[1])
-    # data["ISAV"] = int(basename.split("-")[5].split("_")[1])
-    # data["n"] = int(basename.split("-")[6].split("_")[1])
-    # data["fp"] = float(basename.split("-")[7].split("_")[1])
-    # data["fn"] = float(basename.split("-")[8].split("_")[1])
-    # data["na"] = float(basename.split("-")[9].split("_")[1])
-    # data["d"] = float(basename.split("-")[10].split("_")[1])
-    # last = basename.split("-")[11]
-    # if "." in last:
-    #     data["l"] = int(last.split(".")[0].split("_")[1])
-    # else:
-    #     data["l"] = int(last.split("_")[1])
     return data
+
+
+def parse_log_file(filename):
+    pass
 
 
 def count_flips(I_mtr, O_mtr, na_value=3):
