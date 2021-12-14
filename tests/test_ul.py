@@ -86,7 +86,7 @@ class TestUtils:
 
         scp.ul.dir_base(test_cf_data_1)
         scp.ul.dirbase(test_cf_data_1)
-        scp.ul.get_param(
+        scp.ul.parse_params_file(
             "simNo_2-s_7-m_20-h_1-minVAF_0.1-ISAV_0-n_10-fp_0-fn_0.1-na_0-d_0-l_1000000"
             ".SC"
         )
