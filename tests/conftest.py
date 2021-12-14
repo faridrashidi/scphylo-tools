@@ -84,9 +84,9 @@ def test_consensus_biorxiv_fig3c():
 
 @pytest.fixture(scope="session")
 def test_newick_1():
-    return scp.ul.get_file("scphylo.datasets/test/T00.nwk")
+    return scp.ul.get_file("scphylo.datasets/test/input/T00.nwk")
 
 
 @pytest.fixture(scope="session")
 def test_newick_2():
-    return scp.ul.get_file("scphylo.datasets/test/T06.nwk")
+    return scp.ul.get_file("scphylo.datasets/test/input/T06.nwk")
