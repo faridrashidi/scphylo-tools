@@ -145,7 +145,34 @@ def parse_params_file(filename):
 
 
 def parse_log_file(filename):
-    pass
+    result = {}
+    _, basename = dir_base(filename)
+    result["tool"] = basename.split(".")[-1]
+    with open(filename) as fin:
+        for line in fin:
+            line = line.strip()
+            if "output -- time: " in line:
+                result["running_time"] = float(
+                    line.replace("output -- time: ", "").split()[0].replace("s", "")
+                )
+            if "output -- CF: " in line:
+                result["is_cf"] = bool(line.replace("output -- CF: ", "").split()[-1])
+            if "rates -- FN: " in line:
+                result["fn_rate"] = float(line.replace("rates -- FN: ", "").split()[-1])
+            if "rates -- FP: " in line:
+                result["fp_rate"] = float(line.replace("rates -- FP: ", "").split()[-1])
+    return result
+
+
+def parse_score_file(filename):
+    result = {}
+    _, basename = dir_base(filename)
+    result["tool"] = basename.split(".")[-1]
+    with open(filename) as fin:
+        for line in fin:
+            line = line.strip()
+            result[line.split("=")[0]] = float(line.split("=")[1])
+    return result
 
 
 def count_flips(I_mtr, O_mtr, na_value=3):
