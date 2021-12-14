@@ -152,3 +152,10 @@ gurobi.log
 
 # Repo specific
 scphylo.*
+
+# Temporary
+todo_metools
+meta.yaml
+todo.txt
+.github/workflows/ci.yml
+.scripts/ci/install_dependencies.sh
