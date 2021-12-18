@@ -12,7 +12,7 @@ lint:
 
 test:
 	rm -rf htmlcov
-	pytest --cov=scphylo --cov-report=html ./tests
+	pytest --disable-warnings --cov=scphylo --cov-report=html ./tests
 	rm -rf .coverage*
 
 doc:
