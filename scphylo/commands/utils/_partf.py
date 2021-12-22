@@ -64,7 +64,7 @@ def partf(genotype_file, alpha, beta, n_samples, n_threads):
     t2 = (1 - I_mtr) * beta / (beta + 1 - alpha)
     P = t1 + t2
     P[I_mtr == 3] = 0.5
-    P = P.astype(np.float128)
+    P = P.astype(np.float64)
 
     edges_list = []
     subtrees_list = []

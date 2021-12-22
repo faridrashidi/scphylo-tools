@@ -75,7 +75,7 @@ def clt_sample_rec(
             return la.norm(a - b) - row_leafness_score(a, b) * coef
 
         dist = pairwise_distances(P, metric=join_neg_priority)  # O(n m^2)
-        dist = dist.astype(np.float128)
+        dist = dist.astype(np.float64)
         np.fill_diagonal(dist, np.inf)
 
         # This block adjusts c if dist/2c is too big for sotfmax.

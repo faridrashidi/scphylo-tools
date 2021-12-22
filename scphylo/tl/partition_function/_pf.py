@@ -59,7 +59,7 @@ def get_samples(P, n_samples, disable_tqdm=True):
         tree_our_prob_list: for each sample: the probability of us sampling
             the tree. Prob_{T\sim E}[T]
     """
-    P = P.astype(np.float128)
+    P = P.astype(np.float64)
     edges_list = []
     subtrees_list = []
     tree_our_prob_list = []
