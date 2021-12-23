@@ -29,20 +29,22 @@ def score(ground_file, inferred_file):
     df_s = scp.io.read(inferred_file)
 
     gs = scp.tl.gs(df_g, df_s)
+    scp.logg.info(f"GS={gs:0.4f}\n")
     ad = scp.tl.ad(df_g, df_s)
+    scp.logg.info(f"AD={ad:0.4f}\n")
     dl = scp.tl.dl(df_g, df_s)
+    scp.logg.info(f"DL={dl:0.4f}\n")
     mltd = scp.tl.mltd(df_g, df_s)["normalized_similarity"]
+    scp.logg.info(f"MLTSM={mltd:0.4f}\n")
     tpted = scp.tl.tpted(df_g, df_s)
+    scp.logg.info(f"TPTED={tpted:0.4f}\n")
     caset = scp.tl.caset(df_g, df_s)
+    scp.logg.info(f"CASet={caset:0.4f}\n")
     disc = scp.tl.disc(df_g, df_s)
+    scp.logg.info(f"DISC={disc:0.4f}\n")
     mp3 = scp.tl.mp3(df_g, df_s)
+    scp.logg.info(f"MP3={mp3:0.4f}\n")
     rf = scp.tl.rf(df_g, df_s)
-
-    scp.logg.info(
-        f"GS={gs:0.4f}\nAD={ad:0.4f}\nDL={dl:0.4f}\n"
-        f"MLTSM={mltd:0.4f}\nTPTED={tpted:0.4f}\n"
-        f"CASet={caset:0.4f}\nDISC={disc:0.4f}\nMP3={mp3:0.4f}\n"
-        f"RF={rf:0.4f}"
-    )
+    scp.logg.info(f"RF={rf:0.4f}")
 
     return None
