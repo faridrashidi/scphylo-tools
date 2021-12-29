@@ -77,6 +77,9 @@ def build_crcs():
     # only met
     # "CRC12", "CRC13", "CRC14", "CRC15"
 
+    # only expr
+    # "CRC03", "CRC06"
+
     number_of_samples = len(patients)
     number_of_threads = len(patients)
     with tqdm_joblib(
