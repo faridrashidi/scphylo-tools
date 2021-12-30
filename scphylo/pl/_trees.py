@@ -296,3 +296,134 @@ def dendro_tree(
                 limitsize=False,
             )
     return display(Image(image.getvalue(), embed=True, retina=True))
+
+
+def newick_tree(
+    adata,
+    tree_attr="tree",
+    leaf_attr=None,
+    width=2000,
+    height=800,
+    dpi=300,
+    tippoint_size=0.8,
+    tiplab_size=0.9,
+    show_tiplab=False,
+):
+    """[summary].
+
+    Parameters
+    ----------
+    adata : [type]
+        [description]
+    leaf_attr : [type]
+        [description]
+    tree_attr : [type]
+        [description]
+    width : int, optional
+        [description], by default 2000
+    height : int, optional
+        [description], by default 800
+    dpi : int, optional
+        [description], by default 300
+    tippoint_size : float, optional
+        [description], by default 0.8
+    tiplab_size : float, optional
+        [description], by default 0.9
+    show_tiplab : bool, optional
+        [description], by default False
+
+    Returns
+    -------
+    [type]
+        [description]
+    """
+    ggtree, ggtree_is_not_imported = scp.ul.import_rpy2(
+        "ggtree",
+        "devtools::install_github(c('YuLab-SMU/ggtree','xiangpin/ggtreeExtra'"
+        + ",'YuLab-SMU/aplot'))\ninstall.packages('cowplot')\n",
+    )
+    if ggtree_is_not_imported:
+        scp.logg.error("Unable to import a package!")
+
+    import rpy2.robjects as ro
+    from rpy2.robjects import pandas2ri
+    from rpy2.robjects.lib import grdevices
+    from rpy2.robjects.packages import importr
+
+    importr("ggplot2")
+
+    if leaf_attr is not None:
+        df = adata.obs[[leaf_attr]]
+    else:
+        df = adata.obs.copy()
+        df["color"] = "#000000"
+        df = df[["color"]]
+        leaf_attr = "color"
+    with ro.conversion.localconverter(ro.default_converter + pandas2ri.converter):
+        info_color_r = ro.conversion.py2rpy(df.reset_index())
+        ro.globalenv["info"] = info_color_r
+
+    cmd = f"""
+    tree <- read.tree(text='{str(adata.uns[tree_attr]).strip()}')
+    p <- ggtree(tree, layout='dendrogram', size=0.2, color='gray')
+    # p <- p %>% rotate(191) %>% rotate(218)
+    # p <- p + geom_text(aes(label=node), size=1)
+    p <- p %<+% info + geom_tippoint(aes(color={leaf_attr}), size={tippoint_size})
+    """
+    if show_tiplab:
+        cmd += f"""
+        p <- p + geom_tiplab(aes(color={leaf_attr}), angle=90,
+                                 size={tiplab_size}, hjust=1.1)
+        """
+    cmd += f"""
+    p <- p + scale_color_identity(guide='none')
+    # ggsave('/data/frashidi/{leaf_attr}.pdf', p, width=7.2, height=2,
+    #        units='in', limitsize=FALSE, dpi=300)
+    p
+    """
+
+    with grdevices.render_to_bytesio(
+        grdevices.png, width=width, height=height, res=dpi
+    ) as image:
+        p = ro.r(cmd)
+        ro.r.show(p)
+        #  if output_file is not None:
+        #      ro.r.ggsave(
+        #          plot=p,
+        #          filename=output_file,
+        #          width=width / dpi,
+        #          height=height / dpi,
+        #          units="in",
+        #          dpi=dpi,
+        #          limitsize=False,
+        #      )
+    return display(Image(image.getvalue(), embed=True, retina=True))
+
+
+def networkx_tree(tree, n_attr="label", e_attr="label"):
+    """[summary].
+
+    Parameters
+    ----------
+    tree : [type]
+        [description]
+    n_attr : str, optional
+        [description], by default "label"
+    e_attr : str, optional
+        [description], by default "label"
+    """
+    graph2 = tree.copy()
+    if n_attr == "id":
+        for n in graph2.nodes():
+            if graph2.in_degree(n) == 1 and graph2.out_degree(n) >= 1:
+                graph2.nodes[n]["shape"] = "circle"
+                graph2.nodes[n]["margin"] = 0
+                graph2.nodes[n]["label"] = n
+    else:
+        for n in graph2.nodes():
+            if n_attr in graph2.nodes[n]:
+                graph2.nodes[n]["label"] = graph2.nodes[n][n_attr]
+    for e in graph2.edges():
+        if e_attr in graph2.edges[e]:
+            graph2.edges[e]["label"] = graph2.edges[e][e_attr]
+    display(Image(nx.drawing.nx_pydot.to_pydot(graph2).create_png(), retina=True))
