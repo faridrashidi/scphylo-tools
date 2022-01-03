@@ -66,8 +66,24 @@ import scphylo as scp
     show_default=True,
     help="Smooth rate for the experiment part.",
 )
+@click.option(
+    "--iters_rate",
+    "-i",
+    default=30000,
+    type=int,
+    show_default=True,
+    help="Interations rate for the experiment part.",
+)
 def scite(
-    genotype_file, alpha, beta, n_iters, n_restarts, experiment, time_limit, smooth_rate
+    genotype_file,
+    alpha,
+    beta,
+    n_iters,
+    n_restarts,
+    experiment,
+    time_limit,
+    smooth_rate,
+    iters_rate,
 ):
     """SCITE.
 
@@ -96,11 +112,11 @@ def scite(
             df_in,
             alpha=alpha,
             beta=beta,
-            n_iters=30000,
+            n_iters=iters_rate,
             n_restarts=1,
             experiment=True,
         )
-        n_iters = int(smooth_rate * 30000 * time_limit / running_time)
+        n_iters = int(smooth_rate * iters_rate * time_limit / running_time)
 
         def run(i):
             do, r, s, b = scp.tl.scite(
