@@ -14,7 +14,7 @@ def siclonefit(
     beta,
     n_restarts=3,
     n_iters=500,
-    burnin=100,
+    n_burnin=100,
     return_tree=False,
     experiment=False,
 ):
@@ -36,7 +36,9 @@ def siclonefit(
     n_restarts : :obj:`int`, optional
         Number of restarts, by default 3
     n_iters : :obj:`int`, optional
-        Number of iterations, by default 90000
+        Number of iterations for each Markov Chain after burnin, by default 500
+    n_burnin : :obj:`int`, optional
+        Number of iterations for burnin of each Markov Chain, by default 100
     return_tree : :obj:`bool`, optional
         Return the inferred cell-lineage tree, by default False
     experiment : :obj:`bool`, optional
@@ -79,7 +81,7 @@ def siclonefit(
         f"-cellNames {tmpdir.name}/siclonefit.cellnames "
         f"-geneNames {tmpdir.name}/siclonefit.genenames "
         f"-r {n_restarts} "
-        f"-burnin {burnin} "
+        f"-burnin {n_burnin} "
         # "-recurProb 0 "
         # "-delProb 0 "
         # "-LOHProb 0 "

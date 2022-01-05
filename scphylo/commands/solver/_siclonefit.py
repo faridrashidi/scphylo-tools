@@ -26,20 +26,28 @@ import scphylo as scp
     type=float,
 )
 @click.option(
-    "--n_iters",
-    "-l",
-    default=600,
-    type=int,
-    show_default=True,
-    help="Number of iterations.",
-)
-@click.option(
     "--n_restarts",
     "-r",
     default=3,
     type=int,
     show_default=True,
     help="Number of restarts.",
+)
+@click.option(
+    "--n_iters",
+    "-l",
+    default=600,
+    type=int,
+    show_default=True,
+    help="Number of iterations for MCMC.",
+)
+@click.option(
+    "--n_burnin",
+    "-b",
+    default=100,
+    type=int,
+    show_default=True,
+    help="Number of iterations for burnin.",
 )
 @click.option(
     "--experiment",
@@ -80,6 +88,7 @@ def siclonefit(
     beta,
     n_iters,
     n_restarts,
+    n_burnin,
     experiment,
     time_limit,
     smooth_rate,
@@ -104,6 +113,7 @@ def siclonefit(
             alpha=alpha,
             beta=beta,
             n_iters=n_iters,
+            n_burnin=n_burnin,
             n_restarts=n_restarts,
         )
         scp.io.write(df_out, f"{outfile}.siclonefit.CFMatrix")
@@ -114,6 +124,7 @@ def siclonefit(
             alpha=alpha,
             beta=beta,
             n_iters=iters_rate,
+            n_burnin=n_burnin,
             n_restarts=1,
             experiment=True,
         )
@@ -125,6 +136,7 @@ def siclonefit(
                 alpha=alpha,
                 beta=beta,
                 n_iters=n_iters,
+                n_burnin=n_burnin,
                 n_restarts=1,
                 experiment=True,
             )
