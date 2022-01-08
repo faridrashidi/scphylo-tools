@@ -137,8 +137,8 @@ if __name__ == "__main__":
                 "pre-commit",
                 "pytest-cov",
                 "bumpversion",
-            ]
-            + [
+            ],
+            "docs": [
                 r.strip()
                 for r in (Path("docs") / "requirements.txt")
                 .read_text("utf-8")
