@@ -120,7 +120,7 @@ else:
 
 if __name__ == "__main__":
     setup(
-        name="scphylo",
+        name="scphylo-tools",
         entry_points="""
             [console_scripts]
             scphylo=scphylo.commands.scphylo:cli
