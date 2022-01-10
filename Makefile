@@ -6,6 +6,14 @@ help:
 	@echo " - install      : install the package"
 	@echo " - install-dev  : install the package in dev mode"
 	@echo " - cythonize    : cythonize all pyx files"
+	@echo " - clean        : clean the repo"
+
+clean:
+	rm -rf htmlcov
+	rm -rf .coverage*
+	rm -rf docs/source/scphylo*
+	rm -rf docs/source/auto_examples
+	rm -rf docs/source/gen_modules
 
 lint:
 	pre-commit run --all-files
