@@ -33,9 +33,9 @@ class NaturalOrderGroup(click.Group):
     context_settings={"max_content_width": 300, "terminal_width": 300},
 )
 def cli():
-    """SCPhylo-tools.
+    """scPhylo-tools.
 
-    Scalable intratumor heterogeneity inference and validation from single-cell data.
+    A python toolkit for single-cell tumor phylogenetic analysis
     """
     return None
 
