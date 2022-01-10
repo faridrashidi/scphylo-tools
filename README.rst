@@ -2,8 +2,8 @@
 |Docs Status| |Pre-commit| |Code Score| |License| |Code Style|
 
 
-scPhylo-tools: a toolkit for single-cell tumor phylogenetic analysis
-====================================================================
+scPhylo-tools: a python toolkit for single-cell tumor phylogenetic analysis
+===========================================================================
 
 
 
