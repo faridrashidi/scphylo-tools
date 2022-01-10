@@ -1,7 +1,7 @@
-:tocdepth: 1
+.. _installationguide:
 
 Installation
-------------
+============
 
 scPhylo-tools requires Python 3.6 or later.
 

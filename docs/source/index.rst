@@ -1,5 +1,6 @@
 Documentation
-~~~~~~~~~~~~~
+=============
+
 .. include:: ../../README.rst
 
 .. toctree::
@@ -9,5 +10,6 @@ Documentation
 
    installation
    api_reference
+   cli_reference
    references
    auto_examples/index.rst

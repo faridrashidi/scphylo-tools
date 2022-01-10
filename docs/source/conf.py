@@ -13,6 +13,7 @@
 
 import os
 import sys
+from datetime import datetime
 from pathlib import Path
 
 from pybtex.plugin import register_plugin
@@ -47,7 +48,9 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx_autodoc_typehints",  # needs to be after napoleon
     "sphinx.ext.autosummary",
+    "sphinx_paramlinks",
     "sphinx_copybutton",
+    "sphinx_click.ext",
     "sphinxcontrib.bibtex",
     "sphinx_gallery.gen_gallery",
 ]
@@ -94,8 +97,8 @@ intersphinx_mapping = {
 
 # General information about the project.
 project = "scphylo"
-copyright = "2021, Farid Rashidi, NCI"
 author = "Farid Rashidi"
+copyright = f"{datetime.now():%Y}, {author}, NCI"
 title = "a python toolkit for single-cell tumor phylogenetic analysis"
 
 

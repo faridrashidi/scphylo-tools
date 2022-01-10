@@ -1,7 +1,3 @@
-.. module:: scphylo
-.. automodule:: scphylo
-    :noindex:
-
 API
 ===
 
@@ -14,7 +10,7 @@ After mutation calling and building the input data via our suggested
 
 
 Read/Write (io)
----------------
+^^^^^^^^^^^^^^^
 This module offers a bunch of functions for reading and writing of the data.
 
 .. module:: scphylo.io
@@ -27,7 +23,7 @@ This module offers a bunch of functions for reading and writing of the data.
 
 
 Preprocessing (pp)
-------------------
+^^^^^^^^^^^^^^^^^^
 This module offers a bunch of functions for filtering and preprocessing of the
 data.
 
@@ -45,7 +41,7 @@ data.
 
 
 Tools (tl)
-----------
+^^^^^^^^^^
 This module offers a high-level API to compute the conflict-free solution
 and calculating the probability of mutations seeding particular cells.
 
@@ -63,6 +59,9 @@ and calculating the probability of mutations seeding particular cells.
     tl.scistree
     tl.onconem
     tl.huntress
+    tl.siclonefit
+    tl.sphyr
+    tl.gpps
 
 
 **Partition function calculation (scphylo-PartF)**
@@ -92,10 +91,11 @@ and calculating the probability of mutations seeding particular cells.
     tl.disc
     tl.mp3
     tl.rf
+    tl.gs
 
 
 Plotting (pl)
--------------
+^^^^^^^^^^^^^
 This module offers plotting the tree in clonal or dendrogram format.
 
 .. module:: scphylo.pl
@@ -108,7 +108,7 @@ This module offers plotting the tree in clonal or dendrogram format.
 
 
 Utils (ul)
-----------
+^^^^^^^^^^
 This module offers a bunch of utility functions.
 
 .. module:: scphylo.ul
@@ -125,7 +125,7 @@ This module offers a bunch of utility functions.
 
 
 Datasets (datasets)
--------------------
+^^^^^^^^^^^^^^^^^^^
 This module offers a bunch of functions for simulating data.
 
 .. module:: scphylo.datasets
