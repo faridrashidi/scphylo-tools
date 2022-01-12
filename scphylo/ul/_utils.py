@@ -203,6 +203,25 @@ def infer_rates(I_mtr, O_mtr, na_value=3):
 
 
 def is_conflict_free(df_in):
+    """Check conflict-free criteria via Gusfield algorithm.
+
+    The order of this algorithm is :math:`O(nm^2)`
+    where n is the number of cells and m is the number of mutations.
+
+    Parameters
+    ----------
+    df_in : :class:`pandas.DataFrame`
+        Input genotype matrix.
+
+    Returns
+    -------
+    :obj:`bool`
+        A Boolean checking if the input conflict-free or not.
+
+    See Also
+    --------
+    :func:`scphylo.ul.is_conflict_free_gusfield`.
+    """
     D = df_in.astype(int).values
     if not np.array_equal(np.unique(D), [0, 1]):
         return False
@@ -230,7 +249,7 @@ def is_conflict_free_gusfield(df_in):
 
     This is an implementation of algorithm 1.1 in :cite:`Gusfield_1991`.
 
-    The order of this algorithm is O(nm)
+    The order of this algorithm is :math:`O(nm)`
     where n is the number of cells and m is the number of mutations.
 
     Parameters
