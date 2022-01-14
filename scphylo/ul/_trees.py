@@ -145,8 +145,8 @@ def to_cfmatrix(tree):
     """
     mutations = []
     cells = []
-    for _, v, l in tree.edges(data=True):
-        mutations += l["label"].split(tree.graph["splitter_mut"])
+    for _, v, lable in tree.edges(data=True):
+        mutations += lable["label"].split(tree.graph["splitter_mut"])
         if "––" not in tree.nodes[v]["label"]:
             cells += tree.nodes[v]["label"].split(tree.graph["splitter_cell"])
     df = pd.DataFrame(0, index=cells, columns=mutations)
@@ -332,3 +332,22 @@ def muts_rooted_at(tree, node_id):
 
 def is_leaf(tree, node):
     return "––" not in tree.nodes[node]["label"] and tree.in_degree(node) != 0
+
+
+def sample_from_tree(tree, ratio, axis="cell"):
+    sampled = []
+    if axis == "cell":
+        for n in tree.nodes:
+            if tree.in_degree(n) == 1 and "––" not in tree.nodes[n]["label"]:
+                array = tree.nodes[n]["label"].split(tree.graph["splitter_cell"])
+                array = np.random.choice(
+                    array, replace=False, size=int(ratio * len(array))
+                )
+                sampled += list(array)
+        return sampled
+    elif axis == "mut":
+        for _, _, lable in tree.edges(data=True):
+            array = lable["label"].split(tree.graph["splitter_mut"])
+            array = np.random.choice(array, replace=False, size=int(ratio * len(array)))
+            sampled += list(array)
+        return sampled
