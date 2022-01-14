@@ -77,7 +77,10 @@ def clonal_tree(
         for n in tc.nodes:
             if n != root:
                 ll = tc.nodes[n]["label"].split(tc.graph["splitter_cell"])
-                tc.nodes[n]["label"] = f"{len(ll)}"
+                if "––" in tc.nodes[n]["label"]:
+                    tc.nodes[n]["label"] = "0"
+                else:
+                    tc.nodes[n]["label"] = f"{len(ll)}"
 
     if cell_info is not None:
         tc.nodes[root]["label"] = tree.graph["splitter_cell"].join(
