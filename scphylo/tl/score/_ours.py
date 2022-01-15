@@ -277,8 +277,7 @@ def tpted(df_grnd, df_sol):
     mt_grnd = scp.ul.to_mtree(tree_grnd)
     mt_sol = scp.ul.to_mtree(tree_sol)
 
-    sl_grnd = _split_labels(mt_grnd, mt_guide=mt_sol)
-    sl_sol = _split_labels(mt_sol, mt_guide=mt_sol)
+    sl_grnd, sl_sol = _split_labels(mt_grnd, mt_sol)
 
     apted_grnd = _to_apted(sl_grnd)
     apted_sol = _to_apted(sl_sol)
@@ -289,4 +288,6 @@ def tpted(df_grnd, df_sol):
     ap = apted.APTED(tree1, tree2)
     ed = ap.compute_edit_distance()
 
-    return 1 - ed / (2 * len(inter))
+    # FIXME: `python -m apted -t {a{b}{c}} {a{c}{b}}` returns 2!
+    # looks like the above isomorphic trees have TED of 2!
+    return 1 - ed / (2 * (len(inter) + 1))

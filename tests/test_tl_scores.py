@@ -33,7 +33,7 @@ class TestScores:
         grnd = scp.io.read(test_cf_data_1)
         sol = scp.io.read(test_cf_data_2)
         tpted = scp.tl.tpted(grnd, sol)
-        assert tpted == 0.99
+        assert np.abs(tpted - 0.8811) < 0.0001
 
     def test_caset(self, test_cf_data_1, test_cf_data_2):
         grnd = scp.io.read(test_cf_data_1)

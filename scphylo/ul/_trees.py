@@ -224,51 +224,80 @@ def _to_newick(tree):
     return newick
 
 
-def _split_labels(mt, mt_guide):
-    root_guide = [node for node in mt_guide.nodes if mt_guide.in_degree(node) == 0][0]
-    guide = [
-        y
-        for x in nx.algorithms.bfs_tree(mt_guide, root_guide).nodes
-        for y in mt_guide.nodes[x]["label"]
-    ]
+def _split_labels(tree1, tree2):
+    def _at_which_node(tree, label):
+        for n in tree.nodes:
+            if label in tree.nodes[n]["lable"]:
+                return n
 
-    root = [node for node in mt.nodes if mt.in_degree(node) == 0][0]
-    nodes = nx.algorithms.bfs_tree(mt, root).nodes
+    def _which_muts_must_be_splited(tree):
+        muts = []
+        rid = scp.ul.root_id(tree)
+        for n1 in tree.nodes:
+            if n1 != rid:
+                if len(tree.nodes[n1]["label"]) >= 2:
+                    muts += tree.nodes[n1]["label"]
+        return muts
 
-    latest_node = root
-    removing = []
-    for node in nodes:
-        muts = mt.nodes[node]["label"]
-        if len(muts) > 1 and node != root:
-            parent = list(mt.predecessors(node))[-1]
-            if mt.out_degree(node) != 0:
-                children = list(mt.successors(node))
-            else:
-                children = -1
-            muts = sorted(muts, key=lambda i: guide.index(i))
+    def _sorted_muts(tree):
+        root_guide = scp.ul.root_id(tree)
+        guide = [
+            y
+            for x in nx.algorithms.bfs_tree(tree, root_guide).nodes
+            for y in tree.nodes[x]["label"]
+        ]
+        return guide
 
-            removing.append(node)
-            for i, x in enumerate(muts):
-                latest_node += 1
-                mt.add_node(latest_node, label=x)
-                if i == 0:
-                    mt.add_edge(parent, latest_node)
-                elif i == len(muts) - 1:
-                    if children != -1:
-                        mt.add_edge(latest_node - 1, latest_node)
-                        for child in children:
-                            mt.add_edge(latest_node, child)
+    def _splitter_helper(mt, muts_guide):
+        root = scp.ul.root_id(mt)
+        nodes = list(mt.nodes)
+        latest_node = root
+        removing = []
+        for node in nodes:
+            muts = mt.nodes[node]["label"]
+            if len(muts) > 1 and node != root:
+                parent = list(mt.predecessors(node))[-1]
+                if mt.out_degree(node) != 0:
+                    children = list(mt.successors(node))
+                else:
+                    children = -1
+                muts = sorted(muts, key=lambda i: muts_guide.index(i))
+
+                removing.append(node)
+                for i, x in enumerate(muts):
+                    latest_node += 1
+                    mt.add_node(latest_node, label=x)
+                    if i == 0:
+                        mt.add_edge(parent, latest_node)
+                    elif i == len(muts) - 1:
+                        if children != -1:
+                            mt.add_edge(latest_node - 1, latest_node)
+                            for child in children:
+                                mt.add_edge(latest_node, child)
+                        else:
+                            mt.add_edge(latest_node - 1, latest_node)
                     else:
                         mt.add_edge(latest_node - 1, latest_node)
-                else:
-                    mt.add_edge(latest_node - 1, latest_node)
-        else:
-            if node != root:
-                mt.nodes[node]["label"] = mt.nodes[node]["label"][0]
+            else:
+                if node != root:
+                    mt.nodes[node]["label"] = mt.nodes[node]["label"][0]
 
-    for node in removing:
-        mt.remove_node(node)
-    return mt
+        for node in removing:
+            mt.remove_node(node)
+        return mt
+
+    muts1 = _which_muts_must_be_splited(tree1)
+    muts2 = _which_muts_must_be_splited(tree2)
+    muts_c = sorted(np.intersect1d(muts1, muts2))
+    guide1 = _sorted_muts(tree1)
+    guide2 = _sorted_muts(tree2)
+    muts_12 = sorted(np.setdiff1d(muts1, muts2), key=lambda i: guide2.index(i))
+    muts_21 = sorted(np.setdiff1d(muts2, muts1), key=lambda i: guide1.index(i))
+
+    mt_tree1 = _splitter_helper(tree1.copy(), muts_c + muts_12)
+    mt_tree2 = _splitter_helper(tree2.copy(), muts_c + muts_21)
+
+    return mt_tree1, mt_tree2
 
 
 def _to_apted(sl_tree):
@@ -276,16 +305,16 @@ def _to_apted(sl_tree):
         return list(n for n in sl_tree.neighbors(at))
 
     def _apted_recursive(node):
+        subgs = "{" + sl_tree.nodes[node]["label"]
         nodes = _children(node)
-        if len(nodes) == 0:
-            return "{" + sl_tree.nodes[node]["label"] + "}"
-        else:
-            x = ""
-            for node in nodes:
-                x += _apted_recursive(node)
-            return "{" + sl_tree.nodes[node]["label"] + x + "}"
+        for node in nodes:
+            if len(_children(node)) > 0:
+                subgs += _apted_recursive(node)
+            else:
+                subgs += "{" + sl_tree.nodes[node]["label"] + "}"
+        return subgs + "}"
 
-    root = [node for node in sl_tree.nodes if sl_tree.in_degree(node) == 0][0]
+    root = scp.ul.root_id(sl_tree)
     return _apted_recursive(root)
 
 
