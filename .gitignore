@@ -154,8 +154,6 @@ gurobi.log
 scphylo.*
 
 # Temporary
-todo_metools
-meta.yaml
-todo.txt
+todo
 .github/workflows/ci.yml
 .scripts/ci/install_dependencies.sh
