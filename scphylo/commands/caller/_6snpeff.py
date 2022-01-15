@@ -97,7 +97,7 @@ def snpeff(infile, ref, time, mem, afterok):
             cmds = ""
             cmds += cmd(
                 [
-                    f"python {scp.ul.get_resource('scphylo.ul/cyvcf.py')}",
+                    f"python {scp.ul.get_file('scphylo.ul/cyvcf.py')}",
                     f"{infile[:-len('.vcf')] + '.ann.vcf'}",
                 ]
             )

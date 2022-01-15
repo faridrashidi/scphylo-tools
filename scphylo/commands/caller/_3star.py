@@ -278,7 +278,7 @@ def star(indir, outdir, ref, time, mem, afterok):
             cmds = ""
             cmds += cmd(
                 [
-                    f"python {scp.ul.get_resource('scphylo.ul/star.py')}",
+                    f"python {scp.ul.get_file('scphylo.ul/star.py')}",
                     f"{outdir}",
                 ]
             )

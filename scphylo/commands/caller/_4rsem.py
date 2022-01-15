@@ -149,9 +149,7 @@ def rsem(outdir, ref, single_or_paired, time, mem, afterok):
     def step3(afterok):
         def get_command():
             cmds = ""
-            cmds += cmd(
-                [f"python {scp.ul.get_resource('scphylo.ul/rsem.py')} {outdir}"]
-            )
+            cmds += cmd([f"python {scp.ul.get_file('scphylo.ul/rsem.py')} {outdir}"])
             cmds += cmd(["echo Done!"], islast=True)
             return cmds
 

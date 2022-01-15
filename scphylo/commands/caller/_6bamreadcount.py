@@ -100,7 +100,7 @@ def bamreadcount(outdir, infile, ref, time, mem, afterok):
             cmds += cmd(
                 [
                     "python "
-                    f"{scp.ul.get_resource('scphylo.ul/bamreadcount.py')} "
+                    f"{scp.ul.get_file('scphylo.ul/bamreadcount.py')} "
                     f"{outdir} "
                     f"{infile}"
                 ]
