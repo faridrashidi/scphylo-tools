@@ -41,13 +41,20 @@ from scphylo.ul._servers import cmd, write_cmds_get_main
     help="Memory List [indexing, mapping].",
 )
 @click.option(
+    "--max_multimapping",
+    default="10",
+    type=str,
+    show_default=True,
+    help="`outFilterMultimapNmax` parameter in STAR.",
+)
+@click.option(
     "--afterok",
     default=None,
     type=str,
     show_default=True,
     help="Afterok.",
 )
-def star(indir, outdir, ref, time, mem, afterok):
+def star(indir, outdir, ref, time, mem, max_multimapping, afterok):
     """Run STAR.
 
     scphylo star /path/to/in/dir /path/to/out/dir hg19|hg38|mm10
@@ -121,7 +128,7 @@ def star(indir, outdir, ref, time, mem, afterok):
                     "--runMode alignReads",
                     f"--genomeDir {outdir}/_indexing/1",
                     f"--sjdbGTFfile {config['annot']}",
-                    "--outFilterMultimapNmax 1",
+                    f"--outFilterMultimapNmax {max_multimapping}",
                     "--outSAMunmapped None",
                     "--quantMode TranscriptomeSAM GeneCounts",
                     "--runThreadN 1",
@@ -215,7 +222,7 @@ def star(indir, outdir, ref, time, mem, afterok):
                     "--limitBAMsortRAM 30000000000",
                     "--outSAMtype BAM SortedByCoordinate",
                     f"--sjdbGTFfile {config['annot']}",
-                    "--outFilterMultimapNmax 1",
+                    f"--outFilterMultimapNmax {max_multimapping}",
                     "--outSAMunmapped None",
                     "--quantMode TranscriptomeSAM GeneCounts",
                     "--runThreadN 1",
