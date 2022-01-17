@@ -176,18 +176,6 @@ def group_obs_apply_func(adata, group_key, func=np.nansum, layer=None):
 
 
 def filter_snpeff(adata, exome=False):
-    bad = [
-        "Annotation_Impact",
-        "Gene_ID",
-        "Feature_ID",
-        "Rank",
-        "cDNA.pos / cDNA.length",
-        "CDS.pos / CDS.length",
-        "AA.pos / AA.length",
-        "Distance",
-        "ERRORS / WARNINGS / INFO",
-    ]
-    adata.var.drop(bad, axis=1, inplace=True)
     a = adata.var.Transcript_BioType == "protein_coding"
     b = adata.var.Feature_Type == "transcript"
     # c = adata.var.Annotation.isin(["synonymous_variant", "missense_variant"])

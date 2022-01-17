@@ -47,4 +47,17 @@ adata.layers["total"] = m_ref + m_alt
 adata.layers["mutant"] = m_alt
 adata = adata.T
 outdir, basename = scp.ul.dir_base(infile)
+
+bad = [
+    "Annotation_Impact",
+    "Gene_ID",
+    "Feature_ID",
+    "Rank",
+    "cDNA.pos / cDNA.length",
+    "CDS.pos / CDS.length",
+    "AA.pos / AA.length",
+    "Distance",
+    "ERRORS / WARNINGS / INFO",
+]
+adata.var.drop(bad, axis=1, inplace=True)
 adata.write(outdir + f"/_{basename[:-len('.ann')]}.h5ad.gz", compression="gzip")
