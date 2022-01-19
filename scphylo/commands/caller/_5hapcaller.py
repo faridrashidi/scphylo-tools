@@ -28,7 +28,7 @@ from scphylo.ul._servers import cmd, write_cmds_get_main
 )
 @click.option(
     "--time",
-    default=["20:00:00", "20:00:00"],
+    default=["20:00:00", "2-00:00:00"],
     multiple=True,
     show_default=True,
     help="Time List [indexing, mapping].",
@@ -220,8 +220,8 @@ def hapcaller(outdir, ref, dna_or_rna, time, mem, afterok):
         cmdmain = write_cmds_get_main(
             cmds_tmp,
             "hapcaller-4of4",
-            time[1],
-            mem[1],
+            time[0],
+            mem[0],
             None,
             1,
             scp.settings.tools["email"],
