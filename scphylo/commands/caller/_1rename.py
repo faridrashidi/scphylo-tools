@@ -30,7 +30,7 @@ import scphylo as scp
 def rename(indir, keep, exec):
     """Run Rename.
 
-    trisicell rename path/to/in/dir
+    trisicell rename path/to/in/dir 0,1,3 --exec
     """
     keep = list(map(int, keep.split(",")))
     idx = 0
