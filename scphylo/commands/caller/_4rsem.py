@@ -31,14 +31,14 @@ from scphylo.ul._servers import cmd, write_cmds_get_main
     default=["1:00:00", "10:00:00"],
     multiple=True,
     show_default=True,
-    help="Time List [indexing, mapping].",
+    help="Time List [indexing, calling].",
 )
 @click.option(
     "--mem",
     default=["20", "20"],
     multiple=True,
     show_default=True,
-    help="Memory List [indexing, mapping].",
+    help="Memory List [indexing, calling].",
 )
 @click.option(
     "--afterok",
