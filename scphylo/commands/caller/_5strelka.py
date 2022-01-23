@@ -50,7 +50,7 @@ from scphylo.ul._servers import cmd, write_cmds_get_main
 def strelka(outdir, normal, ref, time, mem, afterok):
     """Run Strelka.
 
-    scphylo strelka /path/to/in/dir /path/to/normal/name hg19|hg38|mm10
+    scphylo strelka /path/to/in/dir normal_name hg19|hg38|mm10
 
     BAM files (*.markdup_bqsr.bam) --> VCF files (*.strelka.vcf)
     """
@@ -85,7 +85,7 @@ def strelka(outdir, normal, ref, time, mem, afterok):
             temp.append({"sample": file})
     df_cmds = pd.DataFrame(temp)
     scp.logg.info(
-        f"Tumor samples: {','.join(df_cmds.sample.values)} & Normal sample: {normal}"
+        f"Tumor samples: {','.join(df_cmds['sample'].values)} & Normal sample: {normal}"
     )
     df_cmds["cmd"] = df_cmds.apply(lambda x: get_command(x["sample"]), axis=1)
 
