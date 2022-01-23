@@ -1,7 +1,6 @@
 import contextlib
 import datetime
 import functools
-import glob
 import multiprocessing
 import os
 import shutil
@@ -420,21 +419,3 @@ def split_mut(mut):
         return ens, gene, chrom, pos, ref, alt
     except IndexError:
         return None, None, None, None, None, None
-
-
-def is_paired(indir):
-    files = glob.glob(f"{indir}/*.fastq.gz")
-    last_char_set = {
-        x[-len(".fastq.gz") - 2 : -len(".fastq.gz")] for x in files  # noqa
-    }
-    temp = []
-    if last_char_set == {"_1", "_2"}:
-        for file in files:
-            file = file.split("/")[-1].replace(".fastq.gz", "")
-            if file[-2:] == "_1":
-                temp.append({"sample": file[:-2], "is_paired": True})
-    else:
-        for file in files:
-            file = file.split("/")[-1].replace(".fastq.gz", "")
-            temp.append({"sample": file, "is_paired": False})
-    return temp

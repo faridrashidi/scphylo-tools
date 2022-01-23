@@ -1,5 +1,6 @@
 """Utils Module."""
 
+from scphylo.ul._caller import get_samples_df, is_paired
 from scphylo.ul._hclustering import (
     dist_cosine_ignore_na,
     dist_dendro,
@@ -35,7 +36,6 @@ from scphylo.ul._utils import (
     infer_rates,
     is_conflict_free,
     is_conflict_free_gusfield,
-    is_paired,
     log_flip,
     log_input,
     log_output,
@@ -98,6 +98,7 @@ __all__ = (
     executable,
     split_mut,
     count_flips,
-    is_paired,
     sample_from_tree,
+    is_paired,
+    get_samples_df,
 )
