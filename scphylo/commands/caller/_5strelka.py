@@ -8,7 +8,7 @@ import scphylo as scp
 from scphylo.ul._servers import cmd, write_cmds_get_main
 
 
-@click.command(short_help="Run Sterlka.")
+@click.command(short_help="Run Strelka.")
 @click.argument(
     "outdir",
     required=True,
@@ -47,12 +47,12 @@ from scphylo.ul._servers import cmd, write_cmds_get_main
     show_default=True,
     help="Afterok.",
 )
-def sterlka(outdir, normal, ref, time, mem, afterok):
-    """Run Sterlka.
+def strelka(outdir, normal, ref, time, mem, afterok):
+    """Run Strelka.
 
-    scphylo sterlka /path/to/in/dir /path/to/normal/name hg19|hg38|mm10
+    scphylo strelka /path/to/in/dir /path/to/normal/name hg19|hg38|mm10
 
-    BAM files (*.markdup_bqsr.bam) --> VCF files (*.vcf)
+    BAM files (*.markdup_bqsr.bam) --> VCF files (*.strelka.vcf)
     """
     if ref == "hg19":
         config = scp.settings.hg19
@@ -63,7 +63,7 @@ def sterlka(outdir, normal, ref, time, mem, afterok):
 
     def get_command(sample):
         cmds = ""
-        cmds += cmd([f"module load {scp.settings.tools['gatk']}"])
+        cmds += cmd([f"module load {scp.settings.tools['strelka']}"])
         cmds += cmd(
             [
                 "cofigureStrelkaSomaticWorkflow.py",
@@ -91,7 +91,7 @@ def sterlka(outdir, normal, ref, time, mem, afterok):
 
     cmdmain = write_cmds_get_main(
         df_cmds,
-        "sterlka",
+        "strelka",
         time,
         mem,
         None,
