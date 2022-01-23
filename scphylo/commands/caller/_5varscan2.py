@@ -82,7 +82,7 @@ def varscan2(outdir, normal, ref, time, mem, afterok):
         )
         cmdmain = write_cmds_get_main(
             df_cmds_tmp,
-            "varscan2-1of3",
+            "varscan2-1of2",
             time,
             mem,
             None,
@@ -97,13 +97,43 @@ def varscan2(outdir, normal, ref, time, mem, afterok):
         def get_command(sample):
             cmds = ""
             cmds += cmd([f"module load {scp.settings.tools['varscan']}"])
+            cmds += cmd([f"mkdir -p {outdir}/{sample}.varscan2"])
             cmds += cmd(
                 [
                     "varscan",
                     "somatic",
                     f"{outdir}/{normal}.markdup_bqsr.pileup",
                     f"{outdir}/{sample}.markdup_bqsr.pileup",
+                    f"--output-snp {outdir}/{sample}.varscan2/snp.vcf",
+                    f"--output-indel {outdir}/{sample}.varscan2/indel.vcf",
                     "--output-vcf",
+                ]
+            )
+            cmds += cmd([f"module load {scp.settings.tools['bcftools']}"])
+            cmds += cmd(
+                [
+                    "bcftools",
+                    "concat",
+                    f"{outdir}/{sample}.varscan2/snp.vcf",
+                    f"{outdir}/{sample}.varscan2/indel.vcf",
+                    f"--output {outdir}/{sample}.varscan2.vcf",
+                    "--output-type v",
+                    "--allow-overlaps",
+                ]
+            )
+            cmds += cmd(
+                [
+                    "bcftools",
+                    "sort",
+                    f"{outdir}/{sample}.varscan2.vcf",
+                    f"--output {outdir}/{sample}.varscan2.vcf",
+                    "--output-type v",
+                ]
+            )
+            cmds += cmd(
+                [
+                    f"rm -rf {outdir}/{sample}.varscan2",
+                    f"rm -rf {outdir}/{sample}.markdup_bqsr.pileup",
                 ]
             )
             cmds += cmd(["echo Done!"], islast=True)
@@ -115,35 +145,7 @@ def varscan2(outdir, normal, ref, time, mem, afterok):
         )
         cmdmain = write_cmds_get_main(
             df_cmds_tmp,
-            "varscan2-2of3",
-            time,
-            mem,
-            None,
-            1,
-            scp.settings.tools["email"],
-            f"{outdir}/_tmp",
-            afterok,
-        )
-        return cmdmain
-
-    def step3(afterok):
-        def get_command(sample):
-            cmds = ""
-            cmds += cmd(
-                [
-                    f"rm -rf {outdir}/{sample}.markdup_bqsr.pileup",
-                ]
-            )
-            cmds += cmd(["echo Done!"], islast=True)
-            return cmds
-
-        df_cmds_tmp = scp.ul.get_samples_df(outdir, normal=None)
-        df_cmds_tmp["cmd"] = df_cmds_tmp.apply(
-            lambda x: get_command(x["sample"]), axis=1
-        )
-        cmdmain = write_cmds_get_main(
-            df_cmds_tmp,
-            "varscan2-3of3",
+            "varscan2-2of2",
             time,
             mem,
             None,
@@ -158,8 +160,6 @@ def varscan2(outdir, normal, ref, time, mem, afterok):
     code1 = subprocess.getoutput(cmd1)
     cmd2 = step2(code1)
     code2 = subprocess.getoutput(cmd2)
-    cmd3 = step3(code2)
-    code3 = subprocess.getoutput(cmd3)
-    scp.logg.info(code3)
+    scp.logg.info(code2)
 
     return None

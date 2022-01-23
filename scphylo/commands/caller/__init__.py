@@ -15,7 +15,7 @@ from scphylo.commands.caller._5hapcaller import hapcaller
 from scphylo.commands.caller._5mpileup import mpileup
 from scphylo.commands.caller._5mutect2 import mutect2
 from scphylo.commands.caller._5sequenza import sequenza
-from scphylo.commands.caller._5strelka import strelka
+from scphylo.commands.caller._5strelka2 import strelka2
 from scphylo.commands.caller._5varscan2 import varscan2
 from scphylo.commands.caller._6bamreadcount import bamreadcount
 from scphylo.commands.caller._6bamsnap import bamsnap
@@ -65,7 +65,7 @@ cli_caller.add_command(star)
 cli_caller.add_command(gatk)
 cli_caller.add_command(hapcaller)
 cli_caller.add_command(mutect2)
-cli_caller.add_command(strelka)
+cli_caller.add_command(strelka2)
 cli_caller.add_command(varscan2)
 cli_caller.add_command(mpileup)
 cli_caller.add_command(sequenza)
