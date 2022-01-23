@@ -14,6 +14,7 @@ from scphylo.commands.caller._4rsem import rsem
 from scphylo.commands.caller._5hapcaller import hapcaller
 from scphylo.commands.caller._5mpileup import mpileup
 from scphylo.commands.caller._5mutect2 import mutect2
+from scphylo.commands.caller._5strelka import sterlka
 from scphylo.commands.caller._6bamreadcount import bamreadcount
 from scphylo.commands.caller._6bamsnap import bamsnap
 from scphylo.commands.caller._6defuse import defuse
@@ -60,8 +61,9 @@ cli_caller.add_command(fastp)
 cli_caller.add_command(bwa)
 cli_caller.add_command(star)
 cli_caller.add_command(gatk)
-cli_caller.add_command(mutect2)
 cli_caller.add_command(hapcaller)
+cli_caller.add_command(mutect2)
+cli_caller.add_command(sterlka)
 cli_caller.add_command(mpileup)
 cli_caller.add_command(snpeff)
 cli_caller.add_command(rsem)
