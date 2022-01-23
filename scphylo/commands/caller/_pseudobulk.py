@@ -64,14 +64,14 @@ def pseudobulk(outdir, ref, time, mem, afterok):
     def step1(afterok):
         def get_command(sample):
             cmds = ""
-            cmds += cmd([f"mkdir -p {outdir}/_indexing/4"])
+            cmds += cmd([f"mkdir -p {outdir}/_indexing/pseudobulk"])
             cmds += cmd([f"module load {scp.settings.tools['samtools']}"])
             cmds += cmd(
                 [
                     "samtools merge",
                     "-in",
                     f"{' -in '.join([])}",
-                    f"-out {outdir}/_indexing/4/merged.bam",
+                    f"-out {outdir}/_indexing/pseudobulk/merged.bam",
                 ]
             )
             cmds += cmd(["echo Done!"], islast=True)

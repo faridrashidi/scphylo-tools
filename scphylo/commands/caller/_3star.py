@@ -83,13 +83,13 @@ def star(indir, outdir, ref, time, mem, max_multimapping, afterok):
     def step1(afterok):
         def get_command():
             cmds = ""
-            cmds += cmd([f"mkdir -p {outdir}/_indexing/1"])
+            cmds += cmd([f"mkdir -p {outdir}/_indexing/star1"])
             cmds += cmd([f"module load {scp.settings.tools['star']}"])
             cmds += cmd(
                 [
                     "STAR",
                     "--runMode genomeGenerate",
-                    f"--genomeDir {outdir}/_indexing/1",
+                    f"--genomeDir {outdir}/_indexing/star1",
                     f"--genomeFastaFiles {config['ref']}",
                     f"--sjdbGTFfile {config['annot']}",
                     f"--sjdbOverhang {readlength}",
@@ -126,7 +126,7 @@ def star(indir, outdir, ref, time, mem, max_multimapping, afterok):
                 [
                     "STAR",
                     "--runMode alignReads",
-                    f"--genomeDir {outdir}/_indexing/1",
+                    f"--genomeDir {outdir}/_indexing/star1",
                     f"--sjdbGTFfile {config['annot']}",
                     f"--outFilterMultimapNmax {max_multimapping}",
                     "--outSAMunmapped None",
@@ -170,13 +170,13 @@ def star(indir, outdir, ref, time, mem, max_multimapping, afterok):
                 [f"{outdir}/{s}_SJ.out.tab" for s in df_cmds["sample"].values]
             )
             cmds = ""
-            cmds += cmd([f"mkdir -p {outdir}/_indexing/2"])
+            cmds += cmd([f"mkdir -p {outdir}/_indexing/star2"])
             cmds += cmd([f"module load {scp.settings.tools['star']}"])
             cmds += cmd(
                 [
                     "STAR",
                     "--runMode genomeGenerate",
-                    f"--genomeDir {outdir}/_indexing/2",
+                    f"--genomeDir {outdir}/_indexing/star2",
                     f"--genomeFastaFiles {config['ref']}",
                     f"--sjdbGTFfile {config['annot']}",
                     f"--sjdbFileChrStartEnd {files}",
@@ -214,7 +214,7 @@ def star(indir, outdir, ref, time, mem, max_multimapping, afterok):
                 [
                     "STAR",
                     "--runMode alignReads",
-                    f"--genomeDir {outdir}/_indexing/2",
+                    f"--genomeDir {outdir}/_indexing/star2",
                     "--readFilesCommand zcat",
                     "--readFilesIn",
                     f"{' '.join(infqs)}",

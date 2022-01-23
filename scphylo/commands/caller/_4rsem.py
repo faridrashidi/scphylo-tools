@@ -64,7 +64,7 @@ def rsem(outdir, ref, single_or_paired, time, mem, afterok):
     def step1(afterok):
         def get_command():
             cmds = ""
-            cmds += cmd([f"mkdir -p {outdir}/_indexing/3"])
+            cmds += cmd([f"mkdir -p {outdir}/_indexing/rsem"])
             cmds += cmd([f"module load {scp.settings.tools['rsem']}"])
             cmds += cmd(
                 [
@@ -73,7 +73,7 @@ def rsem(outdir, ref, single_or_paired, time, mem, afterok):
                     "--gtf",
                     f"{config['annot']}",
                     f"{config['ref']}",
-                    f"{outdir}/_indexing/3/rsem",
+                    f"{outdir}/_indexing/rsem/rsem",
                 ]
             )
             cmds += cmd(["echo Done!"], islast=True)
@@ -107,7 +107,7 @@ def rsem(outdir, ref, single_or_paired, time, mem, afterok):
                         "--paired-end",
                         "--estimate-rspd",
                         f"{outdir}/{sample}.transcript.bam",
-                        f"{outdir}/_indexing/3/rsem",
+                        f"{outdir}/_indexing/rsem/rsem",
                         f"{outdir}/{sample}",
                     ]
                 )
@@ -119,7 +119,7 @@ def rsem(outdir, ref, single_or_paired, time, mem, afterok):
                         "--no-bam-output",
                         "--estimate-rspd",
                         f"{outdir}/{sample}.transcript.bam",
-                        f"{outdir}/_indexing/3/rsem",
+                        f"{outdir}/_indexing/rsem/rsem",
                         f"{outdir}/{sample}",
                     ]
                 )
