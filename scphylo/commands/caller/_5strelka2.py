@@ -94,7 +94,7 @@ def strelka2(outdir, normal, ref, time, mem, afterok):
                 "bcftools",
                 "sort",
                 f"{outdir}/{sample}.strelka2.vcf",
-                f"--output {outdir}/{sample}.strelka2.vcf",
+                f"--output-file {outdir}/{sample}.strelka2.vcf",
                 "--output-type v",
             ]
         )

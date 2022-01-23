@@ -126,7 +126,7 @@ def varscan2(outdir, normal, ref, time, mem, afterok):
                     "bcftools",
                     "sort",
                     f"{outdir}/{sample}.varscan2.vcf",
-                    f"--output {outdir}/{sample}.varscan2.vcf",
+                    f"--output-file {outdir}/{sample}.varscan2.vcf",
                     "--output-type v",
                 ]
             )
