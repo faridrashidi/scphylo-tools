@@ -52,7 +52,7 @@ def mutect2(outdir, normal, ref, time, mem, afterok):
 
     scphylo mutect2 /path/to/in/dir /path/to/normal/name hg19|hg38|mm10
 
-    BAM files (*.markdup_bqsr.bam) --> VCF files (*.vcf)
+    BAM files (*.markdup_bqsr.bam) --> VCF files (*.mutect2.vcf)
     """
     if ref == "hg19":
         config = scp.settings.hg19
@@ -72,10 +72,10 @@ def mutect2(outdir, normal, ref, time, mem, afterok):
                 f"--input {outdir}/{sample}.markdup_bqsr.bam",
                 f"--input {outdir}/{normal}.markdup_bqsr.bam",
                 f"--normal-sample {normal}",
-                f"--output {outdir}/{sample}.vcf",
+                f"--output {outdir}/{sample}.mutect2.vcf",
             ]
         )
-        cmds += cmd(["rm -rf", f"{outdir}/{sample}.vcf.stats"])
+        cmds += cmd(["rm -rf", f"{outdir}/{sample}.mutect2.vcf.stats"])
         cmds += cmd(["echo Done!"], islast=True)
         return cmds
 
