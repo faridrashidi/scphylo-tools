@@ -6,7 +6,7 @@ import scphylo as scp
 from scphylo.ul._servers import cmd, write_cmds_get_main
 
 
-@click.command(short_help="Run Strelka.")
+@click.command(short_help="Run Strelka2.")
 @click.argument(
     "outdir",
     required=True,
@@ -45,12 +45,12 @@ from scphylo.ul._servers import cmd, write_cmds_get_main
     show_default=True,
     help="Afterok.",
 )
-def strelka(outdir, normal, ref, time, mem, afterok):
-    """Run Strelka.
+def strelka2(outdir, normal, ref, time, mem, afterok):
+    """Run Strelka2.
 
-    scphylo strelka /path/to/in/dir normal_name hg19|hg38|mm10
+    scphylo strelka2 /path/to/in/dir normal_name hg19|hg38|mm10
 
-    BAM files (*.markdup_bqsr.bam) --> VCF files (*.strelka.vcf)
+    BAM files (*.markdup_bqsr.bam) --> VCF files (*.strelka2.vcf)
     """
     if ref == "hg19":
         config = scp.settings.hg19
@@ -64,14 +64,41 @@ def strelka(outdir, normal, ref, time, mem, afterok):
         cmds += cmd([f"module load {scp.settings.tools['strelka']}"])
         cmds += cmd(
             [
-                "cofigureStrelkaSomaticWorkflow.py",
+                "configureStrelkaSomaticWorkflow.py",
                 f"--referenceFasta={config['ref']}",
                 f"--normalBam={outdir}/{normal}.markdup_bqsr.bam",
                 f"--tumorBam={outdir}/{sample}.markdup_bqsr.bam",
-                f"--runDir={outdir}",
+                f"--runDir={outdir}/{sample}.strelka2",
             ]
         )
-        cmds += cmd(["demo_out/runWorkflow.py -m local -j $SLURM_CPUS_PER_TASK"])
+        cmds += cmd(
+            [
+                f"{outdir}/{sample}.strelka2/runWorkflow.py -m local -j "
+                "$SLURM_CPUS_PER_TASK"
+            ]
+        )
+        cmds += cmd([f"module load {scp.settings.tools['bcftools']}"])
+        cmds += cmd(
+            [
+                "bcftools",
+                "concat",
+                f"{outdir}/{sample}.strelka2/results/variants/somatic.snvs.vcf.gz",
+                f"{outdir}/{sample}.strelka2/results/variants/somatic.indels.vcf.gz",
+                f"--output {outdir}/{sample}.strelka2.vcf",
+                "--output-type v",
+                "--allow-overlaps",
+            ]
+        )
+        cmds += cmd(
+            [
+                "bcftools",
+                "sort",
+                f"{outdir}/{sample}.strelka2.vcf",
+                f"--output {outdir}/{sample}.strelka2.vcf",
+                "--output-type v",
+            ]
+        )
+        cmds += cmd([f"rm -rf {outdir}/{sample}.strelka2"])
         cmds += cmd(["echo Done!"], islast=True)
         return cmds
 
@@ -80,7 +107,7 @@ def strelka(outdir, normal, ref, time, mem, afterok):
 
     cmdmain = write_cmds_get_main(
         df_cmds,
-        "strelka",
+        "strelka2",
         time,
         mem,
         None,
