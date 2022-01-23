@@ -1,8 +1,6 @@
-import glob
 import subprocess
 
 import click
-import pandas as pd
 
 import scphylo as scp
 from scphylo.ul._servers import cmd, write_cmds_get_main
@@ -79,16 +77,7 @@ def mutect2(outdir, normal, ref, time, mem, afterok):
         cmds += cmd(["echo Done!"], islast=True)
         return cmds
 
-    files = glob.glob(f"{outdir}/*.markdup_bqsr.bam")
-    temp = []
-    for file in files:
-        file = file.split("/")[-1].replace(".markdup_bqsr.bam", "")
-        if file != normal:
-            temp.append({"sample": file})
-    df_cmds = pd.DataFrame(temp)
-    scp.logg.info(
-        f"Tumor samples: {','.join(df_cmds['sample'].values)} & Normal sample: {normal}"
-    )
+    df_cmds = scp.ul.get_samples_df(outdir, normal)
     df_cmds["cmd"] = df_cmds.apply(lambda x: get_command(x["sample"]), axis=1)
 
     cmdmain = write_cmds_get_main(
