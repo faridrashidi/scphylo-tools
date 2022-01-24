@@ -27,7 +27,7 @@ from scphylo.ul._servers import cmd, write_cmds_get_main
 )
 @click.option(
     "--time",
-    default=["1:00:00", "10:00:00"],
+    default=["1:00:00", "20:00:00"],
     multiple=True,
     show_default=True,
     help="Time List [indexing, calling].",
@@ -49,9 +49,9 @@ from scphylo.ul._servers import cmd, write_cmds_get_main
 def sequenza(outdir, normal, ref, time, mem, afterok):
     """Run Sequenza.
 
-    scphylo sequenza /path/to/in/dir hg19|hg38|mm10
+    scphylo sequenza /path/to/in/dir normal_name hg19|hg38|mm10
 
-    BAM files (*.markdup_bqsr.bam) --> AnnData file (_copynumber.h5ad.gz)
+    BAM files (*.markdup_bqsr.bam) --> folder (.sequenza)
     """
     if ref == "hg19":
         config = scp.settings.hg19
@@ -60,6 +60,11 @@ def sequenza(outdir, normal, ref, time, mem, afterok):
     elif ref == "hg38":
         config = scp.settings.hg38
 
+    if ref == "hg19" or ref == "hg38":
+        chroms = [f"chr{i}" for i in range(1, 23)] + ["chrX", "chrY"]
+    elif ref == "mm10":
+        chroms = [f"chr{i}" for i in range(1, 20)] + ["chrX", "chrY"]
+
     def step1(afterok):
         def get_command():
             cmds = ""
@@ -67,7 +72,7 @@ def sequenza(outdir, normal, ref, time, mem, afterok):
             cmds += cmd([f"module load {scp.settings.tools['sequenza']}"])
             cmds += cmd(
                 [
-                    "sequenza−utile",
+                    "sequenza-utils",
                     "gc_wiggle",
                     "-w 50",
                     f"--fasta {config['ref']}",
@@ -81,9 +86,9 @@ def sequenza(outdir, normal, ref, time, mem, afterok):
         cmds_tmp["cmd"] = [get_command()]
         cmdmain = write_cmds_get_main(
             cmds_tmp,
-            "sequenza-1of3",
-            time,
-            mem,
+            "sequenza-1of2",
+            time[0],
+            mem[0],
             None,
             1,
             scp.settings.tools["email"],
@@ -96,6 +101,7 @@ def sequenza(outdir, normal, ref, time, mem, afterok):
         def get_command(sample):
             cmds = ""
             cmds += cmd([f"module load {scp.settings.tools['sequenza']}"])
+            cmds += cmd([f"module load {scp.settings.tools['samtools']}"])
             cmds += cmd(
                 [
                     "sequenza-utils",
@@ -105,6 +111,15 @@ def sequenza(outdir, normal, ref, time, mem, afterok):
                     f"--fasta {config['ref']}",
                     f"-gc {outdir}/_indexing/sequenza/sequenza.wig.gz",
                     f"--output {outdir}/{sample}.seqz.gz",
+                    f"--chromosome {' '.join(chroms)}",
+                ]
+            )
+            cmds += cmd(
+                [
+                    "Rscript",
+                    f"{scp.ul.get_file('scphylo.ul/sequenza.R')}",
+                    outdir,
+                    sample,
                 ]
             )
             cmds += cmd(["echo Done!"], islast=True)
@@ -116,33 +131,11 @@ def sequenza(outdir, normal, ref, time, mem, afterok):
         )
         cmdmain = write_cmds_get_main(
             df_cmds_tmp,
-            "sequenza-2of3",
-            time,
-            mem,
+            "sequenza-2of2",
+            time[1],
+            mem[1],
             None,
             1,
-            scp.settings.tools["email"],
-            f"{outdir}/_tmp",
-            afterok,
-        )
-        return cmdmain
-
-    def step3(afterok):
-        def get_command():
-            cmds = ""
-            cmds += cmd([f"python {scp.ul.get_file('scphylo.ul/rsem.py')} {outdir}"])
-            cmds += cmd(["echo Done!"], islast=True)
-            return cmds
-
-        cmds_tmp = pd.DataFrame()
-        cmds_tmp["cmd"] = [get_command()]
-        cmdmain = write_cmds_get_main(
-            cmds_tmp,
-            "rsem-3of3",
-            time[0],
-            mem[0],
-            None,
-            2,
             scp.settings.tools["email"],
             f"{outdir}/_tmp",
             afterok,
@@ -153,8 +146,6 @@ def sequenza(outdir, normal, ref, time, mem, afterok):
     code1 = subprocess.getoutput(cmd1)
     cmd2 = step2(code1)
     code2 = subprocess.getoutput(cmd2)
-    cmd3 = step3(code2)
-    code3 = subprocess.getoutput(cmd3)
-    scp.logg.info(code3)
+    scp.logg.info(code2)
 
     return None
