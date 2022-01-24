@@ -112,10 +112,36 @@ def varscan2(outdir, normal, ref, time, mem, afterok):
             cmds += cmd([f"module load {scp.settings.tools['bcftools']}"])
             cmds += cmd(
                 [
+                    "bgzip",
+                    f"{outdir}/{sample}.varscan2/snp.vcf",
+                ]
+            )
+            cmds += cmd(
+                [
+                    "bgzip",
+                    f"{outdir}/{sample}.varscan2/indel.vcf",
+                ]
+            )
+            cmds += cmd(
+                [
+                    "bcftools",
+                    "index",
+                    f"{outdir}/{sample}.varscan2/snp.vcf.gz",
+                ]
+            )
+            cmds += cmd(
+                [
+                    "bcftools",
+                    "index",
+                    f"{outdir}/{sample}.varscan2/indel.vcf.gz",
+                ]
+            )
+            cmds += cmd(
+                [
                     "bcftools",
                     "concat",
-                    f"{outdir}/{sample}.varscan2/snp.vcf",
-                    f"{outdir}/{sample}.varscan2/indel.vcf",
+                    f"{outdir}/{sample}.varscan2/snp.vcf.gz",
+                    f"{outdir}/{sample}.varscan2/indel.vcf.gz",
                     f"--output {outdir}/{sample}.varscan2.vcf",
                     "--output-type v",
                     "--allow-overlaps",
