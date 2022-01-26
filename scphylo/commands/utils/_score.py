@@ -19,7 +19,7 @@ import scphylo as scp
     ),
 )
 def score(ground_file, inferred_file):
-    """Scores of Anscenstor-descendant, Different-lineage and MLTD.
+    """Scores of Anscenstor-descendant, Different-lineage, MLTD and etc.
 
     scphylo utils score ground.CFMatrix inferred.CFMatrix
     """
