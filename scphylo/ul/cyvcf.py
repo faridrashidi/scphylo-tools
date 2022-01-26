@@ -61,4 +61,5 @@ bad = [
     "ERRORS / WARNINGS / INFO",
 ]
 adata.var.drop(bad, axis=1, inplace=True)
+adata.var.to_csv(outdir + f"/{basename}.tsv", sep="\t")
 adata.write(outdir + f"/_{basename[:-len('.ann')]}.h5ad.gz", compression="gzip")
