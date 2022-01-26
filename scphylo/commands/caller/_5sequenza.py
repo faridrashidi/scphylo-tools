@@ -61,9 +61,19 @@ def sequenza(outdir, normal, ref, time, mem, afterok):
         config = scp.settings.hg38
 
     if ref == "hg19" or ref == "hg38":
-        chroms = [f"chr{i}" for i in range(1, 23)] + ["chrX", "chrY"]
+        # chroms = [f"chr{i}" for i in range(1, 23)] + ["chrX", "chrY"]
+        chroms = (
+            [f"chr{i}" for i in range(10, 23)]
+            + [f"chr{i}" for i in range(1, 10)]
+            + ["chrX", "chrY"]
+        )
     elif ref == "mm10":
-        chroms = [f"chr{i}" for i in range(1, 20)] + ["chrX", "chrY"]
+        # chroms = [f"chr{i}" for i in range(1, 20)] + ["chrX", "chrY"]
+        chroms = (
+            [f"chr{i}" for i in range(10, 20)]
+            + [f"chr{i}" for i in range(1, 10)]
+            + ["chrX", "chrY"]
+        )
 
     def step1(afterok):
         def get_command():
@@ -116,10 +126,28 @@ def sequenza(outdir, normal, ref, time, mem, afterok):
             )
             cmds += cmd(
                 [
+                    "sequenza-utils",
+                    "seqz_binning",
+                    f"--seqz {outdir}/{sample}.seqz.gz",
+                    "-w 50",
+                    f"-o {outdir}/{sample}.50.seqz.gz",
+                ]
+            )
+            cmds += cmd(
+                [
                     "Rscript",
                     f"{scp.ul.get_file('scphylo.ul/sequenza.R')}",
                     outdir,
                     sample,
+                ]
+            )
+            cmds += cmd(
+                [
+                    "rm -rf",
+                    f"{outdir}/{sample}.50.seqz.gz",
+                    f"{outdir}/{sample}.50.seqz.gz.tbi",
+                    f"{outdir}/{sample}.seqz.gz",
+                    f"{outdir}/{sample}.seqz.gz.tbi",
                 ]
             )
             cmds += cmd(["echo Done!"], islast=True)
