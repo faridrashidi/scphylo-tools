@@ -73,7 +73,13 @@ def mutect2(outdir, normal, ref, time, mem, afterok):
                 f"--output {outdir}/{sample}.mutect2.vcf",
             ]
         )
-        cmds += cmd(["rm -rf", f"{outdir}/{sample}.mutect2.vcf.stats"])
+        cmds += cmd(
+            [
+                "rm -rf",
+                f"{outdir}/{sample}.mutect2.vcf.stats",
+                f"{outdir}/{sample}.mutect2.vcf.idx",
+            ]
+        )
         cmds += cmd(["echo Done!"], islast=True)
         return cmds
 
