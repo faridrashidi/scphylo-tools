@@ -9,3 +9,4 @@
 *.cfg linguist-detectable=false
 *.txt linguist-detectable=false
 *.pyx linguist-detectable=false
+*.R linguist-detectable=false
