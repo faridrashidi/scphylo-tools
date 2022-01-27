@@ -43,7 +43,8 @@ cells = pd.DataFrame(index=cells)
 adata = ad.AnnData(np.zeros((len(muts), len(cells))))
 adata.obs = muts
 adata.var = cells
-adata.layers["genotype"] = m_gen
+if m_gen.shape[1] > 0:
+    adata.layers["genotype"] = m_gen
 adata.layers["total"] = m_ref + m_alt
 adata.layers["mutant"] = m_alt
 adata = adata.T
