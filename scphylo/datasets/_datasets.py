@@ -630,3 +630,39 @@ def isogenic_fibroblast_cell_line():
     """
     # TODO: extract
     return None
+
+
+def acute_myeloid_leukemia1():
+    """Human Acute Myeloid Leukemia dataset (Patient 1).
+
+    This dataset was introduced in :cite:`Velten_2021` and was used in:
+
+    The size is n_cells × n_muts = 1430 × 15
+
+    Returns
+    -------
+    :class:`anndata.AnnData`
+        An anndata in which `.X` is the input noisy.
+    """
+    adata = scp.io.read(
+        scp.ul.get_file("scphylo.datasets/real/acute_myeloid_leukemia1.h5ad")
+    )
+    return adata
+
+
+def acute_myeloid_leukemia2():
+    """Human Acute Myeloid Leukemia dataset (Patient 2).
+
+    This dataset was introduced in :cite:`Velten_2021` and was used in:
+
+    The size is n_cells × n_muts = 1066 × 21
+
+    Returns
+    -------
+    :class:`anndata.AnnData`
+        An anndata in which `.X` is the input noisy.
+    """
+    adata = scp.io.read(
+        scp.ul.get_file("scphylo.datasets/real/acute_myeloid_leukemia2.h5ad")
+    )
+    return adata

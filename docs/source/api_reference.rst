@@ -140,6 +140,8 @@ This module offers a bunch of functions for simulating data.
     datasets.colorectal1
     datasets.colorectal2
     datasets.colorectal3
+    datasets.acute_myeloid_leukemia1
+    datasets.acute_myeloid_leukemia2
     datasets.acute_lymphocytic_leukemia1
     datasets.acute_lymphocytic_leukemia2
     datasets.acute_lymphocytic_leukemia3
