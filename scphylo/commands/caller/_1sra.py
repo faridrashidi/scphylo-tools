@@ -50,20 +50,21 @@ def sra(srafile, outdir, check):
                     f"{srr_id}",
                 ]
             )
-            cmds += cmd(
-                [
-                    "mv",
-                    f"{outdir}/{srr_id}_1.fastq",
-                    f"{outdir}/{name}_1.fastq",
-                ]
-            )
-            cmds += cmd(
-                [
-                    "mv",
-                    f"{outdir}/{srr_id}_2.fastq",
-                    f"{outdir}/{name}_2.fastq",
-                ]
-            )
+            if srr_id != name:
+                cmds += cmd(
+                    [
+                        "mv",
+                        f"{outdir}/{srr_id}_1.fastq",
+                        f"{outdir}/{name}_1.fastq",
+                    ]
+                )
+                cmds += cmd(
+                    [
+                        "mv",
+                        f"{outdir}/{srr_id}_2.fastq",
+                        f"{outdir}/{name}_2.fastq",
+                    ]
+                )
             cmds += cmd(
                 [
                     "gzip",
@@ -84,13 +85,14 @@ def sra(srafile, outdir, check):
                     f"{srr_id}",
                 ]
             )
-            cmds += cmd(
-                [
-                    "mv",
-                    f"{outdir}/{srr_id}.fastq",
-                    f"{outdir}/{name}.fastq",
-                ]
-            )
+            if srr_id != name:
+                cmds += cmd(
+                    [
+                        "mv",
+                        f"{outdir}/{srr_id}.fastq",
+                        f"{outdir}/{name}.fastq",
+                    ]
+                )
             cmds += cmd(
                 [
                     "gzip",
