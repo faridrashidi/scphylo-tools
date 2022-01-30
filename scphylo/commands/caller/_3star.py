@@ -238,7 +238,7 @@ def star(indir, outdir, ref, time, mem, max_multimapping, afterok, is_pdx):
                 f"--sjdbOverhang {readlength}",
             ]
             if is_pdx:
-                tmp += [f"--outReadsUnmapped Fastx"]
+                tmp += ["--outReadsUnmapped Fastx"]
             cmds += cmd(tmp)
             cmds += cmd(
                 [
