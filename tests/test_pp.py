@@ -41,3 +41,11 @@ class TestPreProcessing:
         scp.pp.remove_cell_by_list(adata, ["C15_1"])
         scp.pp.keep_cell_by_list(adata, ["C15_2", "C15_3"])
         assert adata.shape == (2, 267)
+
+    def test_tree(self):
+        adata = scp.datasets.high_grade_serous_ovarian_cancer_3celllines()
+        df_out = adata.to_df(layer="ground")[adata.var_names[:1000]]
+        tree = scp.ul.to_tree(df_out)
+        tree = scp.pp.collapse(tree)
+        sampled_cells = scp.pp.sample_from_tree(tree, 0.2, axis="cell")
+        assert len(sampled_cells) > 160

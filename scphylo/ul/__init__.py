@@ -20,7 +20,6 @@ from scphylo.ul._trees import (
     muts_rooted_at,
     partition_cells,
     root_id,
-    sample_from_tree,
     to_cfmatrix,
     to_mtree,
     to_tree,
@@ -98,7 +97,6 @@ __all__ = (
     executable,
     split_mut,
     count_flips,
-    sample_from_tree,
     is_paired,
     get_samples_df,
 )

@@ -21,7 +21,7 @@ from scphylo.pp._readcount import (
     remove_mut_by_list,
     statistics,
 )
-from scphylo.pp._tree import collapse
+from scphylo.pp._tree import collapse, sample_from_tree
 
 __all__ = (
     bifiltering,
@@ -42,4 +42,5 @@ __all__ = (
     statistics,
     collapse,
     group_obs_apply_func,
+    sample_from_tree,
 )

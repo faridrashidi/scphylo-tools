@@ -1,4 +1,5 @@
 import networkx as nx
+import numpy as np
 
 import scphylo as scp
 
@@ -64,3 +65,22 @@ def collapse(tree):
             tc2[grandparent][new_node]["label"] = new_edge
             tc2.nodes[new_node]["label"] = new_label
     return tc2
+
+
+def sample_from_tree(tree, ratio, axis="cell"):
+    sampled = []
+    if axis == "cell":
+        for n in tree.nodes:
+            if tree.in_degree(n) == 1 and "––" not in tree.nodes[n]["label"]:
+                array = tree.nodes[n]["label"].split(tree.graph["splitter_cell"])
+                array = np.random.choice(
+                    array, replace=False, size=int(ratio * len(array))
+                )
+                sampled += list(array)
+        return sampled
+    elif axis == "mut":
+        for _, _, lable in tree.edges(data=True):
+            array = lable["label"].split(tree.graph["splitter_mut"])
+            array = np.random.choice(array, replace=False, size=int(ratio * len(array)))
+            sampled += list(array)
+        return sampled
