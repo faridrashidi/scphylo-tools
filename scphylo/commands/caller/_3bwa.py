@@ -53,12 +53,22 @@ from scphylo.ul._servers import cmd, write_cmds_get_main
     show_default=True,
     help="Afterok.",
 )
-def bwa(indir, outdir, ref, time, mem, n_threads, afterok):
+@click.option(
+    "--is_pdx",
+    default=False,
+    type=bool,
+    show_default=True,
+    is_flag=True,
+    help="Is the the PDX.",
+)
+def bwa(indir, outdir, ref, time, mem, n_threads, afterok, is_pdx):
     """Run bwa-mem.
 
-    scphylo bwa /path/to/in/dir /path/to/out/dir hg19|hg38|mm10
+    scphylo bwa /path/to/in/dir /path/to/out/dir hg19|hg38|mm10 --is_pdx
 
     FastQ files (*.fastq.gz) --> BAM files (*.mapped.bam)
+
+    if --is_pdx: FastQ files (*.fastq.gz) --> FastQ files (*.fastq.gz)
     """
     scp.ul.mkdir(outdir)
     if ref == "hg19":
@@ -88,6 +98,43 @@ def bwa(indir, outdir, ref, time, mem, n_threads, afterok):
                 f"-o {outdir}/{sample}.mapped.bam -",
             ]
         )
+        if is_pdx:
+            cmds += cmd(
+                [
+                    "samtools view",
+                    "-b -f 4",
+                    f"{outdir}/{sample}.mapped.bam",
+                    f"> {outdir}/{sample}.unmapped.bam",
+                ]
+            )
+            cmds += cmd(
+                [
+                    "samtools fastq",
+                    f"-1 {outdir}/{sample}_1.fastq",
+                    f"-2 {outdir}/{sample}_2.fastq",
+                    "-0 /dev/null -s /dev/null -n",
+                    f"{outdir}/{sample}.unmapped.bam",
+                ]
+            )
+            cmds += cmd(
+                [
+                    "gzip",
+                    f"{outdir}/{sample}_1.fastq",
+                ]
+            )
+            cmds += cmd(
+                [
+                    "gzip",
+                    f"{outdir}/{sample}_2.fastq",
+                ]
+            )
+            cmds += cmd(
+                [
+                    "rm -rf",
+                    f"{outdir}/{sample}.mapped.bam",
+                    f"{outdir}/{sample}.unmapped.bam",
+                ]
+            )
         cmds += cmd(["echo Done!"], islast=True)
         return cmds
 

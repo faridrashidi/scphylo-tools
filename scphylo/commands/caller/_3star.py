@@ -299,7 +299,13 @@ def star(indir, outdir, ref, time, mem, max_multimapping, afterok, is_pdx):
                         f"{outdir}/{sample}_2.fastq",
                     ]
                 )
-
+                cmds += cmd(
+                    [
+                        "rm -rf",
+                        f"{outdir}/{sample}.mapped.bam",
+                        f"{outdir}/{sample}.transcript.bam",
+                    ]
+                )
             cmds += cmd(["echo Done!"], islast=True)
             return cmds
 
