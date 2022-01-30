@@ -54,12 +54,22 @@ from scphylo.ul._servers import cmd, write_cmds_get_main
     show_default=True,
     help="Afterok.",
 )
-def star(indir, outdir, ref, time, mem, max_multimapping, afterok):
+@click.option(
+    "--is_pdx",
+    default=False,
+    type=bool,
+    show_default=True,
+    is_flag=True,
+    help="Is the the PDX.",
+)
+def star(indir, outdir, ref, time, mem, max_multimapping, afterok, is_pdx):
     """Run STAR.
 
-    scphylo star /path/to/in/dir /path/to/out/dir hg19|hg38|mm10
+    scphylo star /path/to/in/dir /path/to/out/dir hg19|hg38|mm10 --is_pdx
 
     FastQ files (*.fastq.gz) --> BAM files (*.mapped.bam)
+
+    if --is_pdx: FastQ files (*.fastq.gz) --> FastQ files (*.fastq.gz)
     """
     scp.ul.mkdir(outdir)
     if ref == "hg19":
@@ -210,25 +220,26 @@ def star(indir, outdir, ref, time, mem, max_multimapping, afterok):
                 infqs = [f"{indir}/{sample}.fastq.gz"]
             cmds = ""
             cmds += cmd([f"module load {scp.settings.tools['star']}"])
-            cmds += cmd(
-                [
-                    "STAR",
-                    "--runMode alignReads",
-                    f"--genomeDir {outdir}/_indexing/star2",
-                    "--readFilesCommand zcat",
-                    "--readFilesIn",
-                    f"{' '.join(infqs)}",
-                    f"--outFileNamePrefix {outdir}/{sample}_",
-                    "--limitBAMsortRAM 30000000000",
-                    "--outSAMtype BAM SortedByCoordinate",
-                    f"--sjdbGTFfile {config['annot']}",
-                    f"--outFilterMultimapNmax {max_multimapping}",
-                    "--outSAMunmapped None",
-                    "--quantMode TranscriptomeSAM GeneCounts",
-                    "--runThreadN 1",
-                    f"--sjdbOverhang {readlength}",
-                ]
-            )
+            tmp = [
+                "STAR",
+                "--runMode alignReads",
+                f"--genomeDir {outdir}/_indexing/star2",
+                "--readFilesCommand zcat",
+                "--readFilesIn",
+                f"{' '.join(infqs)}",
+                f"--outFileNamePrefix {outdir}/{sample}_",
+                "--limitBAMsortRAM 30000000000",
+                "--outSAMtype BAM SortedByCoordinate",
+                f"--sjdbGTFfile {config['annot']}",
+                f"--outFilterMultimapNmax {max_multimapping}",
+                "--outSAMunmapped None",
+                "--quantMode TranscriptomeSAM GeneCounts",
+                "--runThreadN 1",
+                f"--sjdbOverhang {readlength}",
+            ]
+            if is_pdx:
+                tmp += [f"--outReadsUnmapped Fastx"]
+            cmds += cmd(tmp)
             cmds += cmd(
                 [
                     "rm -rf",
@@ -261,6 +272,34 @@ def star(indir, outdir, ref, time, mem, max_multimapping, afterok):
                     f"{outdir}/{sample}.star.log",
                 ]
             )
+            if is_pdx:
+                cmds += cmd(
+                    [
+                        "mv",
+                        f"{outdir}/{sample}_Unmapped.out.mate1",
+                        f"{outdir}/{sample}_1.fastq",
+                    ]
+                )
+                cmds += cmd(
+                    [
+                        "mv",
+                        f"{outdir}/{sample}_Unmapped.out.mate2",
+                        f"{outdir}/{sample}_2.fastq",
+                    ]
+                )
+                cmds += cmd(
+                    [
+                        "gzip",
+                        f"{outdir}/{sample}_1.fastq",
+                    ]
+                )
+                cmds += cmd(
+                    [
+                        "gzip",
+                        f"{outdir}/{sample}_2.fastq",
+                    ]
+                )
+
             cmds += cmd(["echo Done!"], islast=True)
             return cmds
 
