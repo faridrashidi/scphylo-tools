@@ -136,6 +136,7 @@ if __name__ == "__main__":
             "dev": [
                 "pre-commit",
                 "pytest-cov",
+                "pytest-xdist",
                 "bumpversion",
             ],
             "docs": [
