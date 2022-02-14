@@ -2,6 +2,8 @@ import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
+from scipy.cluster import hierarchy
+from scipy.spatial import distance
 
 import scphylo as scp
 
@@ -59,9 +61,13 @@ def heatmap(
         else:
             adatac = adata.copy()
         df = adatac.to_df().copy()
+        distance_array = scp.ul.hclustering(df, return_dist=True)
         df[df == 3] = 2
         df.index.name = "cells"
         df.columns.name = "mutations"
+        row_linkage = hierarchy.linkage(
+            distance.pdist(distance_array), method="average"
+        )
         if sorting_by_chroms:
             chromosoms = {}
             for i in list(range(1, 23, 2)) + ["Y"]:
@@ -86,7 +92,7 @@ def heatmap(
         vmax=vmax,
         metric="euclidean",
         cmap=rvb,
-        row_cluster=False,
+        row_cluster=True,
         col_cluster=False,
         row_colors=row_colors,
         col_colors=column_colors,
@@ -96,6 +102,7 @@ def heatmap(
         yticklabels=False,
         colors_ratio=(0.02, 0.02),
         dendrogram_ratio=0,
+        row_linkage=row_linkage,
     )
     plt.xlabel("")
     plt.ylabel("")

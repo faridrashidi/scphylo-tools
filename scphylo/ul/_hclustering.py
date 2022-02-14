@@ -125,7 +125,7 @@ def dist_dendro(adata):
     return dist
 
 
-def hclustering(df, metric="l1", method="ward"):
+def hclustering(df, metric="l1", method="ward", return_dist=False):
     """Hierarchical clustering.
 
     Parameters
@@ -158,5 +158,8 @@ def hclustering(df, metric="l1", method="ward"):
     for i in range(2, dist.shape[0]):
         fc = fcluster(clust, i, criterion="maxclust")
         clusters[i] = pd.Series(fc, index=df.index)
+
+    if return_dist:
+        return dist
 
     return clusters
