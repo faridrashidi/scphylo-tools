@@ -62,6 +62,7 @@ and calculating the probability of mutations seeding particular cells.
     tl.siclonefit
     tl.sphyr
     tl.gpps
+    tl.phiscsi_bulk
 
 
 **Partition function calculation (scphylo-PartF)**

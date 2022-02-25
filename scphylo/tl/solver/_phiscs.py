@@ -463,6 +463,23 @@ def phiscsi_bulk(
     :class:`pandas.DataFrame`
         A conflict-free matrix in which rows are cells and columns are mutations.
         Values inside this matrix show the presence (1) and absence (0).
+
+    Examples
+    --------
+    >>> adata = scp.datasets.acute_lymphocytic_leukemia2()
+    >>> adata.var["VAF"] = (
+        2
+        * adata.var["MutantCount"]
+        / (adata.var["MutantCount"] + adata.var["ReferenceCount"])
+    )
+    >>> df_out = scp.tl.phiscsi_bulk(
+        adata.to_df(),
+        alpha=0.001,
+        beta=0.181749,
+        delta=0.2,
+        kmax=3,
+        vaf_info=adata.var[["VAF"]],
+    )
     """
     gp, gp_is_not_imported = scp.ul.import_gurobi()
     if gp_is_not_imported:
