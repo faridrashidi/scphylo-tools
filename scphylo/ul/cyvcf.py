@@ -62,5 +62,8 @@ bad = [
     "ERRORS / WARNINGS / INFO",
 ]
 adata.var.drop(bad, axis=1, inplace=True)
+for obs in adata.obs_names:
+    adata.var[f"{obs}_TOTAL_READS"] = adata[obs].layers["total"][0]
+    adata.var[f"{obs}_MUTANT_READS"] = adata[obs].layers["mutant"][0]
 adata.var.to_csv(outdir + f"/{basename}.tsv", sep="\t")
 adata.write(outdir + f"/_{basename[:-len('.ann')]}.h5ad.gz", compression="gzip")
