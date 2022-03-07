@@ -61,5 +61,5 @@ scPhylo-tools: a python toolkit for single-cell tumor phylogenetic analysis
     :alt: Codecov
 
 .. |License| image:: https://img.shields.io/pypi/l/scphylo-tools.svg?logo=creativecommons&logoColor=FFFFFF&style=flat-square&color=blueviolet
-    :target: https://github.com/faridrashidi/scphylo-tools/blob/master/LICENSE.md
+    :target: https://github.com/faridrashidi/scphylo-tools/blob/main/LICENSE.md
     :alt: License
