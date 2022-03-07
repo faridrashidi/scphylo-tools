@@ -155,5 +155,3 @@ scphylo.*
 
 # Temporary
 todo
-.github/workflows/ci.yml
-.scripts/ci/install_dependencies.sh
