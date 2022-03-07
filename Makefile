@@ -35,7 +35,6 @@ install:
 
 install-dev:
 	git fetch
-	git checkout dev
 	python -m pip install -e '.[dev,docs]'
 	pre-commit install
 
