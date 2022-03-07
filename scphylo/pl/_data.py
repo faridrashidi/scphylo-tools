@@ -11,14 +11,7 @@ def _colors(alist):
 
 
 def heatmap(
-    adata,
-    color_attrs=None,
-    layer="X",
-    figsize=(12, 7),
-    vmin=0,
-    vmax=2,
-    rvb=None,
-    sorting_by_chroms=True,
+    adata, color_attrs=None, layer="X", figsize=(12, 7), vmin=0, vmax=2, rvb=None
 ):
     """Plot HeatMap.
 
@@ -53,33 +46,21 @@ def heatmap(
         row_colors = None
 
     if layer == "X":
-        rvb = _colors(["#FFFFFF", "#000000", "#bfbfbf"])
-        if sorting_by_chroms:
-            adatac = adata[:, adata.var.sort_values(["CHROM", "POS"]).index].copy()
-        else:
-            adatac = adata.copy()
+        rvb = _colors(["#A9D0F5", "#000000", "#FFFFFF"])
+        adatac = adata[:, adata.var.sort_values(["CHROM", "POS"]).index].copy()
         df = adatac.to_df().copy()
-        # distance_array = scp.ul.hclustering(df, return_dist=True)
         df[df == 3] = 2
         df.index.name = "cells"
         df.columns.name = "mutations"
-        # from scipy.cluster import hierarchy
-        # from scipy.spatial import distance
-        # row_linkage = hierarchy.linkage(
-        #     distance.pdist(distance_array), method="average"
-        # )
-        if sorting_by_chroms:
-            chromosoms = {}
-            for i in list(range(1, 23, 2)) + ["Y"]:
-                chromosoms[f"chr{i}"] = "#969696"
-            for i in list(range(2, 23, 2)) + ["X"]:
-                chromosoms[f"chr{i}"] = "#252525"
-            adatac.var["chrom_color"] = adata.var["CHROM"].map(chromosoms)
-            scp.logg.info(adatac.var.CHROM.value_counts().sort_index().to_frame())
-            adatac.var["chrom_color"].name = ""
-            column_colors = adatac.var["chrom_color"]
-        else:
-            column_colors = None
+        chromosoms = {}
+        for i in list(range(1, 23, 2)) + ["Y"]:
+            chromosoms[f"chr{i}"] = "#969696"
+        for i in list(range(2, 23, 2)) + ["X"]:
+            chromosoms[f"chr{i}"] = "#252525"
+        adatac.var["chrom_color"] = adata.var["CHROM"].map(chromosoms)
+        scp.logg.info(adatac.var.CHROM.value_counts().sort_index().to_frame())
+        adatac.var["chrom_color"].name = ""
+        column_colors = adatac.var["chrom_color"]
     else:
         df = adata.obsm[layer].copy()
         if isinstance(rvb, list):
@@ -92,7 +73,7 @@ def heatmap(
         vmax=vmax,
         metric="euclidean",
         cmap=rvb,
-        row_cluster=True,
+        row_cluster=False,
         col_cluster=False,
         row_colors=row_colors,
         col_colors=column_colors,
@@ -102,10 +83,7 @@ def heatmap(
         yticklabels=False,
         colors_ratio=(0.02, 0.02),
         dendrogram_ratio=0,
-        # row_linkage=row_linkage,
     )
-    plt.xlabel("")
-    plt.ylabel("")
     # plt.savefig(filepath, bbox_inches="tight", pad_inches=0)
 
 
