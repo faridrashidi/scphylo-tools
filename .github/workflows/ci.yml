@@ -86,12 +86,12 @@ jobs:
         -   name: Unit tests
             run: |
                 make test
-        -   name: Upload coverage
-            if: success()
-            env:
-                CODECOV_NAME: ${{ matrix.python }}-${{ matrix.os }}
-            run: |
-                codecov --no-color --required --flags unittests
+        # -   name: Upload coverage
+        #     if: success()
+        #     env:
+        #         CODECOV_NAME: ${{ matrix.python }}-${{ matrix.os }}
+        #     run: |
+        #         codecov --no-color --required --flags unittests
 
     build_wheels:
         needs: test
