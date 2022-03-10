@@ -1,11 +1,17 @@
-|DOI| |Stars| |Compatible| |PyPI| |PyPiDownloads| |Contributions Welcome| |Build Status|
+|Stars| |Compatible| |PyPI| |PyPiDownloads| |Contributions Welcome| |Build Status|
 |Docs Status| |Pre-commit| |Code Score| |License| |Code Style|
 
 
-scPhylo-tools: a python toolkit for single-cell tumor phylogenetic analysis
+scphylo-tools: a python toolkit for single-cell tumor phylogenetic analysis
 ===========================================================================
 
+.. image:: https://raw.githubusercontent.com/faridrashidi/scphylo-tools/main/docs/source/_static/images/overview.png
+   :target: https://github.com/faridrashidi/scphylo-tools
+   :alt: overview
+   :align: center
 
+
+scphylo-tools is a python toolkit for single-cell tumor phylogenetic analysis
 
 
 .. |DOI| image:: https://img.shields.io/badge/DOI-10.1101/2021.03.26.437185-orange?logo=gitbook&logoColor=FFFFFF&style=flat-square
