@@ -51,7 +51,7 @@ class TestScores:
         grnd = scp.io.read(test_cf_data_1)
         sol = scp.io.read(test_cf_data_2)
         mp3 = scp.tl.mp3(grnd, sol)
-        assert np.abs(mp3 - 0.6582) < 0.001
+        assert np.abs(mp3 - 0.6582) < 0.002
 
     def test_rf(self, test_cf_data_1, test_cf_data_2):
         grnd = scp.io.read(test_cf_data_1)
