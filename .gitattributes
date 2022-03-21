@@ -10,3 +10,4 @@
 *.txt linguist-detectable=false
 *.pyx linguist-detectable=false
 *.R linguist-detectable=false
+*.sh linguist-detectable=false
