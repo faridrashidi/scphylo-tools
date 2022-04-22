@@ -13,7 +13,6 @@
 
 import os
 import sys
-from datetime import datetime
 from pathlib import Path
 
 from pybtex.plugin import register_plugin
@@ -98,7 +97,7 @@ intersphinx_mapping = {
 # General information about the project.
 project = "scphylo"
 author = "Farid Rashidi"
-copyright = f"{datetime.now():%Y}, {author}, NCI"
+copyright = f"2022, {author}, NCI"
 title = "a python toolkit for single-cell tumor phylogenetic analysis"
 
 
