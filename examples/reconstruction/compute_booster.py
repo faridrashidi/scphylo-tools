@@ -1,12 +1,14 @@
 """
-Construct lienage tree using Trisicell-Boost
---------------------------------------------
+Construct tree using Trisicell-Boost
+------------------------------------
 
-This example shows how to construct a lineage tree using Trisicell-Boost on a binary
-single-cell genotype matrix.
+This example shows how to construct a phylogenetic tree using Trisicell-Boost on a
+binary single-cell genotype matrix.
 """
 
 import scphylo as scp
+
+# sphinx_gallery_thumbnail_path = "_static/thumbnails/trisicell-boost.png"
 
 # %%
 # First, we load a binary test single-cell genotype data.
