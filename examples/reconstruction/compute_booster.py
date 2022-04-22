@@ -1,6 +1,6 @@
 """
-Construct tree using Trisicell-Boost
-------------------------------------
+Reconstruct tree by Trisicell-Boost
+-----------------------------------
 
 This example shows how to construct a phylogenetic tree using Trisicell-Boost on a
 binary single-cell genotype matrix.
