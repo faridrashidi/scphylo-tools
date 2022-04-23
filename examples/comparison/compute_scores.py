@@ -25,10 +25,6 @@ scp.tl.ad(grnd, sol)
 scp.tl.dl(grnd, sol)
 
 # %%
-# Calculating the multi-labeled tree dissimilarity measure (MLTD).
-scp.tl.mltd(grnd, sol)
-
-# %%
 # Calculating the tumor phylogeny tree edit distance measure (TPTED).
 scp.tl.tpted(grnd, sol)
 
