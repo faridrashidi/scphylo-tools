@@ -207,6 +207,7 @@ sphinx_gallery_conf = {
         [
             rel_example_dir / "reconstruction",  # really must be relative
             rel_example_dir / "comparison",
+            rel_example_dir / "visualization",
         ]
     ),
     "reference_url": {
