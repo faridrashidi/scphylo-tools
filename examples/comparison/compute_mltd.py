@@ -1,6 +1,6 @@
 """
-Comparing scores for two trees by MLTD
---------------------------------------
+Comparing two trees by MLTD
+---------------------------
 
 This example shows how to compare/measure two inferred genotype data (trees).
 """
