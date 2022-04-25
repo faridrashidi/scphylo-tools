@@ -10,13 +10,13 @@ import scphylo as scp
 # sphinx_gallery_thumbnail_path = "_static/thumbnails/clonal.png"
 
 # %%
-# First, we load two binary test single-cell genotype data.
+# First, we load a binary inferred single-cell genotype data.
 inferred = scp.io.read(
     scp.ul.get_file("scphylo.datasets/test/fp_0-fn_0-na_0.ground.CFMatrix")
 )
 
 # %%
-# First we convert the inferred genotype matrix to a tree object.
+# Next we convert the inferred genotype matrix to a tree object.
 tree = scp.ul.to_tree(inferred)
 
 # %%
