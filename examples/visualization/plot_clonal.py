@@ -22,4 +22,6 @@ tree = scp.ul.to_tree(inferred)
 # %%
 # Then we can draw the tree in `clonal` format i.e. mutations at the edges and cells at
 # at the nodes of the tree.
+
 # scp.pl.clonal_tree(tree)
+# TODO: fix
