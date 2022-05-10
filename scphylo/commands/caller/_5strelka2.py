@@ -92,7 +92,7 @@ def strelka2(outdir, normal, ref, time, mem, afterok):
         cmds += cmd(
             [
                 "bcftools",
-                "--apply-filters PASS",
+                "view --apply-filters PASS",
                 f"{outdir}/{sample}.strelka2.tmp.vcf",
                 f"> {outdir}/{sample}.strelka2.vcf",
             ]
