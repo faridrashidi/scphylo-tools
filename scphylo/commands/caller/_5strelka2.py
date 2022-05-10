@@ -84,11 +84,20 @@ def strelka2(outdir, normal, ref, time, mem, afterok):
                 "concat",
                 f"{outdir}/{sample}.strelka2/results/variants/somatic.snvs.vcf.gz",
                 f"{outdir}/{sample}.strelka2/results/variants/somatic.indels.vcf.gz",
-                f"--output {outdir}/{sample}.strelka2.vcf",
+                f"--output {outdir}/{sample}.strelka2.tmp.vcf",
                 "--output-type v",
                 "--allow-overlaps",
             ]
         )
+        cmds += cmd(
+            [
+                "bcftools",
+                "--apply-filters PASS",
+                f"{outdir}/{sample}.strelka2.tmp.vcf",
+                f"> {outdir}/{sample}.strelka2.vcf",
+            ]
+        )
+
         cmds += cmd(
             [
                 "bcftools",
@@ -98,7 +107,12 @@ def strelka2(outdir, normal, ref, time, mem, afterok):
                 "--output-type v",
             ]
         )
-        cmds += cmd([f"rm -rf {outdir}/{sample}.strelka2"])
+        cmds += cmd(
+            [
+                f"rm -rf {outdir}/{sample}.strelka2",
+                f"rm -rf {outdir}/{sample}.strelka2.tmp.vcf",
+            ]
+        )
         cmds += cmd(["echo Done!"], islast=True)
         return cmds
 
