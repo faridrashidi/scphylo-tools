@@ -142,6 +142,51 @@ def varscan2(outdir, normal, ref, time, mem, afterok):
                     "concat",
                     f"{outdir}/{sample}.varscan2/snp.vcf.gz",
                     f"{outdir}/{sample}.varscan2/indel.vcf.gz",
+                    f"--output {outdir}/{sample}.varscan2.tmp.vcf",
+                    "--output-type v",
+                    "--allow-overlaps",
+                ]
+            )
+
+            cmds += cmd(
+                [
+                    "varscan",
+                    "processSomatic",
+                    f"{outdir}/{sample}.varscan2.tmp.vcf",
+                ]
+            )
+            cmds += cmd(
+                [
+                    "bgzip",
+                    f"{outdir}/{sample}.varscan2.tmp.Somatic.vcf",
+                ]
+            )
+            cmds += cmd(
+                [
+                    "bgzip",
+                    f"{outdir}/{sample}.varscan2.tmp.LOH.vcf",
+                ]
+            )
+            cmds += cmd(
+                [
+                    "bcftools",
+                    "index",
+                    f"{outdir}/{sample}.varscan2.tmp.Somatic.vcf.gz",
+                ]
+            )
+            cmds += cmd(
+                [
+                    "bcftools",
+                    "index",
+                    f"{outdir}/{sample}.varscan2.tmp.LOH.vcf.gz",
+                ]
+            )
+            cmds += cmd(
+                [
+                    "bcftools",
+                    "concat",
+                    f"{outdir}/{sample}.varscan2.tmp.Somatic.vcf.gz",
+                    f"{outdir}/{sample}.varscan2.tmp.LOH.vcf.gz",
                     f"--output {outdir}/{sample}.varscan2.vcf",
                     "--output-type v",
                     "--allow-overlaps",
@@ -156,10 +201,20 @@ def varscan2(outdir, normal, ref, time, mem, afterok):
                     "--output-type v",
                 ]
             )
+
             cmds += cmd(
                 [
                     f"rm -rf {outdir}/{sample}.varscan2",
                     f"rm -rf {outdir}/{sample}.markdup_bqsr.pileup",
+                    f"rm -rf {outdir}/{sample}.varscan2.tmp.Germline.hc.vcf",
+                    f"rm -rf {outdir}/{sample}.varscan2.tmp.Germline.vcf",
+                    f"rm -rf {outdir}/{sample}.varscan2.tmp.Somatic.hc.vcf",
+                    f"rm -rf {outdir}/{sample}.varscan2.tmp.LOH.hc.vcf",
+                    f"rm -rf {outdir}/{sample}.varscan2.tmp.vcf",
+                    f"rm -rf {outdir}/{sample}.varscan2.tmp.Somatic.vcf.gz",
+                    f"rm -rf {outdir}/{sample}.varscan2.tmp.Somatic.vcf.gz.csi",
+                    f"rm -rf {outdir}/{sample}.varscan2.tmp.LOH.vcf.gz",
+                    f"rm -rf {outdir}/{sample}.varscan2.tmp.LOH.vcf.gz.csi",
                 ]
             )
             cmds += cmd(["echo Done!"], islast=True)
