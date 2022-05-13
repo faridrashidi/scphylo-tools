@@ -24,7 +24,7 @@ def is_mut(x):
         g = 0
     if x[x["Allele"][0]] > 0:
         g = 1
-    return g
+    return g, x[x["Allele"][0]]
 
 
 outdir = sys.argv[1]
@@ -45,9 +45,12 @@ df = pd.DataFrame(data)
 
 vcf["MUT"] = vcf["CHROM"] + "." + vcf["POS"].astype(str)
 df = pd.merge(df, vcf, how="left", left_on="MUT", right_on="MUT")
-df["IS_MUT"] = df.apply(lambda x: is_mut(x), axis=1).astype(int)
+df["IS_MUT"] = df.apply(lambda x: is_mut(x)[0], axis=1).astype(int)
+df["MUTANT"] = df.apply(lambda x: is_mut(x)[1], axis=1).astype(int)
 
 sc = df.pivot_table(index="CELL", columns="MUT", values="IS_MUT")
 adata = ad.AnnData(sc)
+adata.layers['mutant'] = sc = df.pivot_table(index="CELL", columns="MUT", values="MUTANT")
+adata.layers['total'] = sc = df.pivot_table(index="CELL", columns="MUT", values="COV")
 adata.var = pd.merge(adata.var, vcf, how="left", left_index=True, right_on="MUT")
 adata.write(outdir + "/_bamreadcount.h5ad.gz", compression="gzip")
