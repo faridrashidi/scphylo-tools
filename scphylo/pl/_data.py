@@ -1,7 +1,7 @@
+import anndata as ad
 import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
 import numpy as np
-import scanpy as sc
 import seaborn as sns
 
 
@@ -44,7 +44,7 @@ def heatmap(
     else:
         row_colors = None
 
-    if isinstance(adata, sc.AnnData):
+    if isinstance(adata, ad.AnnData):
         if layer == "X":
             rvb = _colors(["#A9D0F5", "#000000", "#FFFFFF"])
             adatac = adata[:, adata.var.sort_values(["CHROM", "POS"]).index].copy()
