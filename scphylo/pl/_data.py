@@ -1,9 +1,8 @@
+import anndata as ad
 import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
-
-import scphylo as scp
 
 
 def _colors(alist):
@@ -45,24 +44,29 @@ def heatmap(
     else:
         row_colors = None
 
-    if layer == "X":
-        rvb = _colors(["#A9D0F5", "#000000", "#FFFFFF"])
-        adatac = adata[:, adata.var.sort_values(["CHROM", "POS"]).index].copy()
-        df = adatac.to_df().copy()
-        df[df == 3] = 2
-        df.index.name = "cells"
-        df.columns.name = "mutations"
-        chromosoms = {}
-        for i in list(range(1, 23, 2)) + ["Y"]:
-            chromosoms[f"chr{i}"] = "#969696"
-        for i in list(range(2, 23, 2)) + ["X"]:
-            chromosoms[f"chr{i}"] = "#252525"
-        adatac.var["chrom_color"] = adata.var["CHROM"].map(chromosoms)
-        scp.logg.info(adatac.var.CHROM.value_counts().sort_index().to_frame())
-        adatac.var["chrom_color"].name = ""
-        column_colors = adatac.var["chrom_color"]
+    if isinstance(adata, ad.AnnData):
+        if layer == "X":
+            rvb = _colors(["#A9D0F5", "#000000", "#FFFFFF"])
+            adatac = adata[:, adata.var.sort_values(["CHROM", "POS"]).index].copy()
+            df = adatac.to_df().copy()
+            df[df == 3] = 2
+            df.index.name = "cells"
+            df.columns.name = "mutations"
+            chromosoms = {}
+            for i in list(range(1, 23, 2)) + ["Y"]:
+                chromosoms[f"chr{i}"] = "#969696"
+            for i in list(range(2, 23, 2)) + ["X"]:
+                chromosoms[f"chr{i}"] = "#252525"
+            adatac.var["chrom_color"] = adata.var["CHROM"].map(chromosoms)
+            adatac.var["chrom_color"].name = ""
+            column_colors = adatac.var["chrom_color"]
+        else:
+            df = adata.obsm[layer].copy()
+            if isinstance(rvb, list):
+                rvb = _colors(rvb)
+            column_colors = None
     else:
-        df = adata.obsm[layer].copy()
+        df = adata
         if isinstance(rvb, list):
             rvb = _colors(rvb)
         column_colors = None
