@@ -30,14 +30,23 @@ import scphylo as scp
 def rename(indir, keep, exec):
     """Run Rename.
 
-    trisicell rename path/to/in/dir 0,1,3 --exec
+    scphylo caller rename path/to/in/dir 0,1,3 --exec
     """
-    keep = list(map(int, keep.split(",")))
+    if keep == ",":
+        pass
+    else:
+        keep = list(map(int, keep.split(",")))
     idx = 0
+    cell_i = 1
     for file1 in sorted(glob.glob(indir + "/*.fastq.gz")):
         dirname, basename = scp.ul.dir_base(file1)
-        file2 = [x for i, x in enumerate(basename.split("_")) if i in keep]
-        file2 = "_".join(file2)
+        if keep == ",":
+            file2 = f"cell{cell_i}"
+            if idx % 2 == 1:
+                cell_i += 1
+        else:
+            file2 = [x for i, x in enumerate(basename.split("_")) if i in keep]
+            file2 = "_".join(file2)
         if idx % 2 == 0:
             file2 += "_1.fastq.gz"
         else:
