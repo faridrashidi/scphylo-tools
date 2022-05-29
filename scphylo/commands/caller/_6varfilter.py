@@ -23,7 +23,7 @@ from scphylo.ul._servers import cmd, write_cmds_get_main
 )
 @click.option(
     "--time",
-    default="0-02:00:00",
+    default="1-00:00:00",
     type=str,
     show_default=True,
     help="Time.",
@@ -62,15 +62,22 @@ def varfilter(outdir, ref, time, mem, afterok):
         cmds += cmd(
             [
                 f'gatk --java-options "-Xmx{int(mem)-10}g"',
+                "IndexFeatureFile",
+                f"--input {outdir}/{sample}.vcf",
+            ]
+        )
+        cmds += cmd(
+            [
+                f'gatk --java-options "-Xmx{int(mem)-10}g"',
                 "VariantFiltration",
                 f"--reference {config['ref']}",
                 f"--variant {outdir}/{sample}.vcf",
                 f"--output {outdir}/{sample}.filtered.vcf",
                 "--cluster-window-size 35",
                 "--cluster-size 3",
-                '--filterName "FS"',
+                '--filter-name "FS"',
                 '--filter-expression "FS > 30.0"',
-                '--filterName "QD"',
+                '--filter-name "QD"',
                 '--filter-expression "QD < 2.0"',
             ]
         )
