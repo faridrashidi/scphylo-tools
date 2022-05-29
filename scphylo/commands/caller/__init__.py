@@ -21,6 +21,7 @@ from scphylo.commands.caller._6bamreadcount import bamreadcount
 from scphylo.commands.caller._6bamsnap import bamsnap
 from scphylo.commands.caller._6defuse import defuse
 from scphylo.commands.caller._6snpeff import snpeff
+from scphylo.commands.caller._6varfilter import varfilter
 from scphylo.commands.caller._6vartrix import vartrix
 
 
@@ -69,6 +70,7 @@ cli_caller.add_command(strelka2)
 cli_caller.add_command(varscan2)
 cli_caller.add_command(mpileup)
 cli_caller.add_command(sequenza)
+cli_caller.add_command(varfilter)
 cli_caller.add_command(snpeff)
 cli_caller.add_command(rsem)
 cli_caller.add_command(bamreadcount)
