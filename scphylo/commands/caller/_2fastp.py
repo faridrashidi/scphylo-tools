@@ -44,7 +44,7 @@ from scphylo.ul._servers import cmd, write_cmds_get_main
 def fastp(indir, outdir, time, mem, afterok):
     """Run fastp.
 
-    scphylo fastp /path/to/in/dir /path/to/out/dir
+    scphylo caller fastp /path/to/in/dir /path/to/out/dir
 
     FastQ files --> FastQ files
     """

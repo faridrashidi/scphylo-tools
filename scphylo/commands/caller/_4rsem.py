@@ -50,7 +50,7 @@ from scphylo.ul._servers import cmd, write_cmds_get_main
 def rsem(outdir, ref, single_or_paired, time, mem, afterok):
     """Run RSEM.
 
-    scphylo rsem /path/to/in/dir hg19|hg38|mm10 paired
+    scphylo caller rsem /path/to/in/dir hg19|hg38|mm10 paired
 
     BAM files (*.transcript.bam) --> AnnData file (_expression.h5ad.gz)
     """

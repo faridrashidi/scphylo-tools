@@ -58,7 +58,7 @@ from scphylo.ul._servers import cmd, write_cmds_get_main
 def vartrix(bam, barcodes, vcf, ref, time, mem, afterok):
     """Run vartrix.
 
-    scphylo vartrix /path/to/bam /path/to/barcodes /path/to/vcf hg19|hg38|mm10|m10x
+    scphylo caller vartrix /path/bam /path/barcodes /path/vcf hg19|hg38|mm10|m10x
 
     * --> MTX matrices
     """

@@ -52,7 +52,7 @@ from scphylo.ul._servers import cmd, write_cmds_get_main
 def bamreadcount(outdir, infile, ref, time, mem, afterok):
     """Run bamreadcount.
 
-    scphylo bamreadcount /path/to/bam/dir /path/to/snv/file hg19|hg38|mm10
+    scphylo caller bamreadcount /path/to/bam/dir /path/to/snv/file hg19|hg38|mm10
 
     BAM files (*.markdup_bqsr.bam) --> AnnData file (_bamreadcount.h5ad.gz)
     """

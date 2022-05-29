@@ -49,7 +49,7 @@ from scphylo.ul._servers import cmd, write_cmds_get_main
 def sequenza(outdir, normal, ref, time, mem, afterok):
     """Run Sequenza.
 
-    scphylo sequenza /path/to/in/dir normal_name hg19|hg38|mm10
+    scphylo caller sequenza /path/to/in/dir normal_name hg19|hg38|mm10
 
     BAM files (*.markdup_bqsr.bam) --> folder (.sequenza)
     """

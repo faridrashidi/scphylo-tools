@@ -64,7 +64,7 @@ from scphylo.ul._servers import cmd, write_cmds_get_main
 def bwa(indir, outdir, ref, time, mem, n_threads, afterok, is_pdx):
     """Run bwa-mem.
 
-    scphylo bwa /path/to/in/dir /path/to/out/dir hg19|hg38|mm10 --is_pdx
+    scphylo caller bwa /path/to/in/dir /path/to/out/dir hg19|hg38|mm10 --is_pdx
 
     FastQ files (*.fastq.gz) --> BAM files (*.mapped.bam)
 

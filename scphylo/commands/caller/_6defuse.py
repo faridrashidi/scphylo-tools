@@ -59,7 +59,7 @@ from scphylo.ul._servers import cmd, write_cmds_get_main
 def defuse(indir, outdir, ref, time, mem, n_threads, afterok):
     """Run deFuse.
 
-    scphylo defuse ...
+    scphylo caller defuse ...
 
     FastQ files (*.fastq) -> deFuse files
     """

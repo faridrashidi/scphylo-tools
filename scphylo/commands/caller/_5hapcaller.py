@@ -50,7 +50,7 @@ from scphylo.ul._servers import cmd, write_cmds_get_main
 def hapcaller(outdir, ref, dna_or_rna, time, mem, afterok):
     """Run HaplotypeCaller.
 
-    scphylo hapcaller /path/to/in/dir hg19|hg38|mm10 dna|rna
+    scphylo caller hapcaller /path/to/in/dir hg19|hg38|mm10 dna|rna
 
     BAM files (*.markdup_bqsr.bam) --> VCF file (_hapcaller/jointcalls.g.vcf)
     """

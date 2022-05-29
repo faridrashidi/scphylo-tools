@@ -48,7 +48,7 @@ from scphylo.ul._servers import cmd, write_cmds_get_main
 def strelka2(outdir, normal, ref, time, mem, afterok):
     """Run Strelka2.
 
-    scphylo strelka2 /path/to/in/dir normal_name hg19|hg38|mm10
+    scphylo caller strelka2 /path/to/in/dir normal_name hg19|hg38|mm10
 
     BAM files (*.markdup_bqsr.bam) --> VCF files (*.strelka2.vcf)
     """

@@ -45,7 +45,7 @@ from scphylo.ul._servers import cmd, write_cmds_get_main
 def mpileup(outdir, ref, time, mem, afterok):
     """Run mpileup.
 
-    scphylo mpileup /path/to/in/dir hg19|hg38|mm10
+    scphylo caller mpileup /path/to/in/dir hg19|hg38|mm10
 
     BAM files (*.markdup_bqsr.bam) --> VCF file (_pileupcalls.vcf)
     """

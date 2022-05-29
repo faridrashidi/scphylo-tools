@@ -65,7 +65,7 @@ from scphylo.ul._servers import cmd, write_cmds_get_main
 def star(indir, outdir, ref, time, mem, max_multimapping, afterok, is_pdx):
     """Run STAR.
 
-    scphylo star /path/to/in/dir /path/to/out/dir hg19|hg38|mm10 --is_pdx
+    scphylo caller star /path/to/in/dir /path/to/out/dir hg19|hg38|mm10 --is_pdx
 
     FastQ files (*.fastq.gz) --> BAM files (*.mapped.bam)
 

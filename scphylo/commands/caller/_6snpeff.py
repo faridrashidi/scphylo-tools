@@ -45,7 +45,7 @@ from scphylo.ul._servers import cmd, write_cmds_get_main
 def snpeff(outdir, ref, time, mem, afterok):
     """Run SnpEff.
 
-    scphylo snpeff /path/to/vcf/file hg19|hg38|mm10
+    scphylo caller snpeff /path/to/vcf/file hg19|hg38|mm10
 
     VCF file --> AnnData file (_genotype.h5ad.gz)
     """

@@ -34,7 +34,7 @@ from scphylo.ul._servers import cmd
 def bamsnap(ref, bam, pos):
     """Run bamsnap.
 
-    scphylo bamsnap ...
+    scphylo caller bamsnap ...
 
     BAM files (*.markdup_bqsr.bam) --> PNG file (_bamsnap.png)
     """

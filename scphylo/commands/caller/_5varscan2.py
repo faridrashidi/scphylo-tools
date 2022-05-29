@@ -48,7 +48,7 @@ from scphylo.ul._servers import cmd, write_cmds_get_main
 def varscan2(outdir, normal, ref, time, mem, afterok):
     """Run VarScan2.
 
-    scphylo varscan2 /path/to/in/dir normal_name hg19|hg38|mm10
+    scphylo caller varscan2 /path/to/in/dir normal_name hg19|hg38|mm10
 
     BAM files (*.markdup_bqsr.bam) --> VCF files (*.varscan2.vcf)
     """

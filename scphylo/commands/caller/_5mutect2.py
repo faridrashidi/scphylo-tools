@@ -48,7 +48,7 @@ from scphylo.ul._servers import cmd, write_cmds_get_main
 def mutect2(outdir, normal, ref, time, mem, afterok):
     """Run MuTect2.
 
-    scphylo mutect2 /path/to/in/dir normal_name hg19|hg38|mm10
+    scphylo caller mutect2 /path/to/in/dir normal_name hg19|hg38|mm10
 
     BAM files (*.markdup_bqsr.bam) --> VCF files (*.mutect2.vcf)
     """

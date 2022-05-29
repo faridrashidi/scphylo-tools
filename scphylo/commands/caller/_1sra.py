@@ -33,7 +33,7 @@ from scphylo.ul._servers import cmd, write_cmds_get_main
 def sra(srafile, outdir, check):
     """Run SRA.
 
-    trisicell sra path/to/SraRunTable.csv path/to/output/directory
+    scphylo caller sra path/to/SraRunTable.csv path/to/output/directory
 
     Columns name of the csv file: `Library Name`, `Run`, `LibraryLayout`
     """

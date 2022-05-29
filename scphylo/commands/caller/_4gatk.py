@@ -50,7 +50,7 @@ from scphylo.ul._servers import cmd, write_cmds_get_main
 def gatk(outdir, ref, dna_or_rna, time, mem, afterok):
     """Run GATK.
 
-    caller gatk /path/to/in/dir hg19|hg38|mm10 dna|rna
+    caller caller gatk /path/to/in/dir hg19|hg38|mm10 dna|rna
 
     BAM files (*.mapped.bam) --> BAM files (*.markdup_bqsr.bam)
     """

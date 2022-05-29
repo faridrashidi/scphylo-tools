@@ -45,7 +45,7 @@ from scphylo.ul._servers import cmd, write_cmds_get_main
 def pseudobulk(outdir, ref, time, mem, afterok):
     """Run Pseudo Bulk Calling.
 
-    scphylo pseudobulk ...
+    scphylo caller pseudobulk ...
 
     BAM files --> VCF file
     """
