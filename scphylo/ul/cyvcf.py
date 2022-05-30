@@ -22,16 +22,17 @@ m_ref = []
 m_alt = []
 m_cna = []
 for var in VCF(infile):
-    if var.is_snp or var.is_indel:
-        row = [var.CHROM, var.POS, var.REF, var.ALT, var.start + 1, var.end]
-        if var.INFO.get("ANN") is not None:
-            ann = var.INFO.get("ANN").split(",")[0].split("|")
-            row += ann
-        m_gen.append(var.gt_types.tolist())
-        m_ref.append(var.gt_ref_depths.tolist())
-        m_alt.append(var.gt_alt_depths.tolist())
-        muts.append(row)
-        cnas_per_var = []
+    if var.FILTER is None:
+        if var.is_snp or var.is_indel:
+            row = [var.CHROM, var.POS, var.REF, var.ALT, var.start + 1, var.end]
+            if var.INFO.get("ANN") is not None:
+                ann = var.INFO.get("ANN").split(",")[0].split("|")
+                row += ann
+            m_gen.append(var.gt_types.tolist())
+            m_ref.append(var.gt_ref_depths.tolist())
+            m_alt.append(var.gt_alt_depths.tolist())
+            muts.append(row)
+            cnas_per_var = []
 
 m_gen = np.array(m_gen)
 m_ref = np.array(m_ref)
