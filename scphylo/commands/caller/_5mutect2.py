@@ -70,14 +70,27 @@ def mutect2(outdir, normal, ref, time, mem, afterok):
                 f"--input {outdir}/{sample}.markdup_bqsr.bam",
                 f"--input {outdir}/{normal}.markdup_bqsr.bam",
                 f"--normal-sample {normal}",
+                f"--output {outdir}/{sample}.tmp.mutect2.vcf",
+            ]
+        )
+        cmds += cmd(
+            [
+                f'gatk --java-options "-Xmx{int(mem)-10}g"',
+                "FilterMutectCalls",
+                f"--reference {config['ref']}",
+                f"--variant {outdir}/{sample}.tmp.mutect2.vcf",
                 f"--output {outdir}/{sample}.mutect2.vcf",
             ]
         )
         cmds += cmd(
             [
                 "rm -rf",
+                f"{outdir}/{sample}.mutect2.vcf.filteringStats.tsv",
                 f"{outdir}/{sample}.mutect2.vcf.stats",
                 f"{outdir}/{sample}.mutect2.vcf.idx",
+                f"{outdir}/{sample}.tmp.mutect2.vcf",
+                f"{outdir}/{sample}.tmp.mutect2.vcf.stats",
+                f"{outdir}/{sample}.tmp.mutect2.vcf.idx",
             ]
         )
         cmds += cmd(["echo Done!"], islast=True)
