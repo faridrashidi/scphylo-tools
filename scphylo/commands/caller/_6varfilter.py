@@ -72,13 +72,28 @@ def varfilter(outdir, ref, time, mem, afterok):
                 "VariantFiltration",
                 f"--reference {config['ref']}",
                 f"--variant {outdir}/{sample}.vcf",
-                f"--output {outdir}/{sample}.filtered.vcf",
+                f"--output {outdir}/{sample}.tmp.filtered.vcf",
                 "--cluster-window-size 35",
                 "--cluster-size 3",
                 '--filter-name "FS"',
                 '--filter-expression "FS > 30.0"',
                 '--filter-name "QD"',
                 '--filter-expression "QD < 2.0"',
+            ]
+        )
+        cmds += cmd(
+            [
+                f'gatk --java-options "-Xmx{int(mem)-10}g"',
+                "SelectVariants",
+                f"--variant {outdir}/{sample}.tmp.filtered.vcf",
+                f"--output {outdir}/{sample}.filtered.vcf",
+                "--exclude-filtered",
+            ]
+        )
+        cmds += cmd(
+            [
+                "rm -rf",
+                f"{outdir}/{sample}.tmp.filtered.vcf",
             ]
         )
         cmds += cmd(["echo Done!"], islast=True)
