@@ -60,20 +60,22 @@ def sequenza(outdir, normal, ref, time, mem, afterok):
     elif ref == "hg38":
         config = scp.settings.hg38
 
-    if ref == "hg19" or ref == "hg38":
-        # chroms = [f"chr{i}" for i in range(1, 23)] + ["chrX", "chrY"]
-        chroms = (
-            [f"chr{i}" for i in range(10, 23)]
-            + [f"chr{i}" for i in range(1, 10)]
-            + ["chrX", "chrY"]
-        )
-    elif ref == "mm10":
-        # chroms = [f"chr{i}" for i in range(1, 20)] + ["chrX", "chrY"]
-        chroms = (
-            [f"chr{i}" for i in range(10, 20)]
-            + [f"chr{i}" for i in range(1, 10)]
-            + ["chrX", "chrY"]
-        )
+    # if ref == "hg19" or ref == "hg38":
+    #     chroms = ["chrM"] + [f"chr{i}" for i in range(1, 23)] + ["chrX", "chrY"]
+    #     # chroms = (
+    #     #     ["chrM"]
+    #     #     + [f"chr{i}" for i in range(10, 23)]
+    #     #     + [f"chr{i}" for i in range(1, 10)]
+    #     #     + ["chrX", "chrY"]
+    #     # )
+    # elif ref == "mm10":
+    #     chroms = ["chrM"] + [f"chr{i}" for i in range(1, 20)] + ["chrX", "chrY"]
+    #     # chroms = (
+    #     #     ["chrM"]
+    #     #     + [f"chr{i}" for i in range(10, 20)]
+    #     #     + [f"chr{i}" for i in range(1, 10)]
+    #     #     + ["chrX", "chrY"]
+    #     # )
 
     def step1(afterok):
         def get_command():
@@ -121,7 +123,7 @@ def sequenza(outdir, normal, ref, time, mem, afterok):
                     f"--fasta {config['ref']}",
                     f"-gc {outdir}/_indexing/sequenza/sequenza.wig.gz",
                     f"--output {outdir}/{sample}.seqz.gz",
-                    f"--chromosome {' '.join(chroms)}",
+                    # f"--chromosome {' '.join(chroms)}",
                 ]
             )
             cmds += cmd(
@@ -141,15 +143,15 @@ def sequenza(outdir, normal, ref, time, mem, afterok):
                     sample,
                 ]
             )
-            cmds += cmd(
-                [
-                    "rm -rf",
-                    f"{outdir}/{sample}.50.seqz.gz",
-                    f"{outdir}/{sample}.50.seqz.gz.tbi",
-                    f"{outdir}/{sample}.seqz.gz",
-                    f"{outdir}/{sample}.seqz.gz.tbi",
-                ]
-            )
+            # cmds += cmd(
+            #     [
+            #         "rm -rf",
+            #         f"{outdir}/{sample}.50.seqz.gz",
+            #         f"{outdir}/{sample}.50.seqz.gz.tbi",
+            #         f"{outdir}/{sample}.seqz.gz",
+            #         f"{outdir}/{sample}.seqz.gz.tbi",
+            #     ]
+            # )
             cmds += cmd(["echo Done!"], islast=True)
             return cmds
 
