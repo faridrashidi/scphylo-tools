@@ -7,7 +7,7 @@ out_dir <- paste0(args[1],"/",args[2],".sequenza")
 
 test <- sequenza.extract(
     paste0(args[1],"/",args[2],".50.seqz.gz"),
-    # chromosome.list=paste("chr",c((1:22),"X","Y"),sep=""),
+    chromosome.list=paste("chr",c((1:22),"X","Y"),sep=""),
     verbose=FALSE
 )
 CP <- sequenza.fit(test)
@@ -33,6 +33,7 @@ sequenza2PyClone <- function(mut.tab, seg.cn, sample.id, norm.cn=2) {
         normal_cn=norm.cn, minor_cn=mut.tab$B, major_cn=mut.tab$A,
         variant_case=sample.id, variant_freq=mut.tab$F, genotype=mut.tab$mutation
     )
+    pyclone.tsv <- pyclone.tsv[pyclone.tsv$major_cn != 0, ]
     na.exclude(pyclone.tsv)
 }
 mut.tab <- read.table(paste(out_dir,paste(args[2],"_mutations.txt",sep=""),sep="/"), header=TRUE)
