@@ -20,6 +20,7 @@ from scphylo.commands.caller._5varscan2 import varscan2
 from scphylo.commands.caller._6bamreadcount import bamreadcount
 from scphylo.commands.caller._6bamsnap import bamsnap
 from scphylo.commands.caller._6defuse import defuse
+from scphylo.commands.caller._6pyclone import pyclone
 from scphylo.commands.caller._6snpeff import snpeff
 from scphylo.commands.caller._6varfilter import varfilter
 from scphylo.commands.caller._6vartrix import vartrix
@@ -77,3 +78,4 @@ cli_caller.add_command(bamreadcount)
 cli_caller.add_command(bamsnap)
 cli_caller.add_command(defuse)
 cli_caller.add_command(vartrix)
+cli_caller.add_command(pyclone)
