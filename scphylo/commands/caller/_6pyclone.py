@@ -47,7 +47,10 @@ def pyclone(outdir, time, mem, afterok):
 
     def get_command(sample):
         cmds = ""
-        cmds += cmd([f"module load {scp.settings.tools['snpeff']}"])
+        cmds += cmd(["unset PATH"])
+        cmds += cmd(["unset PYTHONPATH"])
+        cmds += cmd([f"module load {scp.settings.tools['pyclone']}"])
+        cmds += cmd(["module load python/2.7"])
         with open(f"{outdir}/{sample}.sequenza/{sample}_cellularity.txt", "r") as file:
             tumor_content = file.readline().strip()
         cmds += cmd(
@@ -99,7 +102,6 @@ def pyclone(outdir, time, mem, afterok):
         temp.append({"sample": file})
     df_cmds = pd.DataFrame(temp)
     df_cmds["cmd"] = df_cmds.apply(lambda x: get_command(x["sample"]), axis=1)
-    print(df_cmds)
 
     cmdmain = write_cmds_get_main(
         df_cmds,
@@ -112,7 +114,7 @@ def pyclone(outdir, time, mem, afterok):
         f"{outdir}/_tmp",
         afterok,
     )
-    # code = subprocess.getoutput(cmdmain)
-    # scp.logg.info(code)
+    code = subprocess.getoutput(cmdmain)
+    scp.logg.info(code)
 
     return None
