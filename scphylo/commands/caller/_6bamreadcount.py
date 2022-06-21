@@ -54,6 +54,8 @@ def bamreadcount(outdir, infile, ref, time, mem, afterok):
 
     scphylo caller bamreadcount /path/to/bam/dir /path/to/snv/file hg19|hg38|mm10
 
+    The snv file must contains `CHROM,POS,Allele`
+
     BAM files (*.markdup_bqsr.bam) --> AnnData file (_bamreadcount.h5ad.gz)
     """
     if ref == "hg19":
