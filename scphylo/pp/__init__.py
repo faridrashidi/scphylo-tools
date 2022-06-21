@@ -17,8 +17,10 @@ from scphylo.pp._readcount import (
     group_obs_apply_func,
     keep_cell_by_list,
     keep_mut_by_list,
+    mut_seperated_by_cell_group,
     remove_cell_by_list,
     remove_mut_by_list,
+    remove_nonsense_cells,
     statistics,
 )
 from scphylo.pp._tree import collapse, sample_from_tree
@@ -43,4 +45,6 @@ __all__ = (
     collapse,
     group_obs_apply_func,
     sample_from_tree,
+    mut_seperated_by_cell_group,
+    remove_nonsense_cells,
 )

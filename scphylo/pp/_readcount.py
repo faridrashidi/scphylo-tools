@@ -126,6 +126,30 @@ def filter_mut_reference_must_present_in_at_least(adata, min_cells=1):
     keep_mut_by_list(adata, adata.var_names.to_numpy()[good_muts])
 
 
+def mut_seperated_by_cell_group(adata, group_key):
+    def func(x):
+        # a = ((x == 1) | (x == 3)).sum(axis=0) / (x != 2).sum(axis=0)
+        # b = (x == 2).sum(axis=0) / x.shape[0]
+        return ((x == 1) | (x == 3)).sum(axis=0) / x.shape[0]
+
+    grouped = adata.obs.groupby(group_key)
+    out = pd.DataFrame(
+        np.zeros((adata.shape[1], len(grouped)), dtype=np.float64),
+        columns=list(grouped.groups.keys()),
+        index=adata.var_names,
+    )
+    for group, idx in grouped.indices.items():
+        X = adata.layers["genotype"][idx]
+        out[group] = np.ravel(func(X))
+    return out
+
+
+def remove_nonsense_cells(adata):
+    G = adata.layers["genotype"]
+    good_cells = ((G == 0) | (G == 2)).sum(axis=1) != G.shape[0]
+    keep_cell_by_list(adata, adata.obs_names.to_numpy()[good_cells])
+
+
 def build_scmatrix(adata):
     G = adata.layers["genotype"]
     adata.X[G == 0] = 0
