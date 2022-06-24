@@ -13,6 +13,7 @@ import scphylo as scp
 def run_scistree(df_in, alpha, beta, outfile):
     outfile
     # scp.settings.logfile = f"{outfile}/fn_{beta}-fp_{alpha}.log"
+    scp.settings.verbosity = "error"
     df_out = scp.tl.scistree(df_in, alpha, beta)
     nll = scp.ul.calc_nll_matrix(df_in, df_out, alpha, beta)
     # scp.io.write(df_out, f"{outfile}/fn_{beta}-fp_{alpha}.CFMatrix")
@@ -46,8 +47,6 @@ def search(genotype_file, n_threads):
 
     scphylo search input.SC
     """
-    scp.settings.verbosity = "info"
-
     outfile = os.path.splitext(genotype_file)[0]
     # scp.ul.mkdir(outfile)
 
@@ -78,6 +77,7 @@ def search(genotype_file, n_threads):
         alpha = output[output_i][2]
         beta = output[output_i][3]
         scp.io.write(df_out, f"{outfile}.scistree.CFMatrix")
+        scp.settings.verbosity = "info"
         scp.settings.logfile = f"{outfile}.scistree.log"
         scp.logg.info(f"running ScisTree with alpha={alpha}, beta={beta}, n_threads=1")
         scp.ul.stat(df_in, df_out, alpha, beta, 0)
