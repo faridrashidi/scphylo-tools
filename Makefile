@@ -9,6 +9,7 @@ help:
 	@echo " - clean        : clean the repo"
 
 clean:
+	rm -rf docs/build
 	rm -rf htmlcov
 	rm -rf .coverage*
 	rm -rf docs/source/scphylo*
