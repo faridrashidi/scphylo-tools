@@ -51,7 +51,7 @@ def pyclone(outdir, time, mem, afterok):
         cmds += cmd(["unset PYTHONPATH"])
         cmds += cmd([f"module load {scp.settings.tools['pyclone']}"])
         cmds += cmd(["module load python/2.7"])
-        with open(f"{outdir}/{sample}.sequenza/{sample}_cellularity.txt", "r") as file:
+        with open(f"{outdir}/{sample}.sequenza/{sample}_cellularity.txt") as file:
             tumor_content = file.readline().strip()
         cmds += cmd(
             [
