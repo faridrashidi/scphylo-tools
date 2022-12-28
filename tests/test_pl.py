@@ -55,14 +55,14 @@ class TestPlotting:
         )
         assert True
 
-    @skip_rpy2
+    @skip_rpy2()
     def test_dendro_tree_1(self, test_cf_data_1):
         data = scp.io.read(test_cf_data_1)
         tree = scp.ul.to_tree(data)
         scp.pl.dendro_tree(tree)
         assert True
 
-    @skip_rpy2
+    @skip_rpy2()
     def test_dendro_tree_2(self):
         adata = scp.datasets.example()
         adata = adata[adata.obs.group.isin(["C16", "C11", "C22"]), :].copy()
