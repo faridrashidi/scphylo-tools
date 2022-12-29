@@ -42,7 +42,7 @@ scphylo-tools is a python toolkit for single-cell tumor phylogenetic analysis
     :target: https://pypi.org/project/scphylo-tools
     :alt: Compatible
 
-.. |Build Status| image:: https://img.shields.io/github/actions/workflow/status/faridrashidi/scphylo-tools/ci.yml?branch=master&label=build&logo=githubactions&logoColor=FFFFFF&style=flat-square
+.. |Build Status| image:: https://img.shields.io/github/actions/workflow/status/faridrashidi/scphylo-tools/ci.yml?branch=main&label=build&logo=githubactions&logoColor=FFFFFF&style=flat-square
     :target: https://github.com/faridrashidi/scphylo-tools/actions?query=workflow%3ACI
     :alt: Build Status
 
