@@ -50,9 +50,7 @@ df["MUTANT"] = df.apply(lambda x: is_mut(x)[1], axis=1).astype(int)
 
 sc = df.pivot_table(index="CELL", columns="MUT", values="IS_MUT")
 adata = ad.AnnData(sc)
-adata.layers["mutant"] = sc = df.pivot_table(
-    index="CELL", columns="MUT", values="MUTANT"
-)
-adata.layers["total"] = sc = df.pivot_table(index="CELL", columns="MUT", values="COV")
+adata.layers["mutant"] = df.pivot_table(index="CELL", columns="MUT", values="MUTANT")
+adata.layers["total"] = df.pivot_table(index="CELL", columns="MUT", values="COV")
 adata.var = pd.merge(adata.var, vcf, how="left", left_index=True, right_on="MUT")
 adata.write(outdir + "/_bamreadcount.h5ad.gz", compression="gzip")
