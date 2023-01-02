@@ -59,7 +59,6 @@ bibtex_bibfiles = ["references.bib"]
 bibtex_default_style = "mystyle"
 
 # nbsphinx specific settings
-exclude_patterns = ["build", "**.ipynb_checkpoints"]
 nbsphinx_execute = "never"
 
 templates_path = ["_templates"]
@@ -111,7 +110,7 @@ title = "a python toolkit for single-cell tumor phylogenetic analysis"
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This patterns also effect to html_static_path and html_extra_path
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
+exclude_patterns = ["build", "**.ipynb_checkpoints", "_build", "Thumbs.db", ".DS_Store"]
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = "default"
