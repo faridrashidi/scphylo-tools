@@ -217,59 +217,57 @@ def prepare_dependencies(
                     )
         completed += 1
 
-    output_file = open(output_file, "w")
-    output_file.write(
-        "\t".join(
-            [
-                "MUT1",
-                "MUT2",
-                "DIFFERENT_LINEAGES",
-                "ANCESTOR_DESCENDANT",
-                "DESCENDANT_ANCESTOR",
-                "SAME_NODE",
-                "UNDEFINED_DEPENDENCY",
-                "TOTAL",
-                "DOMINANT_DEPENDENCY",
-                "PERCENTAGE_DOMINANT",
-            ]
+    with open(output_file, "w") as output_file:
+        output_file.write(
+            "\t".join(
+                [
+                    "MUT1",
+                    "MUT2",
+                    "DIFFERENT_LINEAGES",
+                    "ANCESTOR_DESCENDANT",
+                    "DESCENDANT_ANCESTOR",
+                    "SAME_NODE",
+                    "UNDEFINED_DEPENDENCY",
+                    "TOTAL",
+                    "DOMINANT_DEPENDENCY",
+                    "PERCENTAGE_DOMINANT",
+                ]
+            )
         )
-    )
-    output_file.write("\n")
+        output_file.write("\n")
 
-    for mut1 in all_mut_ids:
-        for mut2 in all_mut_ids:
-            line_to_write = mut1 + "\t" + mut2
+        for mut1 in all_mut_ids:
+            for mut2 in all_mut_ids:
+                line_to_write = mut1 + "\t" + mut2
 
-            dominant_dependency = None
-            max_count = 0
-            total_count = 0
-            for dependency in [
-                DIFFERENT_LINEAGES,
-                ANCESTOR_DESCENDANT,
-                DESCENDANT_ANCESTOR,
-                SAME_NODE,
-                UNDEFINED_DEPENDENCY,
-            ]:
-                current_count = dependencies[mut1][mut2][dependency]
-                line_to_write += "\t" + str(current_count)
+                dominant_dependency = None
+                max_count = 0
+                total_count = 0
+                for dependency in [
+                    DIFFERENT_LINEAGES,
+                    ANCESTOR_DESCENDANT,
+                    DESCENDANT_ANCESTOR,
+                    SAME_NODE,
+                    UNDEFINED_DEPENDENCY,
+                ]:
+                    current_count = dependencies[mut1][mut2][dependency]
+                    line_to_write += "\t" + str(current_count)
 
-                if current_count > max_count:
-                    dominant_dependency = dependency
-                    max_count = current_count
+                    if current_count > max_count:
+                        dominant_dependency = dependency
+                        max_count = current_count
 
-                total_count += current_count
+                    total_count += current_count
 
-            line_to_write += "\t" + str(total_count)
+                line_to_write += "\t" + str(total_count)
 
-            if total_count == 0:
-                line_to_write += "\t" + "UNDEFINED"
-                line_to_write += "\t" + "UNDEFINED"
-            else:
-                line_to_write += "\t" + str(dominant_dependency)
-                line_to_write += "\t" + float_to_string(
-                    (100.0 * max_count) / total_count
-                )
+                if total_count == 0:
+                    line_to_write += "\t" + "UNDEFINED"
+                    line_to_write += "\t" + "UNDEFINED"
+                else:
+                    line_to_write += "\t" + str(dominant_dependency)
+                    line_to_write += "\t" + float_to_string(
+                        (100.0 * max_count) / total_count
+                    )
 
-            output_file.write(line_to_write + "\n")
-
-    output_file.close()
+                output_file.write(line_to_write + "\n")
