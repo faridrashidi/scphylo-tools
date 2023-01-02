@@ -329,9 +329,9 @@ def phiscsb_bulk(
                 numVarZ += 1
                 Z[i, j] = numVarY + numVarB + numVarZ
 
+    numVarK = 0
     if kmax > 0:
         K = np.empty(num_mutations + 1, dtype=np.int64)
-        numVarK = 0
         for j in range(num_mutations + 1):
             numVarK += 1
             K[j] = numVarY + numVarB + numVarZ + numVarK
