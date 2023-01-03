@@ -37,6 +37,7 @@ def read(filepath):
         return _read_nwk(filepath)
     else:
         scp.logg.error("Extension is wrong!")
+        return None
 
 
 def write(obj, filepath):
