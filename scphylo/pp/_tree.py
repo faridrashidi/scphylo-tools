@@ -84,3 +84,5 @@ def sample_from_tree(tree, ratio, axis="cell"):
             array = np.random.choice(array, replace=False, size=int(ratio * len(array)))
             sampled += list(array)
         return sampled
+    else:
+        return None
