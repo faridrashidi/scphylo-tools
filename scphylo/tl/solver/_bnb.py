@@ -785,7 +785,9 @@ class TwoSatBounding(BoundingAlgAbstract):
                 return sgn * (till_here + this_step)
             elif pv_abs == 7:
                 return 0
-        scp.logg.error("get_priority did not return anything!")
+            else:
+                scp.logg.error("get_priority did not return anything!")
+                return 0
 
 
 class BnB(pybnb.Problem):
