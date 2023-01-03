@@ -231,6 +231,7 @@ def _split_labels(tree1, tree2):
         for n in tree.nodes:
             if label in tree.nodes[n]["lable"]:
                 return n
+        return None
 
     def _which_muts_must_be_splited(tree):
         muts = []
