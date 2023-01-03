@@ -219,6 +219,8 @@ def _to_newick(tree):
                     + ",".join([_newick_recursive(node_id) for node_id in node_ids])
                     + f")Node{node_id+1}"
                 )
+        else:
+            return None
 
     newick = _newick_recursive(root) + ";"
     return newick
