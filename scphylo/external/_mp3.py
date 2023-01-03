@@ -240,7 +240,7 @@ def similarity(tree1, tree2, mode="sigmoid", sigmoid_mult=10.0, cores=1):
         try:
             set_start_method("spawn")
         except RuntimeError:
-            pass
+            print("ERROR")
 
         with Pool(processes=cores) as pool:
             func = partial(is_equal_struct, LCA1=tree1.LCA, LCA2=tree2.LCA)
