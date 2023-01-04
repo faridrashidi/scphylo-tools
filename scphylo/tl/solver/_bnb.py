@@ -558,13 +558,20 @@ def is_conflict_free_gusfield_and_get_two_columns_in_coflicts(I_mtr, na_value):
 
 
 class BoundingAlgAbstract:
-    def __init__(self):
+    def __init__(
+        self,
+        matrix=None,
+        _extra_info=None,
+        _extraInfo={},
+        _times={},
+        na_support=False,
+    ):
         """[summary]."""
-        self.matrix = None
-        self._extra_info = None
-        self._extraInfo = {}
-        self._times = {}
-        self.na_support = False
+        self.matrix = matrix
+        self._extra_info = _extra_info
+        self._extraInfo = _extraInfo
+        self._times = _times
+        self.na_support = na_support
 
     def reset(self, matrix):
         scp.logg.error("The method not implemented")
