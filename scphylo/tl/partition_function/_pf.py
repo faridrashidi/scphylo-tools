@@ -126,7 +126,7 @@ def get_samples_info(
         tree_origin_prob_list.append(origin_prob)
 
     if given_samples:
-        return pf_cond_list, tree_origin_prob_list
+        return pf_cond_list, tree_origin_prob_list, None, None, None
     else:
         return (
             pf_cond_list,

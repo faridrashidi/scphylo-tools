@@ -57,7 +57,7 @@ def partition_function(df_input, alpha, beta, n_samples, n_batches, muts, cells)
 
     def run(mut):
         my_mut = np.where(df_input.columns == mut)[0][0]
-        pf_cond_list, tree_origin_prob_list = get_samples_info(
+        pf_cond_list, tree_origin_prob_list, _, _, _ = get_samples_info(
             P, my_cells, my_mut, n_samples, subtrees_list
         )
         estimates = process_samples(
