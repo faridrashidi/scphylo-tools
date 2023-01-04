@@ -623,17 +623,14 @@ class TwoSatBounding(BoundingAlgAbstract):
 
         :param priority_version:
         """
-        super().__init__()
+        super().__init__(na_support=True)
         assert not cluster_rows, "Not implemented yet"
         assert not cluster_cols, "Not implemented yet"
         assert not only_descendant_rows, "Not implemented yet"
 
         self.priority_version = priority_version
 
-        self.na_support = True
         self.na_value = na_value
-        self.matrix = None
-        self._times = None
         self.next_lb = None
         self.heuristic_setting = heuristic_setting
         self.n_levels = n_levels
