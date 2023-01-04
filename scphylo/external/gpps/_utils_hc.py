@@ -294,6 +294,7 @@ def delete_node(node, nid_dict):
         parent.children.append(child)
     nid_dict.pop(node.id_node)
     node = None
+    return node
 
 
 def check_subtree_losses(node, nid_dict):
