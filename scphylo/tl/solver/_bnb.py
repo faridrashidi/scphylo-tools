@@ -305,7 +305,7 @@ def twosat_solver(
         # input for leave_nas_if_zero
         # I am also not passing eps here to wrap up the recursion soon
 
-        Orec, rec_model_time, rec_opt_time = twosat_solver(
+        Orec, rec_model_time, rec_opt_time, _ = twosat_solver(
             output_matrix,
             na_value=na_value,
             heuristic_setting=None,
@@ -323,7 +323,7 @@ def twosat_solver(
     if return_lb:
         return final_output, model_time, opt_time, lower_bound
     else:
-        return final_output, model_time, opt_time
+        return final_output, model_time, opt_time, None
 
 
 def make_constraints_np_matrix(
