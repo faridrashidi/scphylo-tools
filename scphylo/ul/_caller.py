@@ -7,9 +7,7 @@ import scphylo as scp
 
 def is_paired(indir):
     files = glob.glob(f"{indir}/*.fastq.gz")
-    last_char_set = {
-        x[-len(".fastq.gz") - 2 : -len(".fastq.gz")] for x in files  # noqa
-    }
+    last_char_set = {x[-len(".fastq.gz") - 2 : -len(".fastq.gz")] for x in files}
     temp = []
     if last_char_set == {"_1", "_2"}:
         for file in files:

@@ -465,8 +465,8 @@ def make_constraints_np_matrix(
                         x = np.empty((r01.shape[0] + r10.shape[0], 2), dtype=np.int)
                         x[: len(r01), 0] = r01
                         x[: len(r01), 1] = p
-                        x[-len(r10) :, 0] = r10  # noqa
-                        x[-len(r10) :, 1] = q  # noqa
+                        x[-len(r10) :, 0] = r10
+                        x[-len(r10) :, 1] = q
 
                         for a, b, ind in itertools.product(r01, r10, range(x.shape[0])):
                             for row, col in [
@@ -562,15 +562,19 @@ class BoundingAlgAbstract:
         self,
         matrix=None,
         _extra_info=None,
-        _extraInfo={},
-        _times={},
+        _extraInfo=None,
+        _times=None,
         na_support=False,
     ):
         """[summary]."""
         self.matrix = matrix
         self._extra_info = _extra_info
         self._extraInfo = _extraInfo
+        if self._extraInfo is None:
+            self._extraInfo = {}
         self._times = _times
+        if self._times is None:
+            self._times = {}
         self.na_support = na_support
 
     def reset(self, matrix):

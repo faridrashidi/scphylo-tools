@@ -50,12 +50,12 @@ class NaturalOrderGroup(click.Group):
     context_settings={"max_content_width": 300, "terminal_width": 300},
 )
 def cli_caller():
-    """Caller module.
+    r"""Caller module.
 
     FastQ: {sample}_1.fastq.gz or {sample}.fastq.gz\n
     BAM: {sample}.transcript.bam for counting\n
     BAM: {sample}.mapped.bam -> {sample}.markdup.bam\n
-    """  # noqa
+    """
     return None
 
 
