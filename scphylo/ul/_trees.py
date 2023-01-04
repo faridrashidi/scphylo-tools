@@ -227,12 +227,6 @@ def _to_newick(tree):
 
 
 def _split_labels(tree1, tree2):
-    def _at_which_node(tree, label):
-        for n in tree.nodes:
-            if label in tree.nodes[n]["lable"]:
-                return n
-        return None
-
     def _which_muts_must_be_splited(tree):
         muts = []
         rid = scp.ul.root_id(tree)
