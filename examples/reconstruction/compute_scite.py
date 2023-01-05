@@ -25,4 +25,4 @@ df_out.head()
 # Finally, using :func:`scphylo.ul.is_conflict_free_gusfield` we check whether the
 # inferred genotype matrix is conflict-free or not.
 is_cf = scp.ul.is_conflict_free_gusfield(df_out)
-is_cf
+print(is_cf)
