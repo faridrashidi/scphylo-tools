@@ -11,7 +11,7 @@ import scphylo as scp
 
 
 def run_scistree(df_in, alpha, beta, outfile):
-    outfile
+    type(outfile)
     # scp.settings.logfile = f"{outfile}/fn_{beta}-fp_{alpha}.log"
     scp.settings.verbosity = "error"
     df_out = scp.tl.scistree(df_in, alpha, beta)
