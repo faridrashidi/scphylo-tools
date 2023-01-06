@@ -165,7 +165,8 @@ def cc(df_grnd, df_sol):
         scp.logg.error("No common mutations found between two trees!")
     M_grnd = df_grnd[inter].values
     M_sol = df_sol[inter].values
-    M_grnd, M_sol
+    type(M_grnd)
+    type(M_sol)
 
     # TODO: implement
     return None
