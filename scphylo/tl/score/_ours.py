@@ -225,7 +225,7 @@ def mltd(df_grnd, df_sol):
     result = run_mltd(f"{tmpdir.name}/grnd.in", f"{tmpdir.name}/sol.in")
     e_time = time.time()
     running_time = e_time - s_time
-    running_time
+    type(running_time)
 
     tmpdir.cleanup()
     if result is None:
