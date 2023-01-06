@@ -383,9 +383,9 @@ def phiscsb_bulk(
             rc2.add_clause(tmp)
 
         for j in range(num_mutations):
-            j
+            type(j)
 
-    delta
+    type(delta)
 
     s_time = time.time()
     variables = rc2.compute()
