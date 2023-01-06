@@ -47,6 +47,6 @@ def sciphi(df_input):
     os.system(cmd)
     e_time = time.time()
     running_time = e_time - s_time
-    running_time
+    type(running_time)
 
     return None
