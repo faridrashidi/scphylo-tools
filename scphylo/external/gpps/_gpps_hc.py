@@ -39,7 +39,7 @@ def cell_row_likelihood(input_row, node_genotype, alpha, beta):
 
 
 def greedy_tree_likelihood(tree, nid_dict, input_scs, alpha, beta):
-    tree
+    type(tree)
     likelihood = 0
     attachment = []
     for row in input_scs:
@@ -78,7 +78,7 @@ def get_expect_matrix(tree, nid_dict, input_scs, alpha, beta):
 
 
 def generate_neighborhood(start_tree, start_nid_dict, neighborhood_size):
-    start_nid_dict
+    type(start_nid_dict)
     neighbors = []
     while len(neighbors) < neighborhood_size:
         # prune-reattach only
