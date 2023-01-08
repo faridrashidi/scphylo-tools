@@ -12,33 +12,33 @@ UNDEFINED_DEPENDENCY = 4
 def read_CF_matrix_to_int_dictionary(path_CFmatrix_file):
     assert os.path.exists(path_CFmatrix_file), "ERROR. No file " + path_CFmatrix_file
 
-    input_file = open(path_CFmatrix_file)
-    mut_ids = input_file.readline().strip().split()[1:]
-    m = len(mut_ids)
-    assert len(set(mut_ids)) == m, "ERROR. Repeating mutations present in column names."
+    with open(path_CFmatrix_file) as input_file:
+        mut_ids = input_file.readline().strip().split()[1:]
+        m = len(mut_ids)
+        assert (
+            len(set(mut_ids)) == m
+        ), "ERROR. Repeating mutations present in column names."
 
-    E = {}
-    for line in input_file.readlines():
-        line_columns = line.strip().split()
-        assert len(line_columns) == m + 1, (
-            "ERROR. Input file not in desired matrix format (note that tab or empty"
-            " spaces are assumed as separators)"
-        )
-        cell_id = line_columns[0]
-        assert cell_id not in E, "ERROR. Repeating cell id " + cell_id
-        E[cell_id] = {}
-
-        for i in range(m):
-            mut_id = mut_ids[i]
-            value = int(line_columns[i + 1])
-            assert value == 0 or value == 1, (
-                "ERROR. Conflict free matrix "
-                + path_CFmatrix_file
-                + " contains non-binary entries"
+        E = {}
+        for line in input_file.readlines():
+            line_columns = line.strip().split()
+            assert len(line_columns) == m + 1, (
+                "ERROR. Input file not in desired matrix format (note that tab or empty"
+                " spaces are assumed as separators)"
             )
-            E[cell_id][mut_id] = value
+            cell_id = line_columns[0]
+            assert cell_id not in E, "ERROR. Repeating cell id " + cell_id
+            E[cell_id] = {}
 
-    input_file.close()
+            for i in range(m):
+                mut_id = mut_ids[i]
+                value = int(line_columns[i + 1])
+                assert value == 0 or value == 1, (
+                    "ERROR. Conflict free matrix "
+                    + path_CFmatrix_file
+                    + " contains non-binary entries"
+                )
+                E[cell_id][mut_id] = value
 
     return E, mut_ids
 
