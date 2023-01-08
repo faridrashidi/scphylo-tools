@@ -37,7 +37,7 @@ def import_rpy2(name="base", how=""):
         from rpy2.robjects import r
         from rpy2.robjects.packages import PackageNotInstalledError, importr
 
-        r
+        type(r)
         rpy2_logger.setLevel(logging.ERROR)
 
     except ImportError:
