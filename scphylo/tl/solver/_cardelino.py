@@ -42,6 +42,7 @@ def cardelino(adata, mode, n_clones=None, tree=None):
 
     scp.logg.info("running Cardelino")
 
+    config = None
     with ro.conversion.localconverter(ro.default_converter + pandas2ri.converter):
         A = ro.conversion.py2rpy(adata.to_df(layer="mutant").T)
         D = ro.conversion.py2rpy(adata.to_df(layer="total").T)
