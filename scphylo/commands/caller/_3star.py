@@ -78,6 +78,8 @@ def star(indir, outdir, ref, time, mem, max_multimapping, afterok, is_pdx):
         config = scp.settings.mm10
     elif ref == "hg38":
         config = scp.settings.hg38
+    else:
+        config = None
 
     def get_readlength(filename):
         readlength = None

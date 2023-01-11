@@ -70,6 +70,8 @@ def vartrix(bam, barcodes, vcf, ref, time, mem, afterok):
         config = scp.settings.hg38
     elif ref == "m10x":
         config = scp.settings.m10x
+    else:
+        config = None
 
     outdir, _ = scp.ul.dir_base(bam)
     scp.ul.mkdir(f"{outdir}/_vartrix")

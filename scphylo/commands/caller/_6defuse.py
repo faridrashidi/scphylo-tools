@@ -69,6 +69,8 @@ def defuse(indir, outdir, ref, time, mem, n_threads, afterok):
         config = scp.settings.mm10
     elif ref == "hg38":
         config = scp.settings.hg38
+    else:
+        config = None
 
     def cmds(sample):
         cmds = ""

@@ -57,6 +57,8 @@ def mpileup(outdir, ref, time, mem, afterok):
         config = scp.settings.hg38
     elif ref == "m10x":
         config = scp.settings.m10x
+    else:
+        config = None
 
     def cmds(samples):
         cmds = ""

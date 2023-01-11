@@ -59,6 +59,8 @@ def sequenza(outdir, normal, ref, time, mem, afterok):
         config = scp.settings.mm10
     elif ref == "hg38":
         config = scp.settings.hg38
+    else:
+        config = None
 
     # if ref == "hg19" or ref == "hg38":
     #     chroms = ["chrM"] + [f"chr{i}" for i in range(1, 23)] + ["chrX", "chrY"]

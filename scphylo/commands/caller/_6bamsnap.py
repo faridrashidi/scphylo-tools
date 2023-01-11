@@ -44,6 +44,8 @@ def bamsnap(ref, bam, pos):
         config = scp.settings.mm10
     elif ref == "hg38":
         config = scp.settings.hg38
+    else:
+        config = None
 
     cmds = ""
     # scp.ul.mkdir(f"{outdir}/_bamsnap")

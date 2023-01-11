@@ -55,6 +55,8 @@ def varfilter(outdir, ref, time, mem, afterok):
         config = scp.settings.mm10
     elif ref == "hg38":
         config = scp.settings.hg38
+    else:
+        config = None
 
     def get_command(sample):
         cmds = ""

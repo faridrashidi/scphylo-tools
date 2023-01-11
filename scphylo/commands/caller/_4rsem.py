@@ -60,6 +60,8 @@ def rsem(outdir, ref, single_or_paired, time, mem, afterok):
         config = scp.settings.mm10
     elif ref == "hg38":
         config = scp.settings.hg38
+    else:
+        config = None
 
     def step1(afterok):
         def get_command():

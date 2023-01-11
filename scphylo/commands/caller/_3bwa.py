@@ -77,6 +77,8 @@ def bwa(indir, outdir, ref, time, mem, n_threads, afterok, is_pdx):
         config = scp.settings.mm10
     elif ref == "hg38":
         config = scp.settings.hg38
+    else:
+        config = None
 
     def get_command(sample, is_paired):
         cmds = ""
