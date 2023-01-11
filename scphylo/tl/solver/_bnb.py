@@ -380,6 +380,8 @@ def make_constraints_np_matrix(
     map_f2ij = {}
     zero_vars = []
     na_vars = []
+    B_vars_offset = None
+    C_vars_offset = None
     if compact_formulation:
         B_vars_offset = matrix.shape[0] * matrix.shape[1] + 1
         num_var_B = 0
