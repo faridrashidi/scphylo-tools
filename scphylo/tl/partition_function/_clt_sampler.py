@@ -87,6 +87,7 @@ def clt_sample_rec(
             c_rec *= 2.0
     else:
         # add new row to join_prob_matrix to get sim
+        sim = None
         pass
     prob = sim
     if greedy:
