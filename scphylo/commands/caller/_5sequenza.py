@@ -62,23 +62,6 @@ def sequenza(outdir, normal, ref, time, mem, afterok):
     else:
         config = None
 
-    # if ref == "hg19" or ref == "hg38":
-    #     chroms = ["chrM"] + [f"chr{i}" for i in range(1, 23)] + ["chrX", "chrY"]
-    #     # chroms = (
-    #     #     ["chrM"]
-    #     #     + [f"chr{i}" for i in range(10, 23)]
-    #     #     + [f"chr{i}" for i in range(1, 10)]
-    #     #     + ["chrX", "chrY"]
-    #     # )
-    # elif ref == "mm10":
-    #     chroms = ["chrM"] + [f"chr{i}" for i in range(1, 20)] + ["chrX", "chrY"]
-    #     # chroms = (
-    #     #     ["chrM"]
-    #     #     + [f"chr{i}" for i in range(10, 20)]
-    #     #     + [f"chr{i}" for i in range(1, 10)]
-    #     #     + ["chrX", "chrY"]
-    #     # )
-
     def step1(afterok):
         def get_command():
             cmds = ""
