@@ -85,11 +85,4 @@ def partf(genotype_file, alpha, beta, n_samples, n_threads):
     with open(filename, "wb") as f:
         pickle.dump(samples_object, f)
 
-    # for filename in glob.glob(f"{outfile}.partf.samples/*.pkl"):
-    #     with open(filename, "rb") as f:
-    #         edges_l, subtrees_l, tree_our_prob_l = pickle.load(f)
-    #         edges_list += edges_l
-    #         subtrees_list += subtrees_l
-    #         tree_our_prob_list += tree_our_prob_l
-
     return None
