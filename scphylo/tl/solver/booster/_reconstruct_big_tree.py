@@ -95,19 +95,15 @@ def write_dictionary_of_dictionaries_to_file(D, path_output_file):
             " form,"
         )
 
-    output_file = open(path_output_file, "w")
-
-    output_file.write("row_x_col" + "\t" + "\t".join(column_ids) + "\n")
-
-    for row_id in row_ids:
-        output_file.write(
-            row_id
-            + "\t"
-            + "\t".join([str(D[row_id][column_id]) for column_id in column_ids])
-            + "\n"
-        )
-
-    output_file.close()
+    with open(path_output_file, "w") as output_file:
+        output_file.write("row_x_col" + "\t" + "\t".join(column_ids) + "\n")
+        for row_id in row_ids:
+            output_file.write(
+                row_id
+                + "\t"
+                + "\t".join([str(D[row_id][column_id]) for column_id in column_ids])
+                + "\n"
+            )
 
 
 def get_row_ids_from_2D_hash(D):
@@ -528,10 +524,9 @@ def reconstruct_big_tree(
         existing_mutations.append(mutation_to_add)
         A[mutation_to_add][mutation_to_add] = 0
 
-    parent_vector_file = open(output_files_prefix + ".dnc.tree.parent", "w")
-    for mut_id, parent_id in parent.items():
-        parent_vector_file.write(mut_id + "\t" + parent_id + "\n")
-    parent_vector_file.close()
+    with open(output_files_prefix + ".dnc.tree.parent", "w") as parent_vector_file:
+        for mut_id, parent_id in parent.items():
+            parent_vector_file.write(mut_id + "\t" + parent_id + "\n")
 
     E = get_CF_matrix_from_parent_vector(parent, D, alpha, beta)
     write_dictionary_of_dictionaries_to_file(E, output_files_prefix + ".dnc.CFMatrix")
