@@ -370,9 +370,6 @@ def make_constraints_np_matrix(
 
     # soft_cnst_num = 0
     hard_constraints = [[] for _ in range(n_levels)]  # an empty list each level
-    # if descendance_analysis:
-    #     # dictionary for lazy calculation of decadence:
-    #     descendent_dict = dict()
 
     # variables for each zero
     F = -np.ones(matrix.shape, dtype=np.int64)
