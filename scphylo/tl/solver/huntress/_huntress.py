@@ -34,6 +34,7 @@ def Reconstruct(
     tune_var = itertools.product(h_range, oc_range)
 
     running_time = 0
+    matrix_recons = None
 
     if Algchoice == "FN":
         s_time = time.time()
