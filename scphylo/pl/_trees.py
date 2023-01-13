@@ -390,16 +390,6 @@ def newick_tree(
     ) as image:
         p = ro.r(cmd)
         ro.r.show(p)
-        #  if output_file is not None:
-        #      ro.r.ggsave(
-        #          plot=p,
-        #          filename=output_file,
-        #          width=width / dpi,
-        #          height=height / dpi,
-        #          units="in",
-        #          dpi=dpi,
-        #          limitsize=False,
-        #      )
     return display(Image(image.getvalue(), embed=True, retina=True))
 
 
