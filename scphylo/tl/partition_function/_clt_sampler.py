@@ -88,7 +88,6 @@ def clt_sample_rec(
     else:
         # add new row to join_prob_matrix to get sim
         sim = None
-        pass
     prob = sim
     if greedy:
         pair = np.unravel_index(np.argmax(prob), prob.shape)
