@@ -6,7 +6,7 @@ nbsphinx-link
 pydata_sphinx_theme
 pyenchant
 pypandoc
-sphinx
+sphinx<6
 sphinx-autodoc-typehints
 sphinx-click
 sphinx-paramlinks
