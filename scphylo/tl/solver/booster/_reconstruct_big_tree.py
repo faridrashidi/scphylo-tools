@@ -262,9 +262,8 @@ def compute_weights_from_dependencies_file(path_dependencies_file):
     )
     dependencies_file.close()
 
-    dependencies_file_rows = list(
-        csv.DictReader(open(path_dependencies_file), delimiter="\t")
-    )
+    with open(path_dependencies_file) as dependencies_file:
+        dependencies_file_rows = list(csv.DictReader(dependencies_file, delimiter="\t"))
 
     mut_ids = list({row["MUT1"] for row in dependencies_file_rows})
     # m = len(mut_ids)
