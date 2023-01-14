@@ -99,7 +99,6 @@ def to_tree(df):
             untilnow_mut += tree.get_edge_data(sp[i], sp[i + 1])["label"].split(
                 tree.graph["splitter_mut"]
             )
-        untilnow_mut = set(untilnow_mut)
         untilnow_cell = df.loc[
             (df[untilnow_mut] == 1).all(axis=1)
             & (df[[x for x in df.columns if x not in untilnow_mut]] == 0).all(axis=1)
