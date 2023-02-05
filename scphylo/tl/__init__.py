@@ -23,6 +23,7 @@ from scphylo.tl.solver import (
     phiscsi_bulk,
     rscistree,
     sbm,
+    scelestial,
     sciphi,
     scistree,
     scite,
@@ -68,4 +69,5 @@ __all__ = (
     grmt,
     sciphi,
     gpps,
+    scelestial,
 )

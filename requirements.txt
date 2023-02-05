@@ -5,6 +5,7 @@ click
 cython
 cyvcf2
 ete3
+graphviz
 ipython
 joblib
 matplotlib

@@ -14,6 +14,7 @@ from scphylo.tl.solver._phiscs import (
     phiscsi_bulk,
 )
 from scphylo.tl.solver._sbm import sbm
+from scphylo.tl.solver._scelestial import scelestial
 from scphylo.tl.solver._sciphi import sciphi
 from scphylo.tl.solver._scistree import iscistree, rscistree, scistree
 from scphylo.tl.solver._scite import infscite, scite
@@ -45,4 +46,5 @@ __all__ = (
     sphyr,
     booster,
     huntress,
+    scelestial,
 )

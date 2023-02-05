@@ -8,14 +8,7 @@ import scphylo as scp
 from scphylo.external._scite import run_scite
 
 
-def scite(
-    df_input,
-    alpha,
-    beta,
-    n_iters=90000,
-    n_restarts=3,
-    experiment=False,
-):
+def scite(df_input, alpha, beta, n_iters=90000, n_restarts=3, experiment=False):
     """Solving using SCITE.
 
     Tree inference for single-cell data :cite:`SCITE`.
