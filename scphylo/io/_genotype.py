@@ -31,6 +31,11 @@ def read(filepath):
         if len(sc.columns) != len(set(sc.columns)):
             scp.logg.error("Mutation ids must be unique!")
         return sc
+    elif ext in [".csv"]:
+        sc = pd.read_csv(filepath, index_col=0)
+        if len(sc.columns) != len(set(sc.columns)):
+            scp.logg.error("Mutation ids must be unique!")
+        return sc
     elif ext in [".h5ad", ".gz"]:
         return ad.read(filepath)
     elif ext in [".nwk"]:
