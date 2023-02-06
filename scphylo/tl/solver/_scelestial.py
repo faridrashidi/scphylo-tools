@@ -1,3 +1,4 @@
+import math
 import os
 import sys
 import time
@@ -46,7 +47,7 @@ def scelestial(df_input):
     )
 
     cmd = (
-        f"{executable} -root 0 < {tmpdir.name}/scelestial.input > "
+        f"{executable} < {tmpdir.name}/scelestial.input > "
         f"{tmpdir.name}/scelestial.tree_clone"
     )
 
@@ -54,6 +55,11 @@ def scelestial(df_input):
     os.system(cmd)
     e_time = time.time()
     running_time = e_time - s_time
+
+    _steiner_to_seq(
+        f"{tmpdir.name}/scelestial.tree_clone",
+        f"{tmpdir.name}/scelestial.impute",
+    )
 
     _stein_to_clone_tree(
         f"{tmpdir.name}/scelestial.input",
@@ -94,7 +100,6 @@ def scelestial(df_input):
 
     tmpdir.cleanup()
 
-    # FIXME: see how to add the mutations to the tree in order to calculate flip counts
     scp.ul.stat(df_output, df_output, 0, 0, running_time)
 
     return df_output
@@ -335,7 +340,6 @@ def _clone_tree_to_mu_tree_imput(
         dot = Digraph(format="pdf")
         dot.graph_attr["rankdir"] = "LR"
         for treeNode in nodes:
-            # for treeNode, cells in treeNodeCells.items():
             cells = []
             if treeNode in treeNodeCells:
                 cells = treeNodeCells[treeNode]
@@ -374,29 +378,13 @@ def _clone_tree_to_mu_tree_imput(
             r.append(line.strip())
         return r
 
-    def loadTable(fileName, sep="\t"):
-        f = open(fileName)
-        r = []
-        for line in f:
-            r.append(line.split(sep))
-        return r
-
     def loadCellNames(cellNamesFileName):
         return loadFileRows(cellNamesFileName)
 
-    def writeSequenceFile(sequences, fileName):
-        f = open(fileName, "w")
-        if len(sequences) > 0:
-            for i in range(len(sequences[0])):
-                print(" ".join([str(seq[i]) for seq in sequences]), file=f)
-        f.close()
-
     BLUE = "#69c5f0"
     BLACK = "black"
-    # ORANGE = "#f57433"
-    # BROWN = "#af9d92"
 
-    vertices, edges, treeParent, treeChildren, treeRoot = loadTree(treeFileName)
+    _, edges, _, treeChildren, treeRoot = loadTree(treeFileName)
     treeNodeCells = loadClones(cloneFileName)
 
     sequences = loadSequenceFile(seqFileName)
@@ -446,11 +434,6 @@ def _clone_tree_to_mu_tree_imput(
     treeNodeMutations = {}
 
     def fillTreeNodeMutations(mutIndex=None):
-        allMutationCount = [
-            [sum(1 for s in sequences if s[i] == mut) for mut in [0, 1]]
-            for i, _ in enumerate(mutationInfo)
-        ]
-
         def dfs(v):
             myCellsStar = []
             if v in treeNodeCells:
@@ -485,17 +468,6 @@ def _clone_tree_to_mu_tree_imput(
                                 str(subTreeNormal) + "," + str(len(myCellsStar)),
                             )
                         )
-                    print(
-                        "Mut:{} node: {} cells:{} subtree: {},{}/{},{} ".format(
-                            i,
-                            v,
-                            ",".join([cellNames[int(c) - 1] for c in treeNodeCells[v]]),
-                            subTreeNormal,
-                            subTreeMutated,
-                            allMutationCount[i][0],
-                            allMutationCount[i][1],
-                        )
-                    )
             return myCellsStar
 
         nodeMutations = {}
@@ -521,6 +493,19 @@ def _clone_tree_to_mu_tree_imput(
 
     def treeNodeDescColor(treeNode, cells):
         desc = ", ".join([cellNames[int(c) - 1] for c in cells])
+        if treeNodeMutations is not None and treeNode in treeNodeMutations:
+            mutations = sorted(set(treeNodeMutations[treeNode]))
+            seqmut = math.sqrt(len(mutations) / 7)
+            if len(mutations) > 0:
+                desc += " ["
+                lastLineLen = 0
+                for _, mut in enumerate(mutations):
+                    desc += mut + " "
+                    lastLineLen += 1
+                    if lastLineLen >= seqmut:
+                        desc += "\n"
+                        lastLineLen = 0
+                desc += "]"
         return desc, BLUE, BLACK, BLUE
 
     def treeEdgeLabel(v, u, w):
@@ -545,4 +530,40 @@ def _clone_tree_to_mu_tree_imput(
             edges,
             treeNodeDescColor,
             treeEdgeLabel,
+        )
+
+
+def _steiner_to_seq(steinerFile_path, imputeFile_path):
+    steinerFile = open(steinerFile_path)
+    imputeFile = open(imputeFile_path, "w+")
+    n = int(steinerFile.readline().strip())
+    treeNodes = []
+    cells = []
+    maxAc = -1
+    seq = []
+    for _ in range(n):
+        line = steinerFile.readline().strip()
+        x = line.split()
+        treeNodes.append(x[0])
+        if x[1] == "1":
+            cells.append(x[0])
+        ac = sum(1 for s in x[2] if s == "A")
+        if ac >= maxAc:
+            maxAc = ac
+
+        if x[1] == "1":
+            if sum(1 for s in x[3] if s not in {"A", "C"}) > 0:
+                print(
+                    f"imputed sequence contains invalid char {x[3]}",
+                    file=sys.stderr,
+                )
+                raise Exception("Invalid imputation")
+            seq.append(x[3])
+
+    if len(seq) == 0:
+        exit()
+    for j in range(len(seq[0])):
+        print(
+            " ".join(["0" if s[j] == "A" else "1" for s in seq]),
+            file=imputeFile,
         )
