@@ -196,9 +196,11 @@ def add_readcount(df_in, mean_coverage=50, seed=None):
                 else:
                     # ra allele
                     R_mtx[i, j] = np.ceil(T_mtx[i, j] * np.random.beta(20, 20))
-            else:
+            elif I_mtx[i, j] == 3:
                 R_mtx[i, j] = 0
                 T_mtx[i, j] = 0
+            else:
+                scp.logg.error("Wrong Input")
     adata = ad.AnnData(df_in, dtype=int)
     adata.layers["total"] = T_mtx
     adata.layers["mutant"] = T_mtx - R_mtx

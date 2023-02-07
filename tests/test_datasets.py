@@ -24,6 +24,7 @@ class TestDatasets:
 
     def test_add_noise(self):
         df = scp.datasets.test()
+        df[df == 3] = 0
         df_noisy = scp.datasets.add_noise(df, alpha=0.001, beta=0.1, missing=0.2)
         assert not scp.ul.is_conflict_free_gusfield(df_noisy)
 
