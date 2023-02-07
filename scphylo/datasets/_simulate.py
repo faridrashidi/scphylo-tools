@@ -164,23 +164,26 @@ def add_readcount(df_in, mean_coverage=50, seed=None):
     if seed is not None:
         np.random.seed(seed)
     n, m = df_in.shape
-    I = df_in.values
-    T = np.random.binomial(n=mean_coverage, p=0.5, size=(n, m))  # total reads
+    I_mtx = df_in.values
+    T_mtx = np.random.binomial(n=mean_coverage, p=0.5, size=(n, m))
 
-    R = np.zeros(I.shape, dtype=int)  # reference read count
-    for i in range(I.shape[0]):
-        for j in range(I.shape[1]):
-            if I[i, j] == 0:
-                R[i, j] = np.ceil(T[i, j] * np.random.beta(20, 1))  # rr allele
-            elif I[i, j] == 1:
+    R_mtx = np.zeros(I_mtx.shape, dtype=int)
+    for i in range(I_mtx.shape[0]):
+        for j in range(I_mtx.shape[1]):
+            if I_mtx[i, j] == 0:
+                # rr allele
+                R_mtx[i, j] = np.ceil(T_mtx[i, j] * np.random.beta(20, 1))
+            elif I_mtx[i, j] == 1:
                 if np.random.uniform(0, 1) < 0.5:
-                    R[i, j] = np.ceil(T[i, j] * np.random.beta(1, 20))  # aa allele
+                    # aa allele
+                    R_mtx[i, j] = np.ceil(T_mtx[i, j] * np.random.beta(1, 20))
                 else:
-                    R[i, j] = np.ceil(T[i, j] * np.random.beta(20, 20))  # ra allele
+                    # ra allele
+                    R_mtx[i, j] = np.ceil(T_mtx[i, j] * np.random.beta(20, 20))
             else:
-                R[i, j] = 0
-                T[i, j] = 0
+                R_mtx[i, j] = 0
+                T_mtx[i, j] = 0
     adata = ad.AnnData(df_in, dtype=int)
-    adata.layers["total"] = T
-    adata.layers["mutant"] = T - R
+    adata.layers["total"] = T_mtx
+    adata.layers["mutant"] = T_mtx - R_mtx
     return adata
