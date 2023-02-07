@@ -28,7 +28,7 @@ from scphylo.datasets._datasets import (
     test,
     tnbc,
 )
-from scphylo.datasets._simulate import add_doublets, add_noise, simulate
+from scphylo.datasets._simulate import add_doublets, add_noise, add_readcount, simulate
 
 __all__ = (
     acute_lymphocytic_leukemia1,
@@ -60,4 +60,5 @@ __all__ = (
     simulate,
     add_noise,
     add_doublets,
+    add_readcount,
 )

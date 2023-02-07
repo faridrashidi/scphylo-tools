@@ -22,6 +22,17 @@ class TestDatasets:
         df_noisy = scp.datasets.add_noise(df_ground, alpha=0.001, beta=0.4, missing=0.2)
         assert not scp.ul.is_conflict_free_gusfield(df_noisy)
 
+    def test_add_noise(self):
+        df = scp.datasets.test()
+        df_noisy = scp.datasets.add_noise(df, alpha=0.001, beta=0.1, missing=0.2)
+        assert not scp.ul.is_conflict_free_gusfield(df_noisy)
+
+    def test_add_readcount(self):
+        df = scp.datasets.test()
+        adata = scp.datasets.add_readcount(df, mean_coverage=60, seed=5)
+        assert adata.layers["total"].shape == df.shape
+        assert adata.layers["mutant"].shape == df.shape
+
     @pytest.mark.parametrize(
         "func, n, m", [(scp.datasets.example, 83, 452), (scp.datasets.test, 20, 20)]
     )
