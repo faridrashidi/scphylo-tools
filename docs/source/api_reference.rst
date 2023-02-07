@@ -63,6 +63,7 @@ and calculating the probability of mutations seeding particular cells.
     tl.sphyr
     tl.gpps
     tl.phiscsi_bulk
+    tl.scelestial
 
 
 **Partition function calculation (scphylo-PartF)**
@@ -137,6 +138,7 @@ This module offers a bunch of functions for simulating data.
     datasets.example
     datasets.simulate
     datasets.add_noise
+    datasets.add_readcount
     datasets.melanoma20
     datasets.colorectal1
     datasets.colorectal2
