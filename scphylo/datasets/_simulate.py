@@ -161,6 +161,22 @@ def add_doublets(df_ground, df_noisy, alpha, beta, missing, doublet):
 
 
 def add_readcount(df_in, mean_coverage=50, seed=None):
+    """Add readcount to the input genotype matrix.
+
+    Parameters
+    ----------
+    df_in : :class:`pandas.DataFrame`
+        Input genotype matrix.
+    mean_coverage : :obj:`int`, optional
+        The average coverage, by default 50
+    seed : :obj:`int`, optional
+        The seed for numpy random function, by default None
+
+    Returns
+    -------
+    adata : :class:`anndata.AnnData`
+        The genotype data with readcount info contains layers of mutant and total.
+    """
     if seed is not None:
         np.random.seed(seed)
     n, m = df_in.shape
