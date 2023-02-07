@@ -156,6 +156,10 @@ def _convert_input(sciteFile_path, imputeFile_path, bpFile_path):
             print(f"{v}", end="", file=bpFile)
         print(file=bpFile)
 
+    sciteFile.close()
+    imputeFile.close()
+    bpFile.close()
+
 
 def _stein_to_clone_tree(
     seqSciteFile_path, steinerFile_path, treeFile_path, cloneFile_path
@@ -228,7 +232,6 @@ def _stein_to_clone_tree(
 
     dfs(str(treeRootCloneIdx))
 
-    treeRootCloneIdx
     for v, nei in edges.items():
         for (u, w) in nei:
             if v < u:
@@ -236,6 +239,9 @@ def _stein_to_clone_tree(
                 if dfsNum[v] > dfsNum[u]:
                     x, y = v, u
                 print(f"{x}->{y} {w}", file=treeFile)
+
+    seqSciteFile.close()
+    steinerFile.close()
 
 
 def _clone_tree_to_mu_tree_imput(
@@ -274,6 +280,7 @@ def _clone_tree_to_mu_tree_imput(
         while treeRoot in treeParent:
             treeRoot = treeParent[treeRoot]
 
+        treeFile.close()
         return vertices, edges, treeParent, treeChildren, treeRoot
 
     def loadClones(cloneFileName):
@@ -284,6 +291,7 @@ def _clone_tree_to_mu_tree_imput(
             x = line.strip().split()
             treeNodeCells[x[0]] = x[1:]
 
+        cloneFile.close()
         return treeNodeCells
 
     def compressedTree(treeChildren, treeNodeCells, treeRoot):
@@ -325,6 +333,7 @@ def _clone_tree_to_mu_tree_imput(
                 while num >= len(sequences):
                     sequences.append([])
                 sequences[num].append(int(val))
+        seqFile.close()
         return sequences
 
     def loadMutationInfoFile(mutationInfoFileName):
@@ -332,6 +341,7 @@ def _clone_tree_to_mu_tree_imput(
         mutationInfo = []
         for line in mutationInfoFile:
             mutationInfo.append({id: line.strip()})
+        mutationInfoFile.close()
         return mutationInfo
 
     def writeGraph(
@@ -376,6 +386,7 @@ def _clone_tree_to_mu_tree_imput(
         r = []
         for line in f:
             r.append(line.strip())
+        f.close()
         return r
 
     def loadCellNames(cellNamesFileName):
@@ -425,11 +436,9 @@ def _clone_tree_to_mu_tree_imput(
         for v, _ in treeChildren.items():
             while mergeParent[mergeParent[v]] != mergeParent[v]:
                 mergeParent[v] = mergeParent[mergeParent[v]]
-            newTreeChildren[v]
 
         treeNodeCells = newTreeNodeCells
         treeChildren = newTreeChildren
-        treeRoot = treeRoot
 
     treeNodeMutations = {}
 
@@ -567,3 +576,5 @@ def _steiner_to_seq(steinerFile_path, imputeFile_path):
             " ".join(["0" if s[j] == "A" else "1" for s in seq]),
             file=imputeFile,
         )
+    steinerFile.close()
+    imputeFile.close()
