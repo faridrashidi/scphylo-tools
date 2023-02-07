@@ -244,7 +244,6 @@ def _stein_to_clone_tree(
     steinerFile.close()
     treeFile.close()
     cloneFile.close()
-    
 
 
 def _clone_tree_to_mu_tree_imput(

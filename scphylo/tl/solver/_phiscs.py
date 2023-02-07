@@ -683,10 +683,8 @@ def phiscs_readcount(adata, alpha, beta, time_limit=86400, n_threads=1):
 
     Parameters
     ----------
-    df_input : :class:`pandas.DataFrame`
-        Input genotype matrix in which rows are cells and columns are mutations.
-        Values inside this matrix show the presence (1), absence (0) and missing
-        entires (3).
+    adata : :class:`anndata.AnnData`
+        Input data contains layers of mutant and total.
     alpha : :obj:`float`
         False positive error rate.
     beta : :obj:`float`

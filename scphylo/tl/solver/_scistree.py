@@ -122,10 +122,8 @@ def rscistree(adata, alpha=0, beta=0, n_threads=1, mode="haploid"):
 
     Parameters
     ----------
-    df_input : :class:`pandas.DataFrame`
-        Input genotype matrix in which rows are cells and columns are mutations.
-        Values inside this matrix show the presence (1), absence (0) and missing
-        entires (3).
+    adata : :class:`anndata.AnnData`
+        Input data contains layers of mutant and total.
     alpha : :obj:`float`
         False positive error rate.
     beta : :obj:`float`
