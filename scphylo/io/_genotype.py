@@ -3,6 +3,7 @@ import os
 import anndata as ad
 import ete3
 import networkx as nx
+import numpy as np
 import pandas as pd
 
 import scphylo as scp
@@ -92,3 +93,66 @@ def _read_nwk(filepath):
     G.graph["splitter_cell"] = "\n"
     data = scp.ul.to_cfmatrix(G)
     return data
+
+
+def to_vcf(adata, filepath):
+    def _calculate_pl(ref_count, alt_count):
+        if ref_count == 0 and alt_count == 0:
+            return [0, 0, 0]
+        elif ref_count == 0:
+            return [0, 0, 255]
+        elif alt_count == 0:
+            return [255, 0, 0]
+        else:
+            total_count = ref_count + alt_count
+            p_ref = ref_count / total_count
+            p_alt = alt_count / total_count
+            p_ref_given_data = p_ref
+            p_alt_given_data = p_alt
+            p_ref_ref_given_data = p_ref * p_ref
+            pl_ref = -10 * np.math.log10(p_ref_given_data)
+            pl_alt = -10 * np.math.log10(p_alt_given_data)
+            pl_ref_ref = -10 * np.math.log10(p_ref_ref_given_data)
+            return [int(pl_ref), int(pl_ref_ref), int(pl_alt)]
+
+    gt_mtx = np.where(
+        adata.X == 0,
+        "0/0",
+        np.where(adata.X == 1, "0/1", np.where(adata.X == 3, "./.", adata.X)),
+    )
+    ref_mtx = adata.layers["total"] - adata.layers["mutant"]
+    alt_mtx = adata.layers["mutant"]
+    with open(filepath, "w") as fout:
+        fout.write("##fileformat=VCFv4.3\n")
+        fout.write("##contig=<ID=chr1,length=1000000>\n")
+        fout.write('##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">\n')
+        fout.write(
+            '##FORMAT=<ID=PL,Number=G,Type=Integer,Description="Normalized,'
+            " Phred-scaled likelihoods for genotypes as defined in the VCF"
+            ' specification">\n'
+        )
+        fout.write("#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\t")
+        fout.write("\t".join(adata.obs_names) + "\n")
+        for j in range(adata.shape[1]):
+            samples = []
+            for i in range(adata.shape[0]):
+                pl = _calculate_pl(ref_mtx[i, j], alt_mtx[i, j])
+                samples.append(gt_mtx[i, j] + ":" + ",".join(map(str, pl)))
+            variant = (
+                "\t".join(
+                    [
+                        "chr1",
+                        str(j + 1),
+                        ".",
+                        "A",
+                        "C",
+                        ".",
+                        "PASS",
+                        ".",
+                        "GT:PL",
+                        "\t".join(samples),
+                    ]
+                )
+                + "\n"
+            )
+            fout.write(variant)

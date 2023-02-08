@@ -13,7 +13,8 @@ import scphylo as scp
 def scelestial(df_input):
     """Solving using Scelestial.
 
-    Tree inference for single-cell data :cite:`Scelestial`.
+    Fast and accurate single-cell lineage tree inference based on a Steiner tree
+    approximation algorithm :cite:`Scelestial`.
 
     Parameters
     ----------
@@ -28,7 +29,7 @@ def scelestial(df_input):
         A conflict-free matrix in which rows are cells and columns are mutations.
         Values inside this matrix show the presence (1) and absence (0).
     """
-    executable = scp.ul.executable("scelestial", "scelestial")
+    executable = scp.ul.executable("scelestial", "Scelestial")
 
     scp.logg.info("running Scelestial")
 

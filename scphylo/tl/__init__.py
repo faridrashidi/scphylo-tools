@@ -9,6 +9,7 @@ from scphylo.tl.solver import (
     bnb,
     booster,
     cardelino,
+    cellphy,
     dendro,
     gpps,
     grmt,
@@ -70,4 +71,5 @@ __all__ = (
     sciphi,
     gpps,
     scelestial,
+    cellphy,
 )

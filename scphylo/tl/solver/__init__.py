@@ -2,6 +2,7 @@
 
 from scphylo.tl.solver._bnb import bnb
 from scphylo.tl.solver._cardelino import cardelino
+from scphylo.tl.solver._cellphy import cellphy
 from scphylo.tl.solver._dendro import dendro
 from scphylo.tl.solver._gpps import gpps
 from scphylo.tl.solver._grmt import grmt
@@ -47,4 +48,5 @@ __all__ = (
     booster,
     huntress,
     scelestial,
+    cellphy,
 )
