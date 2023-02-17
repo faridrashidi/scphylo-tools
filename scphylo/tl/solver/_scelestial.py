@@ -134,7 +134,7 @@ def _convert_input(sciteFile_path, imputeFile_path, bpFile_path):
                 ss = "./."
             else:
                 print(f"OH! {s}")
-                raise (f"OH! {s}")
+                raise ValueError(f"OH! {s}")
             print(f"{ss}", end=" ", file=imputeFile)
         print(file=imputeFile)
 
