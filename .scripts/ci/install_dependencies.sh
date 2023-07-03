@@ -5,7 +5,7 @@ set -ev
 echo "Installing APT dependencies"
 if [[ "$OS" == "macos-latest" ]]; then
   brew install R
-  # pip install rpy2>=3.3.0
+  # pip install rpy2<=3.5.10
   # Rscript -e install.packages("devtools")
   # Rscript -e install.packages("BiocManager")
   # Rscript -e install.packages("tidyverse")
@@ -32,7 +32,7 @@ elif [[ "$OS" == "ubuntu-latest" ]]; then
   sudo apt-get update -y
   sudo apt-get install libopenblas-base r-base r-base-dev -y
   sudo apt-get install libcurl4-openssl-dev libssl-dev -y
-  pip install rpy2>=3.3.0
+  pip install rpy2<=3.5.10
   sudo Rscript -e 'install.packages("devtools")'
   sudo Rscript -e 'install.packages("BiocManager")'
   sudo Rscript -e 'install.packages("tidyverse")'
