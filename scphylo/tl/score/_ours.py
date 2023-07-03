@@ -86,6 +86,8 @@ def ad(df_grnd, df_sol):
                             M_sol[:, i]
                         ) <= np.sum(M_sol[:, j]):
                             error_pairs.append([i, j])
+    if n_adpairs == 0:
+        scp.logg.error("No pair of mutations exists in the given inputs!")
     return 1 - len(error_pairs) / n_adpairs
 
 
