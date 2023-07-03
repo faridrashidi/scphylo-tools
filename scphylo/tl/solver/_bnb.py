@@ -108,7 +108,7 @@ def all_None(*args):
 
 
 def calculate_column_intersections(matrix, for_loop=False, row_by_row=False):
-    ret = np.empty((matrix.shape[1], matrix.shape[1]), dtype=np.bool)
+    ret = np.empty((matrix.shape[1], matrix.shape[1]), dtype=np.bool_)
     mask_1 = matrix == 1
 
     if for_loop:
@@ -161,7 +161,6 @@ def make_twosat_model_from_np(
     heuristic_setting=None,
     compact_formulation=True,
 ):
-
     if eps is None:
         eps = 1 / (len(zero_vars) + len(na_vars))
 
@@ -669,7 +668,6 @@ class TwoSatBounding(BoundingAlgAbstract):
         self._times = {"model_preparation_time": 0, "optimization_time": 0}
 
     def get_init_node(self):
-
         node = pybnb.Node()
         solution, model_time, opt_time, lb = twosat_solver(
             self.matrix,
