@@ -36,7 +36,6 @@ def huntress(genotype_file, alpha, beta, n_threads):
 
     scphylo solver huntress input.SC 0.0001 0.1 -p 8
     """
-
     outfile = os.path.splitext(genotype_file)[0]
 
     scp.settings.verbosity = "info"

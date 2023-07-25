@@ -1,3 +1,5 @@
+"""Huntress Module."""
+
 import pandas as pd
 
 import scphylo as scp
@@ -29,7 +31,6 @@ def huntress(df_input_filepath, alpha, beta, n_threads=1):
         A conflict-free matrix in which rows are cells and columns are mutations.
         Values inside this matrix show the presence (1) and absence (0).
     """
-
     scp.logg.info(
         f"running HUNTRESS with alpha={alpha}, beta={beta}, n_threads={n_threads}"
     )
