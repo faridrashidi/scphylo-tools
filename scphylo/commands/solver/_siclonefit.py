@@ -99,7 +99,7 @@ def siclonefit(
     Bayesian inference of population structure, genotype, and phylogeny of tumor clones
     from single-cell genome sequencing data :cite:`SiCloneFit`.
 
-    scphylo siclonefit input.SC 0.0001 0.1 -l 1000000 -r 3 -b 100 -e -t 86400 -s 2
+    scphylo solver siclonefit input.SC 0.0001 0.1 -l 1000000 -r 3 -b 100 -e -t 3600 -s 2
     """
     outfile = os.path.splitext(genotype_file)[0]
 

@@ -89,7 +89,7 @@ def scite(
 
     Tree inference for single-cell data :cite:`SCITE`.
 
-    scphylo scite input.SC 0.0001 0.1 -l 1000000 -r 3 -e -t 86400 -s 2
+    scphylo solver scite input.SC 0.0001 0.1 -l 1000000 -r 3 -e -t 86400 -s 2
     """
     outfile = os.path.splitext(genotype_file)[0]
 

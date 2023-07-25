@@ -87,7 +87,7 @@ def gpps(
     an ILP-based approach for inferring cancer progression with mutation losses from
     single cell data :cite:`gpps`.
 
-    scphylo gpps input.SC 0.0001 0.1 -k 0 -s 30 -l 100 -t 86400 -p 1
+    scphylo solver gpps input.SC 0.0001 0.1 -k 0 -s 30 -l 100 -t 86400 -p 1
     """
     outfile = os.path.splitext(genotype_file)[0]
 

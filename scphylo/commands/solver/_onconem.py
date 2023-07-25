@@ -28,7 +28,7 @@ def onconem(genotype_file, alpha, beta):
 
     Inferring tumor evolution from single-cell sequencing data :cite:`OncoNEM`.
 
-    scphylo onconem input.SC 0.0001 0.1
+    scphylo solver onconem input.SC 0.0001 0.1
     """
     outfile = os.path.splitext(genotype_file)[0]
 

@@ -38,7 +38,7 @@ def scistree(genotype_file, alpha, beta, n_threads):
     single cell data: the maximum likelihood perfect phylogeny approach
     :cite:`ScisTree`.
 
-    scphylo scistree input.SC 0.0001 0.1 -p 1
+    scphylo solver scistree input.SC 0.0001 0.1 -p 1
     """
     outfile = os.path.splitext(genotype_file)[0]
 

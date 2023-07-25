@@ -146,14 +146,14 @@ def booster(
 
     For doing all 3 steps:
 
-    scphylo booster input.SC 0.001 0.1
+    scphylo solver booster input.SC 0.001 0.1
     --solver scite --n_samples 200 --sample_size 15
     --n_jobs 4 --n_iterations 10000 --dep_weight 50
     --subsample_dir . --begin_index 0
 
     For doing only the last step:
 
-    scphylo booster input.SC 0.001 0.1
+    scphylo solver booster input.SC 0.001 0.1
     --dep_weight 50 --subsample_dir PATH_TO_SUBSAMPLES_FOLDER
     --no_subsampling --no_dependencies
     """

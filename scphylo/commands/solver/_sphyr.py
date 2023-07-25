@@ -45,7 +45,7 @@ def sphyr(genotype_file, alpha, beta, n_restarts, n_threads):
     Tumor phylogeny estimation from single-cell sequencing data under loss and error
     :cite:`SPhyR`.
 
-    scphylo sphyr input.SC 0.0001 0.1
+    scphylo solver sphyr input.SC 0.0001 0.1
     """
     outfile = os.path.splitext(genotype_file)[0]
 

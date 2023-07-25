@@ -45,7 +45,7 @@ def grmt(genotype_file, alpha, beta, n_iters, n_threads):
     Generative Reconstruction of Mutation Tree From Scratch Using Single-Cell
     Sequencing Data :cite:`GRMT`.
 
-    scphylo grmt input.SC 0.0001 0.1 -l 100 -p 2
+    scphylo solver grmt input.SC 0.0001 0.1 -l 100 -p 2
     """
     outfile = os.path.splitext(genotype_file)[0]
 

@@ -30,7 +30,7 @@ def phiscsb(genotype_file, alpha, beta):
     tumor phylogeny reconstructionvia integrative use of
     single-cell and bulk sequencing data :cite:`PhISCS`.
 
-    scphylo phiscsb input.SC 0.0001 0.1
+    scphylo solver phiscsb input.SC 0.0001 0.1
     """
     outfile = os.path.splitext(genotype_file)[0]
 
