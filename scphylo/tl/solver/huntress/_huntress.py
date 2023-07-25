@@ -5,7 +5,7 @@ from multiprocessing import Process, Queue
 import numpy as np
 
 __author__ = "Can Kizilkale"
-__date__ = "3/19/21"
+__date__ = "12/30/21"
 
 prfp = 5
 
@@ -278,9 +278,28 @@ def f_d_col(node_piv, M_samples, p_fp=0.005, p_fn=0.1):
     D11 = (M_nodes.T == 1).astype(int).dot(node_piv == 1)
     D00 = (M_nodes.T == 0).astype(int).dot(node_piv == 0)
     D01 = (M_nodes.T == 1).astype(int).dot(node_piv == 0)
-    distances = -np.multiply(np.power(p_fp, D10), np.power(1 - p_fp, D00))
-    distances = np.multiply(distances, np.power(p_fn, D01))
-    distances = np.multiply(distances, np.power(1 - p_fn, D11))
+    distances = -(
+        np.multiply(np.log(p_fp), D10)
+        + np.multiply(np.log(1 - p_fp), D00)
+        + np.multiply(np.log(p_fn), D01)
+        + np.multiply(np.log(1 - p_fn), D11)
+    )
+    return distances
+
+
+def f_d_row(node_piv, M_samples, p_fp=0.005, p_fn=0.1):
+    M_nodes = M_samples.copy()
+    distances = np.zeros(M_nodes.shape[0])
+    D10 = (M_nodes == 0).astype(int).dot(node_piv == 1)
+    D11 = (M_nodes == 1).astype(int).dot(node_piv == 1)
+    D00 = (M_nodes == 0).astype(int).dot(node_piv == 0)
+    D01 = (M_nodes == 1).astype(int).dot(node_piv == 0)
+    distances = -(
+        np.multiply(np.log(p_fp), D10)
+        + np.multiply(np.log(1 - p_fp), D00)
+        + np.multiply(np.log(p_fn), D01)
+        + np.multiply(np.log(1 - p_fn), D11)
+    )
     return distances
 
 
@@ -292,18 +311,6 @@ def c_m_col(M_input, M_nodes, pc_fp=0.0001, pc_fn=0.1):
         min_index = np.argmin(distance_i)
         M_out[:, i] = M_nodes[:, min_index]
     return M_out
-
-
-def f_d_row(node_piv, M_samples, p_fp=0.005, p_fn=0.1):
-    M_nodes = M_samples.copy()
-    D10 = (M_nodes == 0).astype(int).dot(node_piv == 1)
-    D11 = (M_nodes == 1).astype(int).dot(node_piv == 1)
-    D00 = (M_nodes == 0).astype(int).dot(node_piv == 0)
-    D01 = (M_nodes == 1).astype(int).dot(node_piv == 0)
-    distances = -np.multiply(np.power(p_fp, D10), np.power(1 - p_fp, D00))
-    distances = np.multiply(distances, np.power(p_fn, D01))
-    distances = np.multiply(distances, np.power(1 - p_fn, D11))
-    return distances
 
 
 def c_m_row(M_input, M_nodes, pc_fp=0.0001, pc_fn=0.1):
