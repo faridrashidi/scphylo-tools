@@ -41,7 +41,8 @@ def huntress(genotype_file, alpha, beta, n_threads):
     scp.settings.verbosity = "info"
     scp.settings.logfile = f"{outfile}.huntress.log"
 
-    df_out = scp.tl.huntress(genotype_file, alpha=alpha, beta=beta, n_threads=n_threads)
+    df_in = scp.io.read(genotype_file)
+    df_out = scp.tl.huntress(df_in, alpha=alpha, beta=beta, n_threads=n_threads)
     scp.io.write(df_out, f"{outfile}.huntress.CFMatrix")
 
     return None

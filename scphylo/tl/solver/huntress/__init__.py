@@ -6,7 +6,7 @@ import scphylo as scp
 from scphylo.tl.solver.huntress._huntress import Reconstruct
 
 
-def huntress(df_input_filepath, alpha, beta, n_threads=1):
+def huntress(df_input, alpha, beta, n_threads=1):
     """Solving using HUNTRESS.
 
     HUNTRESS: Provably fast intratumor heterogeneity inference from single-cell
@@ -36,6 +36,8 @@ def huntress(df_input_filepath, alpha, beta, n_threads=1):
     )
 
     tmpdir = scp.ul.tmpdirsys(suffix=".huntress")
+    df_input_filepath = f"{tmpdir.name}/huntress.SC"
+    scp.io.write(df_input, df_input_filepath)
 
     running_time = 0
     if alpha == 0:

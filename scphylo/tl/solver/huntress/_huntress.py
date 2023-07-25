@@ -39,7 +39,7 @@ def Reconstruct(
     matrix_input = ReadFileNA(input_file)
     matrix_input_raw = ReadFasis(input_file)
     matrix_NA_est = Estimated_Matrix(input_file)
-    print(np.sum(matrix_input), np.sum(matrix_NA_est), file=Flog)
+    # print(np.sum(matrix_input), np.sum(matrix_NA_est), file=Flog)
     h_range = list(range(1, 100, 2))
     oc_range = [x / 10 for x in range(1, 5)]
     tune_var = list(itertools.product(h_range, oc_range))
@@ -66,7 +66,7 @@ def Reconstruct(
 
     if Algchoice == "FPNA" and auto_tune == 1:
         proc_size = np.ceil(len(tune_var) / n_proc).astype(int)
-        print(proc_size)
+        # print(proc_size)
         cpu_range = []
 
         for i in range(n_proc):
@@ -100,20 +100,20 @@ def Reconstruct(
             i.join()
         ret = []
         while not q.empty():
-            print(" Reading the queue ...")
+            # print(" Reading the queue ...")
             ret.append(q.get())
 
         [m_r, d_min] = ret[0]
         matrix_recons = ReadFfile(m_r)
         for i in range(1, len(ret)):
             [m, d] = ret[i]
-            print(d_min)
+            # print(d_min)
             if d < d_min:
                 matrix_recons = ReadFfile(m)
-                print(d_min)
+                # print(d_min)
                 d_min = d
-
-        print("closed", q.empty())
+        q.empty()
+        # print("closed", q.empty())
 
         e_time = time.time()
         running_time = e_time - s_time
@@ -122,15 +122,15 @@ def Reconstruct(
         output_file = output_file + "TEMP.CFMatrix"
         WriteTfile(output_befpost, matrix_recons, input_file)
         WriteTfile(output_file, matrix_recons, input_file)
-        print(
-            " 1->0 : ",
-            np.sum(matrix_recons < matrix_input),
-            " 0->1 : ",
-            np.sum(matrix_recons > matrix_input_raw),
-            " NA->1 : ",
-            np.sum(matrix_recons > matrix_input)
-            - np.sum(matrix_recons > matrix_input_raw),
-        )
+        # print(
+        #     " 1->0 : ",
+        #     np.sum(matrix_recons < matrix_input),
+        #     " 0->1 : ",
+        #     np.sum(matrix_recons > matrix_input_raw),
+        #     " NA->1 : ",
+        #     np.sum(matrix_recons > matrix_input)
+        #     - np.sum(matrix_recons > matrix_input_raw),
+        # )
 
     Flog.close()
     postprocess_col(
@@ -145,7 +145,7 @@ def Auto_fnfp(
 ):  # multiprocessing worker unit, takes a tuning range and tries everything in between
     apprx_ordr = sum(m_NA_est)
 
-    print("An instance of auto tune has started...", procid)
+    # print("An instance of auto tune has started...", procid)
     matrix_recon = greedyPtreeNA(
         m_input.astype(bool), apprx_ordr, tune_ran[0][1], tune_ran[0][0]
     )[2]
@@ -164,14 +164,15 @@ def Auto_fnfp(
         matrix_rec_Temp = deleteNas(m_input_raw, matrix_rec_i)
         n_10 = np.sum(matrix_rec_Temp < m_input, dtype="int64")
         n_01 = np.sum(matrix_rec_Temp > m_input, dtype="int64")
-        print(procid, h_i, overlapp_coeff)
+        # print(procid, h_i, overlapp_coeff)
         distance_i = fnfp * n_10 + fnc * n_01
         if distance_i < distance:
             matrix_recon = matrix_rec_i.copy()
             distance = distance_i
             h_current = h_i
             oc_current = overlapp_coeff
-    print(procid, "th process finished", q.full(), h_current, oc_current)
+    q.full()
+    # print(procid, "th process finished", q.full(), h_current, oc_current)
     output_file = out_file + f"_TEMP_{procid}.CFMatrix"
     WriteTfile(output_file, matrix_recon, in_file)
     q.put([output_file, distance])
@@ -206,12 +207,12 @@ def precombination(M_in):
     for i in range(x[0]):
         for j in range(i + 1, x[0]):
             rij = np.sum(M_in[i, :] != M_in[j, :]) / np.sum(M_in[i, :] + M_in[j, :])
-            print(rij)
+            # print(rij)
             if rij < trsh:
                 cupi = M_in[i, :] + M_in[j, :]
                 M_return[i, :] = cupi
                 M_return[j, :] = cupi
-                print("combined ", i, j)
+                # print("combined ", i, j)
     return M_return
 
 
@@ -232,7 +233,7 @@ def greedyPtreeNew(
         ISet.append(ISet1[i])
 
     bret = []  # Location of detected false negatives
-    print(M_copy.shape, len(ISet))
+    # print(M_copy.shape, len(ISet))
     while len(ISet) > 1:
         pivot_index = ISet[-1]  # index of the pivot vector
         Sremaining = ISet.copy()
@@ -395,7 +396,7 @@ def isPtree(matrix_in):  # brute force check if matrix_in is a pTree
                     if cap_size != Mj_size:
                         return False
 
-    print("Seems to be a PTree ...")
+    # print("Seems to be a PTree ...")
     return True
 
 
@@ -420,14 +421,14 @@ def compareAD(M1, M2):  # M1 is the ground truth
                             M2[:, i]
                         ) <= np.sum(M2[:, j]):
                             error_pairs.append([i, j])
-    print(
-        "Number of AD pairs = ",
-        n_adpairs,
-        "errors : ",
-        len(error_pairs),
-        "AD score = ",
-        1 - len(error_pairs) / n_adpairs,
-    )
+    # print(
+    #     "Number of AD pairs = ",
+    #     n_adpairs,
+    #     "errors : ",
+    #     len(error_pairs),
+    #     "AD score = ",
+    #     1 - len(error_pairs) / n_adpairs,
+    # )
     return error_pairs
 
 
@@ -442,14 +443,14 @@ def compareDF(M_orj, M_rec):
                 d_pairs = d_pairs + 1
                 if np.sum(cap2) > 0:
                     error_pairs.append([i, j])
-    print(
-        "Number of Diff pairs = ",
-        d_pairs,
-        "errors :",
-        len(error_pairs),
-        "score :",
-        1 - len(error_pairs) / d_pairs,
-    )
+    # print(
+    #     "Number of Diff pairs = ",
+    #     d_pairs,
+    #     "errors :",
+    #     len(error_pairs),
+    #     "score :",
+    #     1 - len(error_pairs) / d_pairs,
+    # )
     return
 
 
@@ -475,7 +476,7 @@ def compute_fnfp(M_n, M_r):
         if M_n[x[0], x[1]] < M_r[x[0], x[1]]:
             n_01 = n_01 + 1
             n_1 = n_1 + 1
-    print("computed fn :", n_01 / n_1, " fp : ", n_10 / n_0)
+    # print("computed fn :", n_01 / n_1, " fp : ", n_10 / n_0)
     return [n_01 / n_1, n_10 / n_0]
 
 
@@ -552,7 +553,7 @@ def postprocess_col(input_file, out_file, pfn, pfp):
         Mtemp2 = c_m_col(ReadFasis(input_file), Mtemp2, pc_fn=pfn, pc_fp=pfp)
 
         d10c = np.sum(Mtemp2 < (M_noisy == 1))
-        print(d10c)
+        # print(d10c)
         if d10c < d10min:
             d10min = d10c
             Mtemp = Mtemp2.copy()
@@ -563,15 +564,15 @@ def postprocess_col(input_file, out_file, pfn, pfp):
     processed_file = out_file[:-13] + ".CFMatrix"
     WriteTfile(processed_file, M_postprocessed, input_file)
     e = time.time()
-    print(
-        "Postprocessed 1->0 : ",
-        np.sum(M_postprocessed < (M_n_copy == 1)),
-        " 0->1 : ",
-        np.sum(M_postprocessed > M_n_copy),
-        " NA->1 : ",
-        np.sum(M_postprocessed > (M_n_copy == 1)) - np.sum(M_postprocessed > M_n_copy),
-    )
-    print("Post processing time : ", e - s)
+    # print(
+    #     "Postprocessed 1->0 : ",
+    #     np.sum(M_postprocessed < (M_n_copy == 1)),
+    #     " 0->1 : ",
+    #     np.sum(M_postprocessed > M_n_copy),
+    #     " NA->1 : ",
+    #     np.sum(M_postprocessed > (M_n_copy == 1)) - np.sum(M_postprocessed > M_n_copy),
+    # )
+    # print("Post processing time : ", e - s)
 
 
 def preproc_row(M_o, c=0.8):
@@ -582,7 +583,7 @@ def preproc_row(M_o, c=0.8):
                 np.sum(M_o[i, :]) * np.sum(M_o[j, :])
             )
             if prdct > c:
-                print(i, j)
+                # print(i, j)
                 M_pre[i, :] = M_o[i, :] + M_o[j, :]
                 M_pre[j, :] = M_o[i, :] + M_o[j, :]
     return M_pre
