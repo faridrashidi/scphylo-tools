@@ -103,11 +103,16 @@ def no_cythonize(extensions, **_ignore):
     return extensions
 
 
-CYTHONIZE = bool(int(os.getenv("CYTHONIZE", 0)))
+try:
+    from Cython.Build import cythonize
+
+    HAS_CYTHON = True
+except ImportError:
+    HAS_CYTHON = False
+
+CYTHONIZE = bool(int(os.getenv("CYTHONIZE", 1 if HAS_CYTHON else 0)))
 if CYTHONIZE:
-    try:
-        from Cython.Build import cythonize
-    except ImportError:
+    if not HAS_CYTHON:
         sys.stderr.write(
             "Cannot find Cython. Have you installed all the requirements?\n"
             "Try pip install -r requirements.txt\n"
