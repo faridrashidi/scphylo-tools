@@ -15,7 +15,7 @@ numba
 numpy
 pandas
 pybnb
-pydot
+pydot<2.0.0
 python_sat
 pyyaml
 scikit_learn
