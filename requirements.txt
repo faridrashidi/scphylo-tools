@@ -10,7 +10,7 @@ ipython
 joblib
 matplotlib
 natsort
-networkx<=2.8.3
+networkx
 numba
 numpy
 pandas

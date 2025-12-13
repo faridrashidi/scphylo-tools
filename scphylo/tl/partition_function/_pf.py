@@ -18,7 +18,7 @@ def cell_lineage_tree_prob(P, subtrees):
         temp = Decimal(0)
         col = P[:, j]
         for v in subtrees:
-            temp += Decimal(np.product(col * v + (1 - col) * (1 - v)))
+            temp += Decimal(np.prod(col * v + (1 - col) * (1 - v)))
         return_value *= temp
     return return_value
 
@@ -37,7 +37,7 @@ def pf_cond_on_one_tree(P, subtrees, cond_c, cond_m):
     numerator = Decimal(0)
     col = P[:, cond_m]
     for v in subtrees:
-        prob = Decimal(np.product(col * v + (1 - col) * (1 - v)))
+        prob = Decimal(np.prod(col * v + (1 - col) * (1 - v)))
         denominator += prob
         if np.array_equal(v, cond_c):
             numerator = prob
