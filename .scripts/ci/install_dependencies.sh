@@ -18,6 +18,8 @@ if [[ "$OS" == "macos-latest" ]]; then
   # Rscript -e devtools::install_bitbucket("edith_ross/oncoNEM")
 
   brew install graphviz
+  export CFLAGS="-I$(brew --prefix graphviz)/include"
+  export LDFLAGS="-L$(brew --prefix graphviz)/lib"
   pip install pygraphviz
 
   brew install graph-tool
