@@ -1,9 +1,110 @@
 [build-system]
-requires = ['setuptools', 'setuptools_scm', 'wheel', 'numpy', 'Cython']
-build-backend = 'setuptools.build_meta'
+requires = ["setuptools>=61.0", "setuptools_scm>=8.0", "wheel", "Cython"]
+build-backend = "setuptools.build_meta"
 
-[tool.flit.metadata]
-module = "scphylo"
-author = "Farid Rashidi"
-author-email = "farid.rsh@gmail.com"
-description-file = "README.rst"
+[project]
+name = "scphylo-tools"
+dynamic = ["version", "description"]
+requires-python = ">=3.6"
+dependencies = [
+    "anndata",
+    "apted",
+    "biopython",
+    "click",
+    "cython",
+    "cyvcf2",
+    "ete3",
+    "graphviz",
+    "ipython",
+    "joblib",
+    "matplotlib",
+    "natsort",
+    "networkx",
+    "numba",
+    "numpy",
+    "pandas",
+    "pybnb",
+    "pydot<2.0.0",
+    "python_sat",
+    "pyyaml",
+    "scikit_learn",
+    "scipy",
+    "seaborn",
+    "termcolor",
+    "tqdm",
+]
+authors = [
+    {name = "Farid Rashidi", email = "farid.rsh@gmail.com"},
+]
+maintainers = [
+    {name = "Farid Rashidi", email = "farid.rsh@gmail.com"},
+]
+license = {text = "BSD"}
+readme = "README.rst"
+classifiers = [
+    "License :: OSI Approved :: BSD License",
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Natural Language :: English",
+    "Framework :: Jupyter",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Topic :: Scientific/Engineering :: Visualization",
+]
+keywords = ["tumor phylogeny", "single cell", "tools"]
+
+[project.urls]
+Homepage = "https://github.com/faridrashidi/scphylo-tools"
+Documentation = "https://scphylo-tools.readthedocs.io/en/latest"
+"Source Code" = "https://github.com/faridrashidi/scphylo-tools"
+Download = "https://github.com/faridrashidi/scphylo-tools"
+
+[project.scripts]
+scphylo = "scphylo.commands.scphylo:cli"
+
+[project.optional-dependencies]
+dev = [
+    "pre-commit",
+    "pytest-cov",
+    "pytest-xdist",
+    "bumpversion",
+]
+docs = [
+    "furo",
+    "ipython",
+    "memory_profiler",
+    "nbsphinx",
+    "nbsphinx-link",
+    "pydata_sphinx_theme",
+    "pyenchant",
+    "pypandoc",
+    "sphinx<6",
+    "sphinx-autodoc-typehints",
+    "sphinx-click",
+    "sphinx-paramlinks",
+    "sphinx_copybutton",
+    "sphinx_gallery",
+    "sphinx_rtd_theme",
+    "sphinxcontrib-bibtex",
+    "typing_extensions",
+]
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["."]
+
+[tool.setuptools_scm]
