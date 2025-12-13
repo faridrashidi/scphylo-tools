@@ -573,6 +573,7 @@ def high_grade_serous_ovarian_cancer_3celllines():
         layers: 'ground', 'mutant', 'total'
     """
     adata = scp.io.read(scp.ul.get_file("scphylo.datasets/real/ovarian.h5ad.gz"))
+    adata.var_names = adata.var_names.str.replace(":", "_")
     return adata
 
 
