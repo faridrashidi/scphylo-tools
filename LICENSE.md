@@ -1,6 +1,6 @@
 BSD 3-Clause License
 
-Copyright (c) 2022-2023, Farid Rashidi
+Copyright (c) 2022-2026, Farid Rashidi
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without

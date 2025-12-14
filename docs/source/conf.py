@@ -97,7 +97,7 @@ intersphinx_mapping = {
 # General information about the project.
 project = "scphylo"
 author = "Farid Rashidi"
-copyright = f"2022-2023, {author}, NCI"
+copyright = f"2022-2026, {author}, NCI"
 title = "a python toolkit for single-cell tumor phylogenetic analysis"
 
 
