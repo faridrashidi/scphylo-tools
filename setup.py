@@ -121,7 +121,7 @@ else:
 if __name__ == "__main__":
     setup(
         name="scphylo-tools",
-        version="0.0.4",
+        version="0.0.5",
         ext_modules=extensions,
         description=Path("README.rst").read_text("utf-8").split("\n")[3],
         package_dir={"": "src"},
