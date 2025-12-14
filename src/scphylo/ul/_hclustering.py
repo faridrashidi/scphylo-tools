@@ -18,9 +18,13 @@ def _l1_ignore_na(a, b):
     return np.nanmean(np.abs(a - b))
 
 
+def _l1_ignore_na_wrapper(x, y, **kwargs):
+    return _l1_ignore_na(x, y)
+
+
 def dist_l1_ignore_na(I_mtr, n_jobs=1):
     dist = pairwise_distances(
-        I_mtr, metric=_l1_ignore_na, force_all_finite="allow-nan", n_jobs=n_jobs
+        I_mtr, metric=_l1_ignore_na_wrapper, force_all_finite="allow-nan", n_jobs=n_jobs
     )
     np.fill_diagonal(dist, 0)
     return dist
@@ -50,9 +54,16 @@ def _cosine_ignore_na(u, v):
     return ratio
 
 
+def _cosine_ignore_na_wrapper(x, y, **kwargs):
+    return _cosine_ignore_na(x, y)
+
+
 def dist_cosine_ignore_na(I_mtr, n_jobs=1):
     dist = pairwise_distances(
-        I_mtr, metric=_cosine_ignore_na, force_all_finite="allow-nan", n_jobs=n_jobs
+        I_mtr,
+        metric=_cosine_ignore_na_wrapper,
+        force_all_finite="allow-nan",
+        n_jobs=n_jobs,
     )
     np.fill_diagonal(dist, 0)
     return dist
