@@ -1,7 +1,35 @@
+# Exclude documentation and test files
 prune docs
+prune examples
+prune tests
+
+# Exclude development-specific directories
 prune .scripts
 prune .github
-include requirements.txt
-include docs/requirements.txt
-include LICENSE
+
+# Include license and community health files
+include LICENSE.md
+include CONTRIBUTING.rst
+include CODE_OF_CONDUCT.rst
+
+# Include package data
 include src/scphylo/datasets/*
+
+# Exclude development, configuration, and lock files
+exclude .bumpversion.cfg
+exclude .gitattributes
+exclude .gitignore
+exclude .pre-commit-config.yaml
+exclude .readthedocs.yml
+exclude .rstcheck.cfg
+exclude Makefile
+exclude uv.lock
+exclude requirements.txt
+
+# Exclude build artifacts and compiled files
+global-exclude *.py[co]
+global-exclude __pycache__
+global-exclude *.so
+prune build
+prune dist
+prune *.egg-info
