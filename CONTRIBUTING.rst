@@ -97,7 +97,6 @@ Building on a new machine
 -------------------------
 To build the shared object (``.so``) files, execute::
 
-    pip install -r requirements.txt
     python setup.py build
     python setup.py build_ext --inplace
     pip install -e .
