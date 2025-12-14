@@ -1,12 +1,11 @@
 CLI
 ===
 
-A command line interface (CLI) is available in scPhylo-tools package.
-After you have scphylo correctly installed on your machine
-(see :ref:`installation tutorial <installationguide>`), the ``scphylo``
-command will become available in the terminal. ``scphylo`` is a
-command line tool with some sub-commands. You can get quick info on all the
-available commands typing ``scphylo --help``. You will get the
+The scPhylo-tools package includes a command-line interface (CLI).
+Once scphylo is installed (see :ref:`installation tutorial <installationguide>`),
+the ``scphylo`` command becomes available in your terminal. ``scphylo`` is a
+command-line tool featuring several sub-commands. You can view a list of all
+available commands by typing ``scphylo --help``. This produces the
 following output:
 
 

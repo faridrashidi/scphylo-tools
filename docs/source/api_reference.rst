@@ -7,13 +7,13 @@ Import scphylo as::
 
    import scphylo as scp
 
-After mutation calling and building the input data via our suggested
-mutation calling pipeline.
+This package is intended for use after mutation calling and building the input
+data via our suggested mutation calling pipeline.
 
 
 Read/Write (io)
 ^^^^^^^^^^^^^^^
-This module offers a bunch of functions for reading and writing of the data.
+This module provides functions for reading and writing data.
 
 .. module:: scphylo.io
 .. currentmodule:: scphylo
@@ -26,8 +26,7 @@ This module offers a bunch of functions for reading and writing of the data.
 
 Preprocessing (pp)
 ^^^^^^^^^^^^^^^^^^
-This module offers a bunch of functions for filtering and preprocessing of the
-data.
+This module provides functions for filtering and preprocessing data.
 
 .. module:: scphylo.pp
 .. currentmodule:: scphylo
@@ -44,8 +43,8 @@ data.
 
 Tools (tl)
 ^^^^^^^^^^
-This module offers a high-level API to compute the conflict-free solution
-and calculating the probability of mutations seeding particular cells.
+This module provides a high-level API to compute conflict-free solutions
+and calculate the probability of mutations seeding particular cells.
 
 .. module:: scphylo.tl
 .. currentmodule:: scphylo
@@ -101,7 +100,7 @@ and calculating the probability of mutations seeding particular cells.
 
 Plotting (pl)
 ^^^^^^^^^^^^^
-This module offers plotting the tree in clonal or dendrogram format.
+This module provides functionality for plotting trees in clonal or dendrogram formats.
 
 .. module:: scphylo.pl
 .. currentmodule:: scphylo
@@ -114,7 +113,7 @@ This module offers plotting the tree in clonal or dendrogram format.
 
 Utils (ul)
 ^^^^^^^^^^
-This module offers a bunch of utility functions.
+This module provides utility functions.
 
 .. module:: scphylo.ul
 .. currentmodule:: scphylo
@@ -131,7 +130,7 @@ This module offers a bunch of utility functions.
 
 Datasets (datasets)
 ^^^^^^^^^^^^^^^^^^^
-This module offers a bunch of functions for simulating data.
+This module provides functions for simulating data and accessing published datasets.
 
 .. module:: scphylo.datasets
 .. currentmodule:: scphylo

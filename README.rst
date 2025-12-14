@@ -10,8 +10,38 @@ scphylo-tools: a python toolkit for single-cell tumor phylogenetic analysis
    :alt: overview
    :align: center
 
+**scphylo-tools** is a comprehensive Python toolkit designed for single-cell tumor
+phylogenetic analysis. It integrates efficient implementations of state-of-the-art
+methods to infer evolutionary trees from single-cell genotype data.
 
-scphylo-tools is a python toolkit for single-cell tumor phylogenetic analysis
+Features
+--------
+
+*   **Phylogenetic Inference**: Wrappers and implementations for state-of-the-art
+    inference methods.
+*   **API & CLI**: Provides a Python API as well as command-line tools.
+*   **Visualization**: Built-in visualization tools.
+*   **Datasets**: Access to available datasets.
+*   **Ease of Use**: A unified Python interface for complex phylogenetic workflows.
+
+Installation
+------------
+
+Install the package via pip:
+
+.. code-block:: bash
+
+    pip install scphylo-tools
+
+Documentation
+-------------
+
+Detailed documentation and tutorials are available at `Read the Docs <https://scphylo-tools.readthedocs.io>`_.
+
+.. Citation
+.. --------
+
+.. If you use ``scphylo-tools`` in your research, please cite the DOI linked above.
 
 
 .. |DOI| image:: https://img.shields.io/badge/DOI-10.1101/2021.03.26.437185-orange?logo=gitbook&logoColor=FFFFFF&style=flat-square

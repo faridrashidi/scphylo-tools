@@ -1,10 +1,10 @@
 Contributing guidelines
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Welcome to `scphylo-tools project <https://github.com/faridrashidi/scphylo-tools>`_!
-Before sending your pull requests, make sure that you **read the whole
-guidelines**. If you have any doubt on the contributing guide, please
-feel free to `state it clearly in an
+Welcome to the `scphylo-tools project <https://github.com/faridrashidi/scphylo-tools>`_!
+Before sending your pull requests, please make sure that you **read the full
+guidelines**. If you have any questions regarding the contributing guide, please
+feel free to `open an
 issue <https://github.com/faridrashidi/scphylo-tools/issues/new/choose>`_.
 
 Table of Contents
@@ -22,37 +22,36 @@ Table of Contents
 
 Contributing to scphylo-tools
 -----------------------------
-Clone scphylo-tools from source as::
+Clone the scphylo-tools repository from source::
 
     git clone https://github.com/faridrashidi/scphylo-tools
     cd scphylo-tools
 
-Install the development mode::
+Install in development mode::
 
     make install-dev
 
 
 Codebase structure
 ------------------
-The scphylo-tools project:
+The scphylo-tools package structure is organized as follows:
 
 - `scphylo <scphylo>`_: the root of the package.
 
-    - `scphylo/io <scphylo/io>`_: the read/write module, offers a bunch of
-        functions for reading and writing of the data.
-    - `scphylo/pl <scphylo/pl>`_: the plotting module, offers plotting the
-        tree in clonal or dendrogram format.
-    - `scphylo/pp <scphylo/pp>`_: the preprocessing module, offers a bunch
-        of functions for filtering and preprocessing of the data.
-    - `scphylo/tl <scphylo/tl>`_: the tools module, offers a high-level API
-        to compute the conflict-free solution and calculating the probability of
+    - `scphylo/io <scphylo/io>`_: the input/output module, provides functions
+        for reading and writing data.
+    - `scphylo/pl <scphylo/pl>`_: the plotting module, provides functionality
+        for plotting trees in clonal or dendrogram formats.
+    - `scphylo/pp <scphylo/pp>`_: the preprocessing module, provides functions
+        for filtering and preprocessing data.
+    - `scphylo/tl <scphylo/tl>`_: the tools module, provides a high-level API
+        to compute conflict-free solutions and calculate the probability of
         mutations seeding particular cells.
-    - `scphylo/ul <scphylo/ul>`_: the utils module, offers a bunch of
-        utility functions.
+    - `scphylo/ul <scphylo/ul>`_: the utils module, provides utility functions.
     - `scphylo/commands <scphylo/commands>`_: the CLI commands module,
-        offers running scphylo in command-line interface (CLI) mode.
-    - `scphylo/datasets <scphylo/datasets>`_: the datasets module, offers
-        some of the published single-cell datasets and generating simulations.
+        enables running scphylo via the command-line interface (CLI).
+    - `scphylo/datasets <scphylo/datasets>`_: the datasets module, contains
+        published single-cell datasets and simulation generators.
 
 Tests structure:
 
@@ -61,32 +60,33 @@ Tests structure:
 
 Code style guide
 ----------------
-We rely on ``black`` and ``isort`` to do the most of the formatting - both of
-them are integrated as pre-commit hooks. You can use ``pre-commit`` to check
-the changes::
+We rely on ``black`` and ``isort`` to handle most of the formatting. Both are
+integrated as pre-commit hooks. You can use ``pre-commit`` to check your
+changes::
 
     make lint
 
-Keep in mind to use tags like ``TODO[colon]`` and ``FIXME[colon]`` to make
-other developers aware of what to do next.
+Please remember to use tags like ``TODO[colon]`` and ``FIXME[colon]`` to
+highlight areas requiring future attention.
 
 
 Testing
 -------
-We use ``pytest`` to automate our testing. To execute the tests, run::
+We use ``pytest`` for automated testing. To execute the tests, run::
 
     make test
 
 
 Writing documentation
 ---------------------
-We use ``numpy``-style docstrings for the documentation with the following
-additions and modifications:
+We use ``numpy``-style docstrings for documentation, with the following
+modifications:
 
 - when referring to some argument within the same docstring, enclose that
-    reference in \`\`.
-- prefer putting references in the ``references.bib`` instead under the
-    ``References`` sections of the docstring.
+    reference in double backticks (``).
+
+- prefer adding references to ``references.bib`` instead of listing them under
+    the ``References`` section of the docstring.
 
 In order to build the documentation, run::
 
@@ -95,7 +95,7 @@ In order to build the documentation, run::
 
 Building on a new machine
 -------------------------
-For building the ``.so`` files you need to execute::
+To build the shared object (``.so``) files, execute::
 
     pip install -r requirements.txt
     python setup.py build
@@ -105,7 +105,7 @@ For building the ``.so`` files you need to execute::
 
 Building cpp files
 ------------------
-For building ``.cpp`` files from ``.pyx`` files you need to execute::
+To generate ``.cpp`` files from ``.pyx`` sources, execute::
 
     CYTHONIZE=1 python setup.py install
     pip install -e .
@@ -121,28 +121,27 @@ instructions:
 - if applicable, make sure you've added/modified at least 1 test to account
     for the changes you've made.
 - make sure that all tests pass locally (see `Testing`_).
-- if there is no issue which this PR solves, create a new
-    `one <https://github.com/faridrashidi/scphylo-tools/issues/new>`_ and briefly
-    explaining what the problem is.
+- if there is no existing issue that this PR solves, create a new
+    `issue <https://github.com/faridrashidi/scphylo-tools/issues/new>`_ briefly
+    explaining the problem.
 
 
 Creating a new release
 ----------------------
-If you are a core developer and you want to create a new release, you need to
-install ``bump2version`` first as::
+If you are a core developer and want to create a new release, first install
+``bump2version``::
 
     pip install bump2version
 
-Depending on what part of the release you want to update, you can run::
+Depending on the release type (major, minor, or patch), run::
 
     bump2version {major,minor,patch}
 
 By default, this will create a new tag and automatically update the
 ``__version__`` wherever necessary, commit the changes and create a new tag.
-If you have uncommitted files in the tree, you can use ``--allow-dirty``
-flag to include them in the commit.
+If you have uncommitted files, you can use the ``--allow-dirty`` flag to
+include them in the commit.
 
-After the version has been bumped, make sure to push the commit **AND**
-the newly create tag to the upstream. This can be done by e.g. setting
-``push.followtags=true`` in your git config or use
-``git push --atomic <branch> <tag>``.
+After bumping the version, push the commit **AND** the newly created tag to
+upstream. This can be done by setting ``push.followtags=true`` in your git
+config or by using ``git push --atomic <branch> <tag>``.
