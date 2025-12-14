@@ -16,8 +16,8 @@ df_in = scp.datasets.test()
 df_in.head()
 
 # %%
-# Then, using :func:`scphylo.tl.partf` we calculate the probability of `cell6` and
-# `cell17` seeded by `mut12`
+# Then, using :func:`scphylo.tl.partition_function` we calculate the probability of
+# `cell6` and `cell17` seeded by `mut12`
 probs = scp.tl.partition_function(
     df_in,
     alpha=0.000001,
