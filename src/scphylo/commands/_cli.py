@@ -20,7 +20,7 @@ def solver():
 
 @cli.group()
 def utils():
-    """Utility commands."""
+    """Run utility commands."""
     pass
 
 
