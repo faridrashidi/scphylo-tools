@@ -126,6 +126,9 @@ jobs:
           python-version: "3.11"
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.22.0
+        env:
+          CIBW_ENVIRONMENT_MACOS: >
+            LDSHARED="$(python -c 'import sysconfig; print((sysconfig.get_config_var("LDSHARED") or "").replace("-Wl,-Bsymbolic-functions", ""))')"
       - uses: actions/upload-artifact@v4
         with:
           name: wheels-${{ matrix.os }}
