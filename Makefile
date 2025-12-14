@@ -15,6 +15,7 @@ clean:
 	rm -rf docs/source/scphylo*
 	rm -rf docs/source/auto_examples
 	rm -rf docs/source/gen_modules
+	rm -rf docs/source/sg_execution_times.rst
 
 lint:
 	pre-commit run --all-files
@@ -28,6 +29,7 @@ doc:
 	rm -rf docs/source/scphylo*
 	rm -rf docs/source/auto_examples
 	rm -rf docs/source/gen_modules
+	rm -rf docs/source/sg_execution_times.rst
 	cd docs && $(MAKE) clean html
 	cd docs/build/html && python -m http.server 8080
 
