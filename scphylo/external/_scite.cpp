@@ -4,7 +4,7 @@
 {
     "distutils": {
         "depends": [
-            "scphylo/external/scite/findBestTrees.h"
+            "src/scphylo/external/scite/findBestTrees.h"
         ],
         "extra_compile_args": [
             "-O3",
@@ -12,24 +12,23 @@
             "-c"
         ],
         "include_dirs": [
-            "scphylo/external",
-            "scphylo/external/scite"
+            "src/scphylo/external/scite"
         ],
         "language": "c++",
         "name": "scphylo.external._scite",
         "sources": [
-            "scphylo/external/_scite.pyx",
-            "scphylo/external/scite/matrices.cpp",
-            "scphylo/external/scite/mcmcBinTreeMove.cpp",
-            "scphylo/external/scite/mcmc.cpp",
-            "scphylo/external/scite/mcmcTreeMove.cpp",
-            "scphylo/external/scite/output.cpp",
-            "scphylo/external/scite/rand.cpp",
-            "scphylo/external/scite/scoreBinTree.cpp",
-            "scphylo/external/scite/scoreTree.cpp",
-            "scphylo/external/scite/treelist.cpp",
-            "scphylo/external/scite/trees.cpp",
-            "scphylo/external/scite/findBestTrees.cpp"
+            "src/scphylo/external/_scite.pyx",
+            "src/scphylo/external/scite/matrices.cpp",
+            "src/scphylo/external/scite/mcmcBinTreeMove.cpp",
+            "src/scphylo/external/scite/mcmc.cpp",
+            "src/scphylo/external/scite/mcmcTreeMove.cpp",
+            "src/scphylo/external/scite/output.cpp",
+            "src/scphylo/external/scite/rand.cpp",
+            "src/scphylo/external/scite/scoreBinTree.cpp",
+            "src/scphylo/external/scite/scoreTree.cpp",
+            "src/scphylo/external/scite/treelist.cpp",
+            "src/scphylo/external/scite/trees.cpp",
+            "src/scphylo/external/scite/findBestTrees.cpp"
         ]
     },
     "module_name": "scphylo.external._scite"
@@ -1167,7 +1166,7 @@ static int __Pyx_init_co_variables(void) {
 /* Early includes */
 #include <string.h>
 #include <stdlib.h>
-#include "scite/findBestTrees.h"
+#include "findBestTrees.h"
 #ifdef _OPENMP
 #include <omp.h>
 #endif /* _OPENMP */
@@ -1375,7 +1374,7 @@ static const char *__pyx_filename;
 /* #### Code section: filename_table ### */
 
 static const char* const __pyx_f[] = {
-  "scphylo/external/_scite.pyx",
+  "src/scphylo/external/_scite.pyx",
 };
 /* #### Code section: utility_code_proto_before_types ### */
 /* Atomics.proto (used by UnpackUnboundCMethod) */
@@ -2338,7 +2337,7 @@ static __pyx_mstatetype * const __pyx_mstate_global = &__pyx_mstate_global_stati
 #endif
 /* #### Code section: constant_name_defines ### */
 #define __pyx_kp_u_ __pyx_string_tab[0]
-#define __pyx_kp_u_scphylo_external__scite_pyx __pyx_string_tab[1]
+#define __pyx_kp_u_src_scphylo_external__scite_pyx __pyx_string_tab[1]
 #define __pyx_n_u_Pyx_PyDict_NextRef __pyx_string_tab[2]
 #define __pyx_n_u_args __pyx_string_tab[3]
 #define __pyx_n_u_asyncio_coroutines __pyx_string_tab[4]
@@ -3166,25 +3165,25 @@ static int __Pyx_InitCachedConstants(__pyx_mstatetype *__pyx_mstate) {
 static int __Pyx_InitConstants(__pyx_mstatetype *__pyx_mstate) {
   CYTHON_UNUSED_VAR(__pyx_mstate);
   {
-    const struct { const unsigned int length: 7; } index[] = {{1},{27},{20},{4},{18},{6},{18},{3},{8},{9},{8},{3},{13},{5},{8},{10},{8},{3},{12},{9},{1},{23},{12},{10},{8},{4},{6},{1},{82}};
-    #if (CYTHON_COMPRESS_STRINGS) == 2 /* compression: bz2 (311 bytes) */
-const char* const cstring = "BZh91AY&SYJ\363z\266\000\000\024\377\363rP*\201#a\214@\244\001r\000\277\357\377\340@@@@@@\000@@\0000\000\371\214\032\2054zL#\032\2310&\010\000\320\001\350\312\rS\310&\232L\004\310\032\000\000\000d4\006\204I\351\250\032\000\006\200h\000\000zi\251(\240@\303\211\341\357\\d\323\021A\201\0140\317\257\201\305\021p\346\306\264BBGH\240\220B3\037+\216\323\247\343&\005\256\220[\022#)\246j\210\316\177.X}\010W\031Z5^\027\242uu\031\270oX\226\302\261d\221`\010E$\220D\311\353\366\205\037\305\240$\204\357\212\340\272\251\204l\270/\212\323AJ\301\034\251 \322\013\021\031\342\0105$\334F\225\316\202\200%\366)\347]\000\211A\351\2410\321A\206\312Q6\020Aa9\233j\205\251\312*0\207\036\247\03421a\243\224d\005e\004*\231\210\361\350\244\350\010\372\210#\r\276H\022\240cJxys&\361\321E\365\3412\017\236\377<\270R\350\276K\360\253\r\212[\355bY\277\213\271\"\234(H%y\275[\000";
-    PyObject *data = __Pyx_DecompressString(cstring, 311, 2);
+    const struct { const unsigned int length: 7; } index[] = {{1},{31},{20},{4},{18},{6},{18},{3},{8},{9},{8},{3},{13},{5},{8},{10},{8},{3},{12},{9},{1},{23},{12},{10},{8},{4},{6},{1},{82}};
+    #if (CYTHON_COMPRESS_STRINGS) == 2 /* compression: bz2 (316 bytes) */
+const char* const cstring = "BZh91AY&SY\250\303J\220\000\000\025\177\363rP*\201#a\214@\244\001r\000\277\357\377\340@@@@@@\000@@\0000\000\371\214\032\205\031\251\246!\265<\246\236\210\000\310\006\203A\350\312\rS\311\242i\244\323\324i\210\000\000\000\003@\006\2052\236\204h\320\000h\006\200\000\007\246\232\223\nC\3144\234\034\345BQ\030[\330\020\303\014\372\370\034Q8-\374\341\2160\371I\033,\001\036\204f>X\022P\237\214\230\024\252\201LE\231O<P\021\235\036Z\240\352P\2562H`\240[zB\317\006p\034_\021\325X>W}\320\245^$\004M\236\237JY\373b\202\020\2361L\226\2270\254\331\205\301JPR\264V\225\0108\203\003\314\360\005\032\320\340VvN\242\220$m\\P\302\001\022\304V*\230p\240\303\245'\272g\203\020\205\344\216J\030\270\0339\217\t\003\257a\302\210\037\020\234\241\360X\022B\266\364\247Z\264\235!?R\205\210d\"\030\320cNus\350N\003\253K_\226,|\367\373\023\224\310\305\213\262\335V\357k\244\277q\306\376.\344\212p\241!Q\206\225 ";
+    PyObject *data = __Pyx_DecompressString(cstring, 316, 2);
     if (unlikely(!data)) __PYX_ERR(0, 1, __pyx_L1_error)
     const char* const bytes = __Pyx_PyBytes_AsString(data);
     #if !CYTHON_ASSUME_SAFE_MACROS
     if (likely(bytes)); else { Py_DECREF(data); __PYX_ERR(0, 1, __pyx_L1_error) }
     #endif
-    #elif (CYTHON_COMPRESS_STRINGS) != 0 /* compression: zlib (265 bytes) */
-const char* const cstring = "x\332=O=K\304@\020e\005A\354D\304N\260P\264\311\025Z\\'\007\326r\n\326\303:\231\234\213\233\335\270\037g\322]\271e\312\224)\363\223R\372S\234\220;\247\230y\363\230\367f\346\311c\365\331h\273\240:\2203R/\300\243\n\224UM\r\260\346\264n\236\025\006x\341\2017*\244\333x\351\033\203\312fh\235\215A\031\362\010\314oQ3\006e 8\211\364!\361\013\313\234\014\332\\\231\r\231X\222\223\201\000\212h\020@\3455(\017\377&\274\264\364\000\245d\003\216\322\346Q\323\204\214,\271V\266\002\370\216R\317\255\213f>\324\357\037\310\016\017d3\017\340)\354\265\214r>=\352\000\300\n\3161\024\313\255\324\221|\275\023\277\342$\211t\221d\362\355}\267\354\037\3738\254Fq\232\356\332\333NtW\275\033\316\207\325\360:\212\343\335{\272I\r\223g\343\321$\272l\3054x\235\036X\375\323\312q\262\372\003\375\276\206W";
-    PyObject *data = __Pyx_DecompressString(cstring, 265, 1);
+    #elif (CYTHON_COMPRESS_STRINGS) != 0 /* compression: zlib (267 bytes) */
+const char* const cstring = "x\332=O=K\304@\020e\005A\354D\304N\260P\264I\n-\256\223\003k9\005\353a\235L\316\305\315n\334\2173\351\256\3342e\312+\363\223R\372S\234\220;\247\230y\363\230\367f\346\311;\314=\326\237\255\26695\201\234\221:\007\217*PV\267\r\300\212\323\252}V\030\340\205\007\336\250\224n\355\245o\r*\233\241u6\006e\310#0\277A\315\030\224\201\340$\322\207\304/\254\n2h\013e\326dbEN\006\002(\243A\000U4\240<\374\233\360\322\312\003T\222\r8*[DM\0232\262\342Z\333\032\340;J=\267.\232\371P\277\177 ;<\220\315<\200\247\260\3272*\370\364\250\003\000+8\307P.6RG\362\315V\374\212\223$\322E\222\311w\367\375b\367\270\213\303r\024\247\351\256\273\355E\177\265s\303\371\260\034^Gq\274}O7\251e\362l<\232D\227\235\230\006\257\323\003\253\177:9NV\177\363\210\207\316";
+    PyObject *data = __Pyx_DecompressString(cstring, 267, 1);
     if (unlikely(!data)) __PYX_ERR(0, 1, __pyx_L1_error)
     const char* const bytes = __Pyx_PyBytes_AsString(data);
     #if !CYTHON_ASSUME_SAFE_MACROS
     if (likely(bytes)); else { Py_DECREF(data); __PYX_ERR(0, 1, __pyx_L1_error) }
     #endif
-    #else /* compression: none (340 bytes) */
-const char* const bytes = "?scphylo/external/_scite.pyx__Pyx_PyDict_NextRefargsasyncio.coroutinesc_argvcline_in_tracebackcmdencodingenumerate__func__idx_is_coroutineitems__main____module____name__pop__qualname__run_scitesscphylo.external._scite__set_name__setdefault__test__utf8valuesx\200\001\340\001\010\210\001\210\025\210a\210s\220)\2308\2404\240u\250A\330\001\n\210(\220&\230\001\230\036\240r\250\023\250A\250Q\330\001\005\200U\210%\210y\230\001\230\021\330\002\010\210\001\210\027\220\001\330\001\n\210!\2103\210a\210w\220a\330\001\010\210\001";
+    #else /* compression: none (344 bytes) */
+const char* const bytes = "?src/scphylo/external/_scite.pyx__Pyx_PyDict_NextRefargsasyncio.coroutinesc_argvcline_in_tracebackcmdencodingenumerate__func__idx_is_coroutineitems__main____module____name__pop__qualname__run_scitesscphylo.external._scite__set_name__setdefault__test__utf8valuesx\200\001\340\001\010\210\001\210\025\210a\210s\220)\2308\2404\240u\250A\330\001\n\210(\220&\230\001\230\036\240r\250\023\250A\250Q\330\001\005\200U\210%\210y\230\001\230\021\330\002\010\210\001\210\027\220\001\330\001\n\210!\2103\210a\210w\220a\330\001\010\210\001";
     PyObject *data = NULL;
     CYTHON_UNUSED_VAR(__Pyx_DecompressString);
     #endif
@@ -3280,7 +3279,7 @@ static int __Pyx_CreateCodeObjects(__pyx_mstatetype *__pyx_mstate) {
   {
     const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 6, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 7};
     PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_cmd, __pyx_mstate->__pyx_n_u_c_argv, __pyx_mstate->__pyx_n_u_args, __pyx_mstate->__pyx_n_u_idx, __pyx_mstate->__pyx_n_u_s, __pyx_mstate->__pyx_n_u_x};
-    __pyx_mstate_global->__pyx_codeobj_tab[0] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_scphylo_external__scite_pyx, __pyx_mstate->__pyx_n_u_run_scite, __pyx_mstate->__pyx_kp_b_iso88591_as_84uA_r_AQ_U_y_3awa, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[0])) goto bad;
+    __pyx_mstate_global->__pyx_codeobj_tab[0] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_scphylo_external__scite_pyx, __pyx_mstate->__pyx_n_u_run_scite, __pyx_mstate->__pyx_kp_b_iso88591_as_84uA_r_AQ_U_y_3awa, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[0])) goto bad;
   }
   Py_DECREF(tuple_dedup_map);
   return 0;

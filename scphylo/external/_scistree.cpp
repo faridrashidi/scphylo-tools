@@ -4,7 +4,7 @@
 {
     "distutils": {
         "depends": [
-            "scphylo/external/scistree/main.h"
+            "src/scphylo/external/scistree/main.h"
         ],
         "extra_compile_args": [
             "-O3",
@@ -12,34 +12,33 @@
             "-c"
         ],
         "include_dirs": [
-            "scphylo/external",
-            "scphylo/external/scistree"
+            "src/scphylo/external/scistree"
         ],
         "language": "c++",
         "name": "scphylo.external._scistree",
         "sources": [
-            "scphylo/external/_scistree.pyx",
-            "scphylo/external/scistree/Utils.cpp",
-            "scphylo/external/scistree/Utils2.cpp",
-            "scphylo/external/scistree/Utils3.cpp",
-            "scphylo/external/scistree/Utils4.cpp",
-            "scphylo/external/scistree/UtilsNumerical.cpp",
-            "scphylo/external/scistree/RerootTreeUtils.cpp",
-            "scphylo/external/scistree/TreeBuilder.cpp",
-            "scphylo/external/scistree/UnWeightedGraph.cpp",
-            "scphylo/external/scistree/MarginalTree.cpp",
-            "scphylo/external/scistree/RBT.cpp",
-            "scphylo/external/scistree/PhylogenyTreeBasic.cpp",
-            "scphylo/external/scistree/PhylogenyTree.cpp",
-            "scphylo/external/scistree/BioSequenceMatrix.cpp",
-            "scphylo/external/scistree/BinaryMatrix.cpp",
-            "scphylo/external/scistree/GenotypeMatrix.cpp",
-            "scphylo/external/scistree/ScistGenotype.cpp",
-            "scphylo/external/scistree/ScistPerfPhyUtils.cpp",
-            "scphylo/external/scistree/ScistPerfPhyImp.cpp",
-            "scphylo/external/scistree/ScistDoublet.cpp",
-            "scphylo/external/scistree/ScistErrRateInf.cpp",
-            "scphylo/external/scistree/main.cpp"
+            "src/scphylo/external/_scistree.pyx",
+            "src/scphylo/external/scistree/Utils.cpp",
+            "src/scphylo/external/scistree/Utils2.cpp",
+            "src/scphylo/external/scistree/Utils3.cpp",
+            "src/scphylo/external/scistree/Utils4.cpp",
+            "src/scphylo/external/scistree/UtilsNumerical.cpp",
+            "src/scphylo/external/scistree/RerootTreeUtils.cpp",
+            "src/scphylo/external/scistree/TreeBuilder.cpp",
+            "src/scphylo/external/scistree/UnWeightedGraph.cpp",
+            "src/scphylo/external/scistree/MarginalTree.cpp",
+            "src/scphylo/external/scistree/RBT.cpp",
+            "src/scphylo/external/scistree/PhylogenyTreeBasic.cpp",
+            "src/scphylo/external/scistree/PhylogenyTree.cpp",
+            "src/scphylo/external/scistree/BioSequenceMatrix.cpp",
+            "src/scphylo/external/scistree/BinaryMatrix.cpp",
+            "src/scphylo/external/scistree/GenotypeMatrix.cpp",
+            "src/scphylo/external/scistree/ScistGenotype.cpp",
+            "src/scphylo/external/scistree/ScistPerfPhyUtils.cpp",
+            "src/scphylo/external/scistree/ScistPerfPhyImp.cpp",
+            "src/scphylo/external/scistree/ScistDoublet.cpp",
+            "src/scphylo/external/scistree/ScistErrRateInf.cpp",
+            "src/scphylo/external/scistree/main.cpp"
         ]
     },
     "module_name": "scphylo.external._scistree"
@@ -1177,7 +1176,7 @@ static int __Pyx_init_co_variables(void) {
 /* Early includes */
 #include <string.h>
 #include <stdlib.h>
-#include "scistree/main.h"
+#include "main.h"
 #ifdef _OPENMP
 #include <omp.h>
 #endif /* _OPENMP */
@@ -1385,7 +1384,7 @@ static const char *__pyx_filename;
 /* #### Code section: filename_table ### */
 
 static const char* const __pyx_f[] = {
-  "scphylo/external/_scistree.pyx",
+  "src/scphylo/external/_scistree.pyx",
 };
 /* #### Code section: utility_code_proto_before_types ### */
 /* Atomics.proto (used by UnpackUnboundCMethod) */
@@ -2348,7 +2347,7 @@ static __pyx_mstatetype * const __pyx_mstate_global = &__pyx_mstate_global_stati
 #endif
 /* #### Code section: constant_name_defines ### */
 #define __pyx_kp_u_ __pyx_string_tab[0]
-#define __pyx_kp_u_scphylo_external__scistree_pyx __pyx_string_tab[1]
+#define __pyx_kp_u_src_scphylo_external__scistree_p __pyx_string_tab[1]
 #define __pyx_n_u_Pyx_PyDict_NextRef __pyx_string_tab[2]
 #define __pyx_n_u_args __pyx_string_tab[3]
 #define __pyx_n_u_asyncio_coroutines __pyx_string_tab[4]
@@ -3176,25 +3175,25 @@ static int __Pyx_InitCachedConstants(__pyx_mstatetype *__pyx_mstate) {
 static int __Pyx_InitConstants(__pyx_mstatetype *__pyx_mstate) {
   CYTHON_UNUSED_VAR(__pyx_mstate);
   {
-    const struct { const unsigned int length: 7; } index[] = {{1},{30},{20},{4},{18},{6},{18},{3},{8},{9},{8},{3},{13},{5},{8},{10},{8},{3},{12},{12},{1},{26},{12},{10},{8},{4},{6},{1},{82}};
-    #if (CYTHON_COMPRESS_STRINGS) == 2 /* compression: bz2 (319 bytes) */
-const char* const cstring = "BZh91AY&SY\200\032\215\354\000\000\024\377\363rP*\201#a\214@\244\001r\000\277\357\377\340@@@@@@\000@@\0000\000\371\226\021&\243i\250i\203I\247\2441\032\0314\030\010\323\321\220j4\3214'\251\352zF\200\000\000\000\032\032\003B\2314\322\031\001\240\0004\000\001\243\rL\242\240\343\023\225\"\232U\0014\302\334\300\206\030g\333\310\344\210\247tcZ\035\031$\361\274\021\310Fbh\207z\023\361\223\002\224\370S\021fR\312\327\210\316\217S\250SR\025\326X\201\351\005\307\304\317$H(\3519*\260S\007\336\n\226\372\326\024\230\347\202(\366q\027\310\224\r\245;\205\017\266\266\0105\302\350\240\354\246f\212\323\032Q\"X\036E\204(\226d\205hd\352K\201\312\325\265\214\000\315a\267\"A\010\221\0046\3168L\242\010\037\n\325\ry\037YI2\007\202\310\333\312F\235\324@#\004\002\230K\020I,\005;\362\024\300l\014\361\303c\302m\t\001\217\203\017\372\366/\001\361+_j!\017\337\177\270\255\310\332\030\303\216\\\362\356\225;\257B\207\230\273\222)\302\204\204\000\324o`";
-    PyObject *data = __Pyx_DecompressString(cstring, 319, 2);
+    const struct { const unsigned int length: 7; } index[] = {{1},{34},{20},{4},{18},{6},{18},{3},{8},{9},{8},{3},{13},{5},{8},{10},{8},{3},{12},{12},{1},{26},{12},{10},{8},{4},{6},{1},{82}};
+    #if (CYTHON_COMPRESS_STRINGS) == 2 /* compression: bz2 (320 bytes) */
+const char* const cstring = "BZh91AY&SY\035 \024q\000\000\025\177\363rP*\201#a\214@\244\001r\000\277\357\377\340@@@@@@\000@@\0000\000\371\215\210\220\233\324\321\0144\365##\t\221\210\310\014#M2\rF\232\023(\315F\214\200\000\000\000d\000hSI\350F\215\000h\000h\006\200\r\246\232\231\205A\306\030M\rj\240(L>\345\2040\263>\336G4NO\272x\"\210:BFH\360G!\031\217\266\204t\245\006K\nU`\245\243\346SM\013\304gO\246(6\244+\313\216\007\247\027 me\004H'|7\310\301\362\274/\005U\276\265\205%\323H\212}\033K\333T\016\"\2321L-\255\202\274Q\213\242\223\2352\304+JiC\322\301\002,!D\263$+C&Rc\007R%\271\255\001)Xu\211\010<NA\362\246\017\262H\200Ph^Z\221\316\305\241\323\020\240\300\231&!\221\2440 +\010.FHM\221\366\236\007\2449\001|$@\032Pf\276\344\t\247\275b\257\241p\023\324~\374\262Q\367\345\022:\373#\024\313Kt\266j\235n'\234\237\305\334\221N\024$\007H\005\034@";
+    PyObject *data = __Pyx_DecompressString(cstring, 320, 2);
     if (unlikely(!data)) __PYX_ERR(0, 1, __pyx_L1_error)
     const char* const bytes = __Pyx_PyBytes_AsString(data);
     #if !CYTHON_ASSUME_SAFE_MACROS
     if (likely(bytes)); else { Py_DECREF(data); __PYX_ERR(0, 1, __pyx_L1_error) }
     #endif
-    #elif (CYTHON_COMPRESS_STRINGS) != 0 /* compression: zlib (267 bytes) */
-const char* const cstring = "x\332=O\261N\3040\014U\220\220\020\033B\210\r\211\001\004Ko\200\3416t\0223:\220\230\255\340\272GD\232\22489\332\355\306\214\035;v\354'u\344SHuG=\330\317\366\363\223\337\023c\365\331h\273\240\332\2233R/\200Q\261wDY\325\324\000\353\224\326\315\263B\017/\211\363F\205t\033\226\334\030T6C\353l\360\312\020#\244\371\026u\302\240\014x'\221>$~a\231\223A\233+\263!\023Jr\322\023@\021\014\002\250\274\006\3050\213(O%\003\2242\t\244(m\0364M\310\3102\325\312V\000\337A\352}\353\202\231\177\345\203\215\354\337F6\257\000\230\374A!\241<\031\010\332\003x\342\224\203/\226[\251\003q\275\023\277\342$\212x\021e\344\366\276[\366\217}\030V\2438\215w\355m'\272\253\336\r\347\303jx\035\305\361\356=\336\304&\r\317\306\243\351\350\262\025\023\361:>\244\353\237V\216\223\324\037\022\365\2125";
-    PyObject *data = __Pyx_DecompressString(cstring, 267, 1);
+    #elif (CYTHON_COMPRESS_STRINGS) != 0 /* compression: zlib (270 bytes) */
+const char* const cstring = "x\332=O\261N\3040\014U\220\220\020\033B\210\r\211\001\004K;\300p\033:\211\031\035H\314Vp\335#\"MJ\234\034\355vc\306\216\035o\354'u\344SHuG=\330\317\366\363\223\337\023;\314\031\353\317V\333\234\032O\316H\235\003\243b\357\210\262\272m\000V)\255\332g\205\036^\022\347\215J\351\326,\2715\250l\206\326\331\340\225!FH\363\r\352\204A\031\360N\"}H\374\302\252 \203\266PfM&T\344\244'\2002\030\004PE\003\212a\026Q\236*\006\250d\022HQ\331\"h\232\220\221U\252\265\255\001\276\203\324\373\326\0053\377\312\007\033\331\277\215l^\0010\371\203BBE2\020\264\007\360\304)\007_.6R\007\342f+~\305I\024\361\"\312\310\335}\277\330=\356\302\260\034\305i\274\353n{\321_\355\334p>,\207\327Q\034o\337\343Ml\323\360l<\232\216.;1\021\257\343C\272\376\351\3448I\375\001\025\356\213\254";
+    PyObject *data = __Pyx_DecompressString(cstring, 270, 1);
     if (unlikely(!data)) __PYX_ERR(0, 1, __pyx_L1_error)
     const char* const bytes = __Pyx_PyBytes_AsString(data);
     #if !CYTHON_ASSUME_SAFE_MACROS
     if (likely(bytes)); else { Py_DECREF(data); __PYX_ERR(0, 1, __pyx_L1_error) }
     #endif
-    #else /* compression: none (349 bytes) */
-const char* const bytes = "?scphylo/external/_scistree.pyx__Pyx_PyDict_NextRefargsasyncio.coroutinesc_argvcline_in_tracebackcmdencodingenumerate__func__idx_is_coroutineitems__main____module____name__pop__qualname__run_scistreesscphylo.external._scistree__set_name__setdefault__test__utf8valuesx\200\001\340\001\010\210\001\210\025\210a\210s\220)\2308\2404\240u\250A\330\001\n\210(\220&\230\001\230\036\240r\250\023\250A\250Q\330\001\005\200U\210%\210y\230\001\230\021\330\002\010\210\001\210\027\220\001\330\001\n\210!\2103\210a\210w\220a\330\001\010\210\001";
+    #else /* compression: none (353 bytes) */
+const char* const bytes = "?src/scphylo/external/_scistree.pyx__Pyx_PyDict_NextRefargsasyncio.coroutinesc_argvcline_in_tracebackcmdencodingenumerate__func__idx_is_coroutineitems__main____module____name__pop__qualname__run_scistreesscphylo.external._scistree__set_name__setdefault__test__utf8valuesx\200\001\340\001\010\210\001\210\025\210a\210s\220)\2308\2404\240u\250A\330\001\n\210(\220&\230\001\230\036\240r\250\023\250A\250Q\330\001\005\200U\210%\210y\230\001\230\021\330\002\010\210\001\210\027\220\001\330\001\n\210!\2103\210a\210w\220a\330\001\010\210\001";
     PyObject *data = NULL;
     CYTHON_UNUSED_VAR(__Pyx_DecompressString);
     #endif
@@ -3290,7 +3289,7 @@ static int __Pyx_CreateCodeObjects(__pyx_mstatetype *__pyx_mstate) {
   {
     const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 6, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 7};
     PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_cmd, __pyx_mstate->__pyx_n_u_c_argv, __pyx_mstate->__pyx_n_u_args, __pyx_mstate->__pyx_n_u_idx, __pyx_mstate->__pyx_n_u_s, __pyx_mstate->__pyx_n_u_x};
-    __pyx_mstate_global->__pyx_codeobj_tab[0] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_scphylo_external__scistree_pyx, __pyx_mstate->__pyx_n_u_run_scistree, __pyx_mstate->__pyx_kp_b_iso88591_as_84uA_r_AQ_U_y_3awa, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[0])) goto bad;
+    __pyx_mstate_global->__pyx_codeobj_tab[0] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_scphylo_external__scistree_p, __pyx_mstate->__pyx_n_u_run_scistree, __pyx_mstate->__pyx_kp_b_iso88591_as_84uA_r_AQ_U_y_3awa, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[0])) goto bad;
   }
   Py_DECREF(tuple_dedup_map);
   return 0;

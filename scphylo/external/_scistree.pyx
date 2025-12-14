@@ -1,7 +1,7 @@
 from libc.stdlib cimport free, malloc
 
 
-cdef extern from "scistree/main.h":
+cdef extern from "main.h":
 	cdef int main_in_c(int argc, char **argv)
 
 def run_scistree(cmd):

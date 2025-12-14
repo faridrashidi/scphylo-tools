@@ -29,6 +29,7 @@ dependencies = [
     "pyyaml",
     "scikit_learn",
     "scipy",
+    "setuptools",
     "seaborn",
     "termcolor",
     "tqdm",
@@ -105,6 +106,6 @@ docs = [
 include-package-data = true
 
 [tool.setuptools.packages.find]
-where = ["."]
+where = ["src"]
 
 [tool.setuptools_scm]

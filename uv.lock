@@ -10429,6 +10429,8 @@ dependencies = [
     { name = "seaborn", version = "0.11.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.7'" },
     { name = "seaborn", version = "0.12.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.7.*'" },
     { name = "seaborn", version = "0.13.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.8'" },
+    { name = "setuptools", version = "59.6.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.7'" },
+    { name = "setuptools", version = "68.0.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.7'" },
     { name = "termcolor", version = "1.1.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.7'" },
     { name = "termcolor", version = "2.3.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.7.*'" },
     { name = "termcolor", version = "2.4.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.8.*'" },
@@ -10539,6 +10541,7 @@ requires-dist = [
     { name = "scikit-learn" },
     { name = "scipy" },
     { name = "seaborn" },
+    { name = "setuptools" },
     { name = "sphinx", marker = "extra == 'docs'", specifier = "<6" },
     { name = "sphinx-autodoc-typehints", marker = "extra == 'docs'" },
     { name = "sphinx-click", marker = "extra == 'docs'" },
@@ -10644,6 +10647,11 @@ name = "setuptools"
 version = "68.0.0"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
+    "python_full_version >= '3.12'",
+    "python_full_version == '3.11.*'",
+    "python_full_version == '3.10.*'",
+    "python_full_version == '3.9.*'",
+    "python_full_version == '3.8.*'",
     "python_full_version >= '3.7.1' and python_full_version < '3.8' and platform_machine != 'aarch64' and platform_machine != 'arm64'",
     "python_full_version >= '3.7.1' and python_full_version < '3.8' and platform_machine == 'aarch64'",
     "python_full_version >= '3.7.1' and python_full_version < '3.8' and platform_machine == 'arm64'",

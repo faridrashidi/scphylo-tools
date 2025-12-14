@@ -1,7 +1,7 @@
 from libc.stdlib cimport free, malloc
 
 
-cdef extern from "scite/findBestTrees.h":
+cdef extern from "findBestTrees.h":
 	cdef int main_in_c(int argc, char **argv)
 
 def run_scite(cmd):

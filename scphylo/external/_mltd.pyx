@@ -1,4 +1,4 @@
-cdef extern from "mltd/mltd.h":
+cdef extern from "mltd.h":
 	ctypedef struct MLTDResult:
 		int distance
 		int similarity

@@ -4,4 +4,4 @@ prune .github
 include requirements.txt
 include docs/requirements.txt
 include LICENSE
-include scphylo/datasets/*
+include src/scphylo/datasets/*
