@@ -33,7 +33,7 @@ elif [[ "$OS" == "ubuntu-latest" ]]; then
   sudo add-apt-repository "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/"
   sudo apt-get update -y
   sudo apt-get install libfontconfig1-dev libharfbuzz-dev libfribidi-dev libfreetype6-dev -y
-  sudo apt-get install liblpng-dev libtiff5-dev libjpeg-dev -y
+  sudo apt-get install libpng-dev libtiff5-dev libjpeg-dev -y
   sudo apt-get install libopenblas0 r-base r-base-dev -y
   sudo apt-get install libcurl4-openssl-dev libssl-dev -y
   pip install "rpy2<=3.5.10"
