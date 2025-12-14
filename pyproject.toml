@@ -4,7 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "scphylo-tools"
-dynamic = ["version", "description"]
+dynamic = ["version"]
+description = "A python toolkit for single-cell tumor phylogenetic analysis"
 requires-python = ">=3.10"
 dependencies = [
     "anndata",
@@ -40,10 +41,9 @@ authors = [
 maintainers = [
     {name = "Farid Rashidi", email = "farid.rsh@gmail.com"},
 ]
-license = {text = "BSD"}
+license = {text = "BSD-3-Clause"}
 readme = "README.rst"
 classifiers = [
-    "License :: OSI Approved :: BSD License",
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
     "Intended Audience :: Science/Research",
@@ -73,7 +73,7 @@ Documentation = "https://scphylo-tools.readthedocs.io/en/latest"
 Download = "https://github.com/faridrashidi/scphylo-tools"
 
 [project.scripts]
-scphylo = "scphylo.commands.scphylo:cli"
+scphylo = "scphylo.commands._cli:cli"
 
 [project.optional-dependencies]
 dev = [
@@ -109,3 +109,6 @@ include-package-data = true
 where = ["src"]
 
 [tool.setuptools_scm]
+
+[tool.cibuildwheel]
+build = "cp3*-* pp3*-*"
