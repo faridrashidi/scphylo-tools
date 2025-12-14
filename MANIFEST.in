@@ -2,6 +2,7 @@
 prune docs
 prune examples
 prune tests
+prune paper
 
 # Exclude development-specific directories
 prune .scripts
