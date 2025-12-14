@@ -38,7 +38,7 @@ def read(filepath):
             scp.logg.error("Mutation ids must be unique!")
         return sc
     elif ext in [".h5ad", ".gz"]:
-        return ad.read(filepath)
+        return ad.read_h5ad(filepath)
     elif ext in [".nwk"]:
         return _read_nwk(filepath)
     else:
