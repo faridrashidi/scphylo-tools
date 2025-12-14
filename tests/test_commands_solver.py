@@ -1,7 +1,7 @@
 import pytest
 from click.testing import CliRunner
 
-from scphylo.commands import cli
+from scphylo.__main__ import cli
 
 from ._helpers import skip_graphviz
 
