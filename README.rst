@@ -19,9 +19,13 @@ Features
 
 *   **Phylogenetic Inference**: Wrappers and implementations for state-of-the-art
     inference methods.
+
 *   **API & CLI**: Provides a Python API as well as command-line tools.
+
 *   **Visualization**: Built-in visualization tools.
+
 *   **Datasets**: Access to available datasets.
+
 *   **Ease of Use**: A unified Python interface for complex phylogenetic workflows.
 
 Installation

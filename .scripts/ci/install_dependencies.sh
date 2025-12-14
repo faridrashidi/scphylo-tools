@@ -32,8 +32,8 @@ elif [[ "$OS" == "ubuntu-latest" ]]; then
   sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
   sudo add-apt-repository "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/"
   sudo apt-get update -y
-  sudo apt-get install libfontconfig1-dev libharfbuzz-dev libfribidi-dev libfreetype6-dev -y
-  sudo apt-get install libpng-dev libtiff5-dev libjpeg-dev -y
+  sudo apt-get install libfontconfig1-dev libharfbuzz-dev libpng-dev libcairo2-dev -y
+  sudo apt-get install libfribidi-dev libfreetype6-dev libtiff5-dev libjpeg-dev -y
   sudo apt-get install libopenblas0 r-base r-base-dev -y
   sudo apt-get install libcurl4-openssl-dev libssl-dev -y
   pip install "rpy2<=3.5.10"
