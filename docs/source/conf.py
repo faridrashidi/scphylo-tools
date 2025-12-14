@@ -33,7 +33,7 @@ needs_sphinx = "3.4"  # Nicer param docs
 release = "master"
 version = f"master ({scp.__version__})"
 
-language = None
+language = "en"
 
 # -- General configuration ---------------------------------------------------
 # Add any Sphinx extension module names here, as strings. They can be
@@ -111,7 +111,18 @@ title = "a python toolkit for single-cell tumor phylogenetic analysis"
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This patterns also effect to html_static_path and html_extra_path
-exclude_patterns = ["build", "**.ipynb_checkpoints", "_build", "Thumbs.db", ".DS_Store"]
+exclude_patterns = [
+    "build",
+    "**.ipynb_checkpoints",
+    "_build",
+    "Thumbs.db",
+    ".DS_Store",
+    "auto_examples/**/*.ipynb",
+    "auto_examples/**/*.py",
+    "auto_examples/**/*.zip",
+    "auto_examples/**/*.md5",
+    "auto_examples/**/*.json",
+]
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = "default"
@@ -220,5 +231,5 @@ sphinx_gallery_conf = {
     "backreferences_dir": "gen_modules/backreferences",
     "doc_module": "scphylo",
     "download_all_examples": False,
-    "pypandoc": True,  # convert rST to md when downloading notebooks
+    "pypandoc": False,  # convert rST to md when downloading notebooks
 }

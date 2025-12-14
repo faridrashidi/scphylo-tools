@@ -1,12 +1,14 @@
 API
 ===
 
+.. module:: scphylo
+
 Import scphylo as::
 
    import scphylo as scp
 
 After mutation calling and building the input data via our suggested
-:ref:`mutation calling pipeline <caller>`.
+mutation calling pipeline.
 
 
 Read/Write (io)
@@ -57,6 +59,7 @@ and calculating the probability of mutations seeding particular cells.
     tl.scite
     tl.phiscsb
     tl.scistree
+    tl.bnb
     tl.onconem
     tl.huntress
     tl.siclonefit
