@@ -111,9 +111,11 @@ def gatk(outdir, ref, dna_or_rna, time, mem, afterok):
                 f'gatk --java-options "-Xmx{int(mem)-10}g"',
                 "BaseRecalibrator",
                 f"--reference {config['ref']}",
-                f"--input {outdir}/{sample}.splitted.bam"
-                if dna_or_rna == "rna"
-                else f"--input {outdir}/{sample}.markdup.bam",
+                (
+                    f"--input {outdir}/{sample}.splitted.bam"
+                    if dna_or_rna == "rna"
+                    else f"--input {outdir}/{sample}.markdup.bam"
+                ),
                 f"--output {outdir}/{sample}.markdup_bqsr.report",
                 "--known-sites",
                 f"{' --known-sites '.join(config['known_sites'])}",
@@ -125,9 +127,11 @@ def gatk(outdir, ref, dna_or_rna, time, mem, afterok):
                 "ApplyBQSR",
                 f"--reference {config['ref']}",
                 f"--bqsr-recal-file {outdir}/{sample}.markdup_bqsr.report",
-                f"--input {outdir}/{sample}.splitted.bam"
-                if dna_or_rna == "rna"
-                else f"--input {outdir}/{sample}.markdup.bam",
+                (
+                    f"--input {outdir}/{sample}.splitted.bam"
+                    if dna_or_rna == "rna"
+                    else f"--input {outdir}/{sample}.markdup.bam"
+                ),
                 f"--output {outdir}/{sample}.markdup_bqsr.bam",
             ]
         )

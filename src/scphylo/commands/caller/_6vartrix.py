@@ -93,7 +93,7 @@ def vartrix(bam, barcodes, vcf, ref, time, mem, afterok):
                 "--no-duplicates",
                 f"--out-matrix {outdir}/_vartrix/alt.mtx",
                 f"--ref-matrix {outdir}/_vartrix/ref.mtx",
-                f"--out-variants {outdir}/_vartrix/var_names.txt"
+                f"--out-variants {outdir}/_vartrix/var_names.txt",
                 # f"--out-matrix {outdir}/_vartrix/gen.mtx",
             ]
         )

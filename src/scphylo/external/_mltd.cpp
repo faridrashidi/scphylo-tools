@@ -2384,14 +2384,14 @@ return 0;
 
 /* "scphylo/external/_mltd.pyx":8
  * 	cdef MLTDResult calc_mltd(const char* tree1, const char* tree2)
- * 
+ *
  * def run_mltd(file1, file2):             # <<<<<<<<<<<<<<
  * 	cdef bytes file1_bytes = file1.encode()
  * 	cdef char* cfile1 = file1_bytes
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7scphylo_8external_5_mltd_1run_mltd(PyObject *__pyx_self, 
+static PyObject *__pyx_pw_7scphylo_8external_5_mltd_1run_mltd(PyObject *__pyx_self,
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -2400,7 +2400,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
 ); /*proto*/
 PyDoc_STRVAR(__pyx_doc_7scphylo_8external_5_mltd_run_mltd, "run_mltd(file1, file2)");
 static PyMethodDef __pyx_mdef_7scphylo_8external_5_mltd_1run_mltd = {"run_mltd", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7scphylo_8external_5_mltd_1run_mltd, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7scphylo_8external_5_mltd_run_mltd};
-static PyObject *__pyx_pw_7scphylo_8external_5_mltd_1run_mltd(PyObject *__pyx_self, 
+static PyObject *__pyx_pw_7scphylo_8external_5_mltd_1run_mltd(PyObject *__pyx_self,
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -2503,7 +2503,7 @@ static PyObject *__pyx_pf_7scphylo_8external_5_mltd_run_mltd(CYTHON_UNUSED PyObj
   __Pyx_RefNannySetupContext("run_mltd", 0);
 
   /* "scphylo/external/_mltd.pyx":9
- * 
+ *
  * def run_mltd(file1, file2):
  * 	cdef bytes file1_bytes = file1.encode()             # <<<<<<<<<<<<<<
  * 	cdef char* cfile1 = file1_bytes
@@ -2623,7 +2623,7 @@ static PyObject *__pyx_pf_7scphylo_8external_5_mltd_run_mltd(CYTHON_UNUSED PyObj
 
   /* "scphylo/external/_mltd.pyx":8
  * 	cdef MLTDResult calc_mltd(const char* tree1, const char* tree2)
- * 
+ *
  * def run_mltd(file1, file2):             # <<<<<<<<<<<<<<
  * 	cdef bytes file1_bytes = file1.encode()
  * 	cdef char* cfile1 = file1_bytes
@@ -2955,7 +2955,7 @@ static CYTHON_SMALL_CODE int __pyx_pymod_exec__mltd(PyObject *__pyx_pyinit_modul
         Py_FatalError("failed to import 'refnanny' module");
   }
   #endif
-  
+
 __Pyx_RefNannySetupContext("PyInit__mltd", 0);
   __Pyx_init_runtime_version();
   if (__Pyx_check_binary_version(__PYX_LIMITED_VERSION_HEX, __Pyx_get_runtime_version(), CYTHON_COMPILING_IN_LIMITED_API) < (0)) __PYX_ERR(0, 1, __pyx_L1_error)
@@ -2993,7 +2993,7 @@ __Pyx_RefNannySetupContext("PyInit__mltd", 0);
 
   /* "scphylo/external/_mltd.pyx":8
  * 	cdef MLTDResult calc_mltd(const char* tree1, const char* tree2)
- * 
+ *
  * def run_mltd(file1, file2):             # <<<<<<<<<<<<<<
  * 	cdef bytes file1_bytes = file1.encode()
  * 	cdef char* cfile1 = file1_bytes
@@ -3183,12 +3183,12 @@ static int __Pyx_CreateCodeObjects(__pyx_mstatetype *__pyx_mstate) {
 static int __Pyx_InitGlobals(void) {
   /* PythonCompatibility.init */
   if (likely(__Pyx_init_co_variables() == 0)); else
-  
+
   if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1, __pyx_L1_error)
 
   /* CommonTypesMetaclass.init */
   if (likely(__pyx_CommonTypesMetaclass_init(__pyx_m) == 0)); else
-  
+
   if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1, __pyx_L1_error)
 
   /* CachedMethodType.init */
@@ -3202,12 +3202,12 @@ static int __Pyx_InitGlobals(void) {
       }
   } // error handling follows
   #endif
-  
+
   if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1, __pyx_L1_error)
 
   /* CythonFunctionShared.init */
   if (likely(__pyx_CyFunction_init(__pyx_m) == 0)); else
-  
+
   if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1, __pyx_L1_error)
 
   return 0;

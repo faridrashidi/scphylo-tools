@@ -227,14 +227,14 @@ def _stein_to_clone_tree(
         dfsNum[v] = dfsNumCounter
         dfsNumCounter += 1
         mark[v] = True
-        for (u, _) in edges[v]:
+        for u, _ in edges[v]:
             if u not in mark:
                 dfs(u)
 
     dfs(str(treeRootCloneIdx))
 
     for v, nei in edges.items():
-        for (u, w) in nei:
+        for u, w in nei:
             if v < u:
                 x, y = u, v
                 if dfsNum[v] > dfsNum[u]:

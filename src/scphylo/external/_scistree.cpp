@@ -2434,14 +2434,14 @@ return 0;
 
 /* "scphylo/external/_scistree.pyx":7
  * 	cdef int main_in_c(int argc, char **argv)
- * 
+ *
  * def run_scistree(cmd):             # <<<<<<<<<<<<<<
  * 	cdef char **c_argv
  * 	args = [bytes(x, encoding="utf8") for x in cmd]
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7scphylo_8external_9_scistree_1run_scistree(PyObject *__pyx_self, 
+static PyObject *__pyx_pw_7scphylo_8external_9_scistree_1run_scistree(PyObject *__pyx_self,
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -2450,7 +2450,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
 ); /*proto*/
 PyDoc_STRVAR(__pyx_doc_7scphylo_8external_9_scistree_run_scistree, "run_scistree(cmd)");
 static PyMethodDef __pyx_mdef_7scphylo_8external_9_scistree_1run_scistree = {"run_scistree", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7scphylo_8external_9_scistree_1run_scistree, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7scphylo_8external_9_scistree_run_scistree};
-static PyObject *__pyx_pw_7scphylo_8external_9_scistree_1run_scistree(PyObject *__pyx_self, 
+static PyObject *__pyx_pw_7scphylo_8external_9_scistree_1run_scistree(PyObject *__pyx_self,
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -2714,7 +2714,7 @@ static PyObject *__pyx_pf_7scphylo_8external_9_scistree_run_scistree(CYTHON_UNUS
 
   /* "scphylo/external/_scistree.pyx":7
  * 	cdef int main_in_c(int argc, char **argv)
- * 
+ *
  * def run_scistree(cmd):             # <<<<<<<<<<<<<<
  * 	cdef char **c_argv
  * 	args = [bytes(x, encoding="utf8") for x in cmd]
@@ -3051,7 +3051,7 @@ static CYTHON_SMALL_CODE int __pyx_pymod_exec__scistree(PyObject *__pyx_pyinit_m
         Py_FatalError("failed to import 'refnanny' module");
   }
   #endif
-  
+
 __Pyx_RefNannySetupContext("PyInit__scistree", 0);
   __Pyx_init_runtime_version();
   if (__Pyx_check_binary_version(__PYX_LIMITED_VERSION_HEX, __Pyx_get_runtime_version(), CYTHON_COMPILING_IN_LIMITED_API) < (0)) __PYX_ERR(0, 1, __pyx_L1_error)
@@ -3089,7 +3089,7 @@ __Pyx_RefNannySetupContext("PyInit__scistree", 0);
 
   /* "scphylo/external/_scistree.pyx":7
  * 	cdef int main_in_c(int argc, char **argv)
- * 
+ *
  * def run_scistree(cmd):             # <<<<<<<<<<<<<<
  * 	cdef char **c_argv
  * 	args = [bytes(x, encoding="utf8") for x in cmd]
@@ -3104,8 +3104,8 @@ __Pyx_RefNannySetupContext("PyInit__scistree", 0);
 
   /* "scphylo/external/_scistree.pyx":1
  * from libc.stdlib cimport free, malloc             # <<<<<<<<<<<<<<
- * 
- * 
+ *
+ *
 */
   __pyx_t_2 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
@@ -3302,12 +3302,12 @@ static int __Pyx_CreateCodeObjects(__pyx_mstatetype *__pyx_mstate) {
 static int __Pyx_InitGlobals(void) {
   /* PythonCompatibility.init */
   if (likely(__Pyx_init_co_variables() == 0)); else
-  
+
   if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1, __pyx_L1_error)
 
   /* CommonTypesMetaclass.init */
   if (likely(__pyx_CommonTypesMetaclass_init(__pyx_m) == 0)); else
-  
+
   if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1, __pyx_L1_error)
 
   /* CachedMethodType.init */
@@ -3321,12 +3321,12 @@ static int __Pyx_InitGlobals(void) {
       }
   } // error handling follows
   #endif
-  
+
   if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1, __pyx_L1_error)
 
   /* CythonFunctionShared.init */
   if (likely(__pyx_CyFunction_init(__pyx_m) == 0)); else
-  
+
   if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1, __pyx_L1_error)
 
   return 0;
@@ -4650,7 +4650,7 @@ static PyObject* __Pyx_Unpacked___Pyx_PyLong_AddObjC(PyObject *op1, PyObject *op
             llx = lla + llb;
             return PyLong_FromLongLong(llx);
         }
-    
+
 }
 #endif
 static PyObject* __Pyx_Float___Pyx_PyLong_AddObjC(PyObject *float_val, long intval, int zerodivision_check) {
@@ -4658,7 +4658,7 @@ static PyObject* __Pyx_Float___Pyx_PyLong_AddObjC(PyObject *float_val, long intv
     const long b = intval;
     double a = __Pyx_PyFloat_AS_DOUBLE(float_val);
         double result;
-        
+
         result = ((double)a) + (double)b;
         return PyFloat_FromDouble(result);
 }
