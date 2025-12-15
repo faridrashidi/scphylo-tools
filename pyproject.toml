@@ -110,5 +110,5 @@ where = ["src"]
 build = "cp3*-* pp3*-*"
 
 [tool.cibuildwheel.macos.environment]
-LDSHARED = "sh -c \"if [[ $CIBW_BUILD == pp* ]]; then echo \\\"\\$LDSHARED\\\" | sed 's/-Wl,-O1 //g; s/-Wl,-Bsymbolic-functions //g'; else echo \\\"\\$LDSHARED\\\"; fi\""
-LDFLAGS = "sh -c \"if [[ $CIBW_BUILD == pp* ]]; then echo \\\"\\$LDFLAGS\\\" | sed 's/-Wl,-O1 //g; s/-Wl,-Bsymbolic-functions //g'; else echo \\\"\\$LDFLAGS\\\"; fi\""
+LDSHARED = "sh -c \"\\$LDSHARED | sed 's/-Wl,-O1 //g; s/-Wl,-Bsymbolic-functions //g'\""
+LDFLAGS = "sh -c \"\\$LDFLAGS | sed 's/-Wl,-O1 //g; s/-Wl,-Bsymbolic-functions //g'\""
