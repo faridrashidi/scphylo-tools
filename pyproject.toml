@@ -108,7 +108,3 @@ where = ["src"]
 
 [tool.cibuildwheel]
 build = "cp3*-* pp3*-*"
-
-[tool.cibuildwheel.macos.environment]
-LDSHARED = "sh -c \"\\$LDSHARED | sed 's/-Wl,-O1 //g; s/-Wl,-Bsymbolic-functions //g'\""
-LDFLAGS = "sh -c \"\\$LDFLAGS | sed 's/-Wl,-O1 //g; s/-Wl,-Bsymbolic-functions //g'\""
