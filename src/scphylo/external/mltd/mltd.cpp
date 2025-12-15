@@ -36,6 +36,9 @@ struct Graph
   }
 };
 
+map<string, int> label2int;
+int nlabel = 0;
+
 struct Tree
 {
   vector<vector<int>> g;
@@ -54,7 +57,7 @@ struct Tree
       dfs(p, x);
     }
   }
-  void read(const char *file, map<string, int> &label2int, int &nlabel)
+  void read(const char *file)
   {
     map<string, int> name2int;
     ifstream in(file);
@@ -151,6 +154,31 @@ struct Tree
   }
 };
 
+vector<vector<int>> T;
+vector<vector<int>> D;
+vector<vector<int>> G;
+Tree t, s;
+
+int cD(int a, int b, int c, int d)
+{
+  int &res = D[t.pair2int[make_pair(a, c)]][s.pair2int[make_pair(b, d)]];
+  if (res != -1)
+    return res;
+  if (a == c && b == d)
+  {
+    return res = T[c][d];
+  }
+  if (a == c && b != d)
+  {
+    return res = T[c][d] + cD(a, b, c, s.p[d]);
+  }
+  if (a != c && b == d)
+  {
+    return res = T[c][d] + cD(a, b, t.p[c], d);
+  }
+  return res = T[c][d] + max(cD(a, b, t.p[c], d), cD(a, b, c, s.p[d]));
+}
+
 vector<int> subtree(Tree &g, int s)
 {
   vector<int> res;
@@ -216,133 +244,134 @@ int mcmf(Graph &g, int S, int T)
   return res;
 }
 
-class MLTDSolver
+int cG(int a, int b)
 {
-  map<string, int> label2int;
-  int nlabel = 0;
-  vector<vector<int>> T_mat;
-  vector<vector<int>> D_mat;
-  vector<vector<int>> G_mat;
-  Tree t, s;
-
-  int cD(int a, int b, int c, int d)
+  int &res = G[a][b];
+  if (res != -1)
+    return res;
+  int na = t.g[a].size();
+  int nb = s.g[b].size();
+  Graph g;
+  g.init(na + nb + 2);
+  int S = na + nb;
+  int T = S + 1;
+  for (int i = 0; i < na; i++)
   {
-    int &res = D_mat[t.pair2int[make_pair(a, c)]][s.pair2int[make_pair(b, d)]];
-    if (res != -1)
-      return res;
-    if (a == c && b == d)
-    {
-      return res = T_mat[c][d];
-    }
-    if (a == c && b != d)
-    {
-      return res = T_mat[c][d] + cD(a, b, c, s.p[d]);
-    }
-    if (a != c && b == d)
-    {
-      return res = T_mat[c][d] + cD(a, b, t.p[c], d);
-    }
-    return res = T_mat[c][d] + max(cD(a, b, t.p[c], d), cD(a, b, c, s.p[d]));
+    g.addEdge(S, i, 1, 0);
   }
-
-  int cG(int a, int b)
+  for (int i = 0; i < nb; i++)
   {
-    int &res = G_mat[a][b];
-    if (res != -1)
-      return res;
-    int na = t.g[a].size();
-    int nb = s.g[b].size();
-    Graph g;
-    g.init(na + nb + 2);
-    int S = na + nb;
-    int T = S + 1;
-    for (int i = 0; i < na; i++)
+    g.addEdge(na + i, T, 1, 0);
+  }
+  auto ca = vector<vector<int>>(t.g[a].size());
+  auto cb = vector<vector<int>>(s.g[b].size());
+  for (int i = 0; i < (int)t.g[a].size(); i++)
+  {
+    ca[i] = subtree(t, t.g[a][i]);
+  }
+  for (int i = 0; i < (int)s.g[b].size(); i++)
+  {
+    cb[i] = subtree(s, s.g[b][i]);
+  }
+  for (int i = 0; i < (int)ca.size(); i++)
+  {
+    for (int j = 0; j < (int)cb.size(); j++)
     {
-      g.addEdge(S, i, 1, 0);
-    }
-    for (int i = 0; i < nb; i++)
-    {
-      g.addEdge(na + i, T, 1, 0);
-    }
-    auto ca = vector<vector<int>>(t.g[a].size());
-    auto cb = vector<vector<int>>(s.g[b].size());
-    for (int i = 0; i < (int)t.g[a].size(); i++)
-    {
-      ca[i] = subtree(t, t.g[a][i]);
-    }
-    for (int i = 0; i < (int)s.g[b].size(); i++)
-    {
-      cb[i] = subtree(s, s.g[b][i]);
-    }
-    for (int i = 0; i < (int)ca.size(); i++)
-    {
-      for (int j = 0; j < (int)cb.size(); j++)
+      int t = 0;
+      for (auto x : ca[i])
       {
-        int val = 0;
-        for (auto x : ca[i])
+        for (auto y : cb[j])
         {
-          for (auto y : cb[j])
-          {
-            val = max(val, cD(ca[i][0], cb[j][0], x, y) + cG(x, y));
-          }
+          t = max(t, cD(ca[i][0], cb[j][0], x, y) + cG(x, y));
         }
-        g.addEdge(i, na + j, 1, -val);
       }
+      g.addEdge(i, na + j, 1, -t);
     }
-    return res = -mcmf(g, S, T);
   }
-
-public:
-  MLTDResult solve(const char *tree1, const char *tree2)
-  {
-    t.read(tree1, label2int, nlabel);
-    s.read(tree2, label2int, nlabel);
-    auto tl = vector<int>(nlabel, -1);
-    auto sl = vector<int>(nlabel, -1);
-    for (int i = 0; i < (int)t.l.size(); i++)
-    {
-      for (auto &x : t.l[i])
-      {
-        assert(tl[x] == -1);
-        tl[x] = i;
-      }
-    }
-    for (int i = 0; i < (int)s.l.size(); i++)
-    {
-      for (auto &x : s.l[i])
-      {
-        assert(sl[x] == -1);
-        sl[x] = i;
-      }
-    }
-    T_mat = vector<vector<int>>(t.nname, vector<int>(s.nname, 0));
-    for (int i = 0; i < nlabel; i++)
-    {
-      if (sl[i] != -1 && tl[i] != -1)
-      {
-        T_mat[tl[i]][sl[i]]++;
-      }
-    }
-    D_mat = vector<vector<int>>(t.npair, vector<int>(s.npair, -1));
-    G_mat = vector<vector<int>>(t.nname, vector<int>(s.nname, -1));
-    int res = 0;
-    for (int i = 0; i < t.nname; i++)
-    {
-      for (int j = 0; j < s.nname; j++)
-      {
-        res = max(res, cG(i, j) + cD(t.r, s.r, i, j));
-      }
-    }
-    MLTDResult mltdresult;
-    mltdresult.distance = t.nl + s.nl - 2 * res;
-    mltdresult.similarity = res;
-    mltdresult.normalized_similarity = res * 1.0 / nlabel;
-    return mltdresult;
-  }
-};
+  return res = -mcmf(g, S, T);
+}
 
 MLTDResult calc_mltd(const char *tree1, const char *tree2)
 {
-  MLTDSolver solver;
-  return solver.solve(tree1, tree2);
+  t.read(tree1);
+  s.read(tree2);
+  auto tl = vector<int>(nlabel, -1);
+  auto sl = vector<int>(nlabel, -1);
+  for (int i = 0; i < (int)t.l.size(); i++)
+  {
+    for (auto &x : t.l[i])
+    {
+      assert(tl[x] == -1);
+      tl[x] = i;
+    }
+  }
+  for (int i = 0; i < (int)s.l.size(); i++)
+  {
+    for (auto &x : s.l[i])
+    {
+      assert(sl[x] == -1);
+      sl[x] = i;
+    }
+  }
+  T = vector<vector<int>>(t.nname, vector<int>(s.nname, 0));
+  for (int i = 0; i < nlabel; i++)
+  {
+    if (sl[i] != -1 && tl[i] != -1)
+    {
+      T[tl[i]][sl[i]]++;
+    }
+  }
+  /*for (auto &x : T) {
+    for (auto &y : x) {
+      cerr << y << " ";
+    }
+    cerr << "\n";
+  }
+  cerr << t.npair << " " << s.npair << "\n";*/
+  D = vector<vector<int>>(t.npair, vector<int>(s.npair, -1));
+  G = vector<vector<int>>(t.nname, vector<int>(s.nname, -1));
+  int res = 0;
+  // cerr << t.r << " " << s.r << "\n";
+  for (int i = 0; i < t.nname; i++)
+  {
+    for (int j = 0; j < s.nname; j++)
+    {
+      res = max(res, cG(i, j) + cD(t.r, s.r, i, j));
+    }
+  }
+  /*cerr << "T1\n";
+  for (int i = 0; i < t.nname; i++) {
+    cerr << i << " :(";
+    for (auto x : t.l[i]) {
+      cerr << x << ",";
+    }
+    cerr << ") ";
+    for (auto x : t.g[i]) {
+      cerr << x << " ";
+    }
+    cerr << "\n";
+  }
+  cerr << "T2\n";
+  for (int i = 0; i < s.nname; i++) {
+    cerr << i << " :(";
+    for (auto x : s.l[i]) {
+      cerr << x << ",";
+    }
+    cerr << ") ";
+    for (auto x : s.g[i]) {
+      cerr << x << " ";
+    }
+    cerr << "\n";
+  }*/
+  MLTDResult mltdresult;
+  // cout << "\nOutput:\n\n";
+  // cout << "Distance = " << t.nl + s.nl - 2 * res << "\n";
+  // cout << "Similarity = " << res << "\n";
+  // cout << "Normalized Similarity = " << res * 1.0 / nlabel << "\n\n";
+  mltdresult.distance = t.nl + s.nl - 2 * res;
+  mltdresult.similarity = res;
+  mltdresult.normalized_similarity = res * 1.0 / nlabel;
+  return mltdresult;
 }
+
+int main(int argc, char *argv[]) { return 0; }
