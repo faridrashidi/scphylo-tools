@@ -119,40 +119,10 @@ if CYTHONIZE:
 else:
     extensions = no_cythonize(extensions)
 
-
-# === FIX FOR PyPy on macOS ===
-# PyPy injects Linux-specific linker flags (-Wl,-O1 -Wl,-Bsymbolic-functions)
-# that are invalid on macOS. Remove them only on Darwin + PyPy.
-if platform == "darwin":
-    import sysconfig
-
-    # Check if we are using PyPy
-    is_pypy = hasattr(sys, "pypy_version_info")
-    if is_pypy:
-        # Get the current linker flags
-        ldshared = sysconfig.get_config_var("LDSHARED")
-        ldflags = sysconfig.get_config_var("LDFLAGS")
-        if ldshared:
-            # Remove the problematic flags from LDSHARED
-            new_ldshared = (
-                ldshared.replace("-Wl,-O1", "")
-                .replace("-Wl,-Bsymbolic-functions", "")
-                .strip()
-            )
-            sysconfig._CONFIG_VARS["LDSHARED"] = new_ldshared
-        if ldflags:
-            # Also clean LDFLAGS just in case
-            new_ldflags = (
-                ldflags.replace("-Wl,-O1", "")
-                .replace("-Wl,-Bsymbolic-functions", "")
-                .strip()
-            )
-            sysconfig._CONFIG_VARS["LDFLAGS"] = new_ldflags
-
 if __name__ == "__main__":
     setup(
         name="scphylo-tools",
-        version="0.0.5",
+        version="0.0.4",
         ext_modules=extensions,
         description=Path("README.rst").read_text("utf-8").split("\n")[3],
         package_dir={"": "src"},
