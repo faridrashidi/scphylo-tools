@@ -3,7 +3,7 @@
 Installation
 ============
 
-scPhylo-tools requires Python 3.10 or later.
+scPhylo-tools requires Python 3.11 or later.
 
 Using PyPI
 ^^^^^^^^^^

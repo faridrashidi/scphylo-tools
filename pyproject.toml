@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "scphylo-tools"
 dynamic = ["version"]
 description = "A python toolkit for single-cell tumor phylogenetic analysis"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
     "anndata",
     "apted",
@@ -53,7 +53,6 @@ classifiers = [
     "Operating System :: Microsoft :: Windows",
     "Operating System :: POSIX :: Linux",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
