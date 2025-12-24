@@ -9,8 +9,8 @@ from scphylo.tl.solver.huntress._huntress import Reconstruct
 def huntress(df_input, alpha, beta, n_threads=1):
     """Solving using HUNTRESS.
 
-    HUNTRESS: Provably fast intratumor heterogeneity inference from single-cell
-    sequencing data
+    Fast intratumor heterogeneity inference from single-cell sequencing
+    data :cite:`HUNTRESS`.
 
     Parameters
     ----------
