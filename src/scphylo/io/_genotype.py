@@ -31,11 +31,15 @@ def read(filepath):
         sc = pd.read_table(filepath, index_col=0)
         if len(sc.columns) != len(set(sc.columns)):
             scp.logg.error("Mutation ids must be unique!")
+        if (sc.values == 0).all() or (sc.values == 1).all():
+            scp.logg.error("Matrix cannot be all zeros or all ones!")
         return sc
     elif ext in [".csv"]:
         sc = pd.read_csv(filepath, index_col=0)
         if len(sc.columns) != len(set(sc.columns)):
             scp.logg.error("Mutation ids must be unique!")
+        if (sc.values == 0).all() or (sc.values == 1).all():
+            scp.logg.error("Matrix cannot be all zeros or all ones!")
         return sc
     elif ext in [".h5ad", ".gz"]:
         return ad.read_h5ad(filepath)
