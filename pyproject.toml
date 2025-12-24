@@ -35,13 +35,9 @@ dependencies = [
     "termcolor",
     "tqdm",
 ]
-authors = [
-    {name = "Farid Rashidi", email = "farid.rsh@gmail.com"},
-]
-maintainers = [
-    {name = "Farid Rashidi", email = "farid.rsh@gmail.com"},
-]
-license = {text = "BSD-3-Clause"}
+authors = [{ name = "Farid Rashidi", email = "farid.rsh@gmail.com" }]
+maintainers = [{ name = "Farid Rashidi", email = "farid.rsh@gmail.com" }]
+license = { text = "BSD-3-Clause" }
 readme = "README.rst"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -71,12 +67,7 @@ Download = "https://github.com/faridrashidi/scphylo-tools"
 scphylo = "scphylo.commands._cli:cli"
 
 [project.optional-dependencies]
-dev = [
-    "pre-commit",
-    "pytest-cov",
-    "pytest-xdist",
-    "bumpversion",
-]
+dev = ["pre-commit", "pytest-cov", "pytest-xdist", "bumpversion", "ipykernel"]
 docs = [
     "furo",
     "ipython",
