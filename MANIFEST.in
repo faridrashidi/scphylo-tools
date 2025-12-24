@@ -11,7 +11,7 @@ prune .github
 # Include license and community health files
 include LICENSE.md
 include CONTRIBUTING.rst
-include CODE_OF_CONDUCT.rst
+include CODE_OF_CONDUCT.md
 
 # Include package data
 include src/scphylo/datasets/*
