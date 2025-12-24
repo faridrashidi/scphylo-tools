@@ -31,7 +31,7 @@ def Reconstruct(
     matrix_NA_est = Estimated_Matrix(df_input.copy())
     h_range = list(range(1, 100, 2))
     oc_range = [x / 10 for x in range(1, 5)]
-    tune_var = itertools.product(h_range, oc_range)
+    tune_var = list(itertools.product(h_range, oc_range))
 
     running_time = 0
     matrix_recons = None
@@ -52,17 +52,24 @@ def Reconstruct(
         running_time = e_time - s_time
 
     if Algchoice == "FPNA" and auto_tune == 1:
-        tune_var = list(tune_var)
+        # Calculate chunks for multiprocessing
         proc_size = np.ceil(len(tune_var) / n_proc).astype(int)
         cpu_range = []
 
         for i in range(n_proc):
             s_i = i * proc_size
             e_i = s_i + proc_size
-            if e_i > len(tune_var):
-                e_i = len(tune_var)
-            cpu_range.append(tune_var[s_i:e_i])
+            # Only append valid, non-empty ranges
+            if s_i < len(tune_var):
+                if e_i > len(tune_var):
+                    e_i = len(tune_var)
+                cpu_range.append(tune_var[s_i:e_i])
+
         s_time = time.time()
+
+        # Only start as many processes as we have chunks
+        active_procs = len(cpu_range)
+
         p = [
             Process(
                 target=Auto_fnfp,
@@ -76,24 +83,33 @@ def Reconstruct(
                     fnc,
                 ),
             )
-            for _ in range(len(cpu_range))
+            for i in range(active_procs)
         ]
+
+        # 1. Start all processes
         for i in p:
             i.start()
-        for i in p:
-            i.join()
+
+        # 2. FIX: Retrieve results BEFORE joining to prevent Queue deadlock
+        # The parent process consumes the queue while children are writing to it
         ret = []
-        while not q.empty():
+        for _ in range(active_procs):
             ret.append(q.get())
 
-        [m_r, d_min] = ret[0]
-        matrix_recons = m_r
-        for i in range(1, len(ret)):
-            [m, d] = ret[i]
-            if d < d_min:
-                matrix_recons = m
-                d_min = d
-        q.empty()
+        # 3. Join processes (they should be finished now that queue is drained)
+        for i in p:
+            i.join()
+
+        # Find best result
+        if ret:
+            [m_r, d_min] = ret[0]
+            matrix_recons = m_r
+            for i in range(1, len(ret)):
+                [m, d] = ret[i]
+                if d < d_min:
+                    matrix_recons = m
+                    d_min = d
+
         e_time = time.time()
         running_time = e_time - s_time
 
@@ -103,6 +119,10 @@ def Reconstruct(
 
 
 def Auto_fnfp(q, tune_ran, m_input, m_NA_est, m_input_raw, fnfp, fnc):
+    # Ensure tune_ran is not empty to avoid IndexError
+    if not tune_ran:
+        return
+
     apprx_ordr = sum(m_NA_est)
 
     matrix_recon = greedyPtreeNA(
@@ -125,7 +145,7 @@ def Auto_fnfp(q, tune_ran, m_input, m_NA_est, m_input_raw, fnfp, fnc):
         if distance_i < distance:
             matrix_recon = matrix_rec_i.copy()
             distance = distance_i
-    q.full()
+
     q.put([matrix_recon, distance])
 
 
