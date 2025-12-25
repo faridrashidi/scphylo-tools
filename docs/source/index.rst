@@ -12,8 +12,8 @@ Documentation
    getting_started
    api_reference
    cli_reference
-   references
    auto_examples/index.rst
+   references
 
 ..
    Padding to avoid rstcheck crash due to include directive line number mismatch.
