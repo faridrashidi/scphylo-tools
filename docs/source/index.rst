@@ -9,6 +9,7 @@ Documentation
    :hidden:
 
    installation
+   getting_started
    api_reference
    cli_reference
    references
