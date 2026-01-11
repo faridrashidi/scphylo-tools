@@ -1,5 +1,5 @@
 ---
-title: "scphylo-tools: A comprehensive Python toolkit for single-cell tumor phylogenetic analysis"
+title: "scphylo-tools: A Python toolkit for single-cell tumor phylogenetic analysis"
 tags:
   - python
   - biology
@@ -15,79 +15,72 @@ authors:
 affiliations:
   - name: Laboratory of Human Carcinogenesis, Center for Cancer Research, National Cancer Institute, National Institutes of Health, Bethesda, MD, USA
     index: 1
-date: 24 December 2025
+date: 11 January 2026
 bibliography: paper.bib
 ---
 
 # Summary
 
-`scphylo-tools` is a comprehensive Python library designed to unify single-cell tumor phylogeny inference methods. It addresses the lack of standardization by providing a cohesive interface for data processing, tree reconstruction, and visualization. By streamlining these tasks, `scphylo` empowers researchers with limited programming expertise to easily install and utilize complex inference methods. It accelerates algorithm development, ensures reproducible benchmarking, and democratizes access to advanced computational oncology tools.
+`scphylo-tools` is a Python library designed to unify single-cell tumor phylogeny inference methods. It addresses the lack of standardization in the field by providing a cohesive interface for data processing, tree reconstruction, visualization, and benchmarking. By streamlining these tasks, `scphylo-tools` empowers researchers with limited programming expertise to easily install and utilize complex inference methods, accelerates algorithm development, and ensures reproducible benchmarking of tumor phylogeny reconstruction methods.
 
-# Introduction
+# Statement of Need
 
-Cancer is a dynamic evolutionary process driven by the acquisition of somatic mutations and the competitive selection of clonal populations. The rapid development of Single-Cell Sequencing (SCS) technologies has enabled the profiling of genomic alterations at cellular resolution, offering unprecedented insights into intratumor heterogeneity [@Navin_2011; @Wang_2014]. Elucidating the phylogenetic relationships between tumor cells is essential for understanding metastasis [@Leung_2017; @Roper_2020], drug resistance [@Kim_2014; @Gopalan_2021; @Gruen_2023], and clonal dynamics [@Laks_2019; @Liu_2025; @Hirsch_2025].
+Cancer is a dynamic evolutionary process driven by the acquisition of somatic mutations and the competitive selection of clonal populations. Single-Cell Sequencing (SCS) technologies have enabled the profiling of genomic alterations at cellular resolution, offering unprecedented insights into intratumor heterogeneity [@Navin_2011; @Wang_2014]. Elucidating the phylogenetic relationships between tumor cells is essential for understanding metastasis [@Leung_2017; @Roper_2020], drug resistance [@Kim_2014; @Gopalan_2021; @Gruen_2023], and clonal dynamics [@Laks_2019; @Liu_2025; @Hirsch_2025].
 
-However, reconstructing the evolutionary history (often called phylogeny) of a tumor from SCS data presents unique computational challenges. These datasets are often plagued by high noise levels, including Allele Drop-Out (ADO), false positives, missing data, and doublet artifacts [@ReviewBinary; @RashidiMehrabadi2022]. Consequently, a diverse array of computational tools has been developed to address these challenges.
+Reconstructing the evolutionary history of a tumor from SCS data presents unique computational challenges. These datasets are plagued by high noise levels, including Allele Drop-Out (ADO), false positives, missing data, and doublet artifacts [@ReviewBinary; @RashidiMehrabadi2022]. Consequently, a diverse array of computational tools has been developed to address these challenges, including stochastic methods like SCITE [@SCITE], infSCITE [@infSCITE], OncoNEM [@OncoNEM], SiFit [@SiFit], and SiCloneFit [@SiCloneFit]; combinatorial approaches such as PhISCS [@PhISCS], PhISCS-BnB [@PhISCS-BnB], SPhyR [@SPhyR], ScisTree [@ScisTree], gpps [@gpps], and SASC [@SASC]; and specialized methods including HUNTRESS [@HUNTRESS], SCIPhI [@SCIPhI], and Scelestial [@Scelestial].
 
-# Statement of need
+However, the software landscape remains highly fragmented. Existing methods typically function as standalone binaries or scripts with inconsistent input/output formats, rendering comparative analysis difficult. Researchers attempting to utilize these tools face a laborious process of installation, data conversion, and script wrapping. Furthermore, integrating these tools into modern Python-based environments (e.g., alongside SCANPY [@SCANPY] or Biopython [@Biopython]) often requires custom development. `scphylo-tools` addresses these challenges by wrapping diverse state-of-the-art algorithms into a single, cohesive Python API.
 
-Although the bioinformatics community has produced a plethora of algorithms to infer tumor trees, the software landscape remains highly fragmented. Existing methods typically function as standalone binaries or scripts with inconsistent input/output formats, rendering comparative analysis difficult. These include:
+The target audience includes computational biologists, bioinformaticians, and cancer researchers who need to:
 
-- **Stochastic and Probabilistic methods:** Tools like SCITE [@SCITE], infSCITE [@infSCITE], OncoNEM [@OncoNEM], SiFit [@SiFit], SiCloneFit [@SiCloneFit], and B-SCITE [@B-SCITE].
-- **Combinatorial and Constraint-based methods:** Tools such as PhISCS [@PhISCS], PhISCS-BnB [@PhISCS-BnB], SPhyR [@SPhyR], ScisTree [@ScisTree], Trisicell [@Trisicell-Boost], Sgootr[@Sgootr], gpps [@gpps], and SASC [@SASC].
-- **Specialized inference approaches:** Including HUNTRESS [@HUNTRESS], SCIPhI [@SCIPhI], TRaIT [@TRaIT], Phyolin [@Phyolin], scVILP [@scVILP], Scelestial [@Scelestial], and generative models like GRMT [@GRMT].
+- Compare multiple phylogeny inference methods on the same dataset
+- Benchmark new algorithms against established methods
+- Integrate tumor phylogeny analysis into existing Python workflows
+- Access curated single-cell cancer datasets for research
 
-Consequently, researchers attempting to utilize these tools face a laborious process of installation, data conversion, and script wrapping. Furthermore, integrating these tools into modern Python-based environments (e.g., alongside SCANPY [@SCANPY] or Biopython [@Biopython]) often requires custom development. `scphylo` addresses these challenges by wrapping diverse state-of-the-art algorithms into a single, cohesive Python API.
+# State of the Field
 
-# Features and Functionality
+Several tools exist for tumor phylogeny inference, but none provide the unified framework that `scphylo-tools` offers. Individual tools like SCITE, PhISCS, and HUNTRESS each require separate installation, different input formats, and produce outputs that are not directly comparable. Workflow frameworks like Snakemake or Nextflow could orchestrate these tools, but would require significant custom development for format conversion and result standardization.
 
-The `scphylo` package is modular, catering to different stages of the phylogenetic analysis workflow:
+`scphylo-tools` distinguishes itself by:
 
-## 1. Data Management (`scphylo.io`)
+1. **Unified Interface**: A consistent Python API across all wrapped methods, eliminating format conversion overhead
+2. **Comprehensive Metrics**: Built-in implementation of specialized tumor tree comparison metrics (MLTD [@MLTD], CASet/DISC [@CASet_DISC], MP3 [@MP3])
+3. **Curated Datasets**: Direct access to published SCS datasets from landmark cancer evolution studies [@Gawad_2014; @Morita_2020; @Hou_2012; @Leung_2017; @Wang_2014; @Wolf_2019]
+4. **Ecosystem Integration**: Seamless integration with the Python scientific stack (NumPy, NetworkX, Matplotlib)
 
-`scphylo` streamlines data management through its `io` module, providing a unified interface for reading and writing genotype and read-count matrices. This ensures seamless integration between upstream variant callers and downstream phylogenetic analysis, directly addressing the format inconsistencies common in the field.
+# Software Design
 
-## 2. Data Preprocessing (`scphylo.pp`)
+`scphylo-tools` follows a modular architecture inspired by established bioinformatics packages like SCANPY. The design philosophy prioritizes:
 
-To mitigate the noise and sparsity characteristic of SCS data, the `pp` module provides essential preprocessing utilities:
+**Modular Organization**: The package is organized into functional modules (`io`, `pp`, `tl`, `pl`, `ul`, `datasets`) that mirror the phylogenetic analysis workflow. This separation allows users to engage only with the components relevant to their needs.
 
-- **Filtering:** Functions to remove artifacts and retain informative features based on mutation prevalence.
-- **Matrix Optimization:** The `bifiltering` algorithm identifies the maximally informed submatrix, minimizing the impact of missing data on tree reconstruction.
-- **Data Aggregation:** The `consensus` utility enables cell merging to generate high-confidence genotypes or to cluster similar cells, significantly improving the signal-to-noise ratio.
+**Consistent Abstractions**: All solver wrappers expose a uniform interface, handling input formatting, binary execution, and output parsing internally. Trees are represented as NetworkX `DiGraph` objects, enabling interoperability with the broader Python ecosystem.
 
-## 3. Phylogenetic Inference (`scphylo.tl`)
+**Extensibility**: New inference methods can be added by implementing a standard wrapper interface, making the package straightforward to extend as new algorithms emerge.
 
-The core of `scphylo` lies in its unified solver interface. It wraps a wide array of the inference algorithms mentioned above (e.g., SCITE, PhISCS, HUNTRESS, ScisTree), allowing users to execute complex inference tasks using standard Python syntax. This abstraction layer handles the formatting of input files, execution of the underlying binary/script, and parsing of the resulting trees back into a NetworkX-compatible format. This is critical for users wishing to compare different inference methods on the same data.
+**Reproducibility**: The `datasets` module provides versioned access to published datasets, and the simulation engine enables controlled generation of synthetic data with known ground truths for algorithm validation.
 
-## 4. Tree Visualization (`scphylo.pl`)
+Key implementation decisions include using pandas DataFrames for genotype matrices (facilitating data manipulation), NetworkX for tree structures (enabling standard graph algorithms), and Matplotlib/Graphviz for visualization (providing publication-quality outputs).
 
-Interpreting phylogenetic trees requires high-quality visualization. `scphylo` provides plotting functions that leverage Matplotlib and Graphviz to render annotated trees and sorted genotype heatmaps. These visualizations help researchers identify clonal subpopulations, visualize the acquisition of mutations, and characterize the evolutionary trajectories of distinct cell lineages.
+# Research Impact Statement
 
-## 5. Interactive Datasets (`scphylo.datasets`)
+`scphylo-tools` has been used in several published research studies:
 
-To foster reproducibility and ease of benchmarking, `scphylo` includes a dedicated module providing direct access to a curated collection of published high-impact SCS datasets. Users can load genotype matrices from landmark cancer evolution studies with a single command. The available datasets cover a wide range of cancer types and sequencing protocols, including:
+- Analysis of melanoma subclonal evolution and immunotherapy resistance mechanisms [@Gruen_2023]
+- Development of the Trisicell-PartF algorithm for evaluating inferred subclonal structures [@Trisicell-PartF]
+- Investigation of expressed mutation profiles in single cells [@Trisicell-Boost]
+- Metastatic migration pattern analysis using single-cell methylation sequencing [@Liu_2025; @Sgootr]
+- Stochastic modeling of gene expression adaptation in tumor evolution [@Hirsch_2025]
 
-- **Leukemia:** Acute Lymphoblastic Leukemia (ALL) [@Gawad_2014], Acute Myeloid Leukemia (AML) [@Morita_2020], and JAK2-negative Myeloproliferative Neoplasms [@Hou_2012].
-- **Solid Tumors:** Kidney tumor (single-cell exome) [@Xu_2012], Bladder cancer [@Li_2012], Breast cancer [@Wang_2014], and Melanoma [@Wolf_2019].
-- **Complex Evolution:** Metastatic Colorectal Cancer [@Leung_2017], Non-hereditary Colorectal Cancer [@Wu_2016], High-grade Serous Ovarian Cancer [@McPherson_2016; @McPherson_2019], and Oligodendroglioma [@Tirosh_2016].
-- **Protocol-Specific Data:** Datasets generated via SNES [@Leung_2015] and approaches for identifying leukemic stem cells [@Velten_2021].
+The package is available on PyPI. Documentation and tutorials are hosted on Read the Docs, providing comprehensive guidance for new users.
 
-## 6. Tree Evaluation and Simulation (`scphylo.ul`)
+# AI Usage Disclosure
 
-To facilitate rigorous benchmarking, `scphylo` implements a comprehensive suite of metrics to quantitatively assess the accuracy of inferred trees relative to a ground truth. Supported metrics include:
-
-- **Lineage Accuracies:** Assessments of how closely predicted lineage relationships match the ground truth, including Ancestor-Descendant, Different-Lineage, Robinson-Foulds, and Genotype-Similarity.
-- **Tree Distance Measures:** Implementation of specialized distances such as the Multi-Labeled Tree Dissimilarity (MLTD) [@MLTD], CASet and DISC distances [@CASet_DISC], MP3 similarity score [@MP3], and Bourque distances [@Bourque].
-- **Subclonal Reliability:** The Trisicell-PartF score [@Trisicell-PartF], which utilizes a partition function algorithm to evaluate the reliability of inferred subclonal structures.
-
-To complement these benchmarking tools, `scphylo` features a flexible simulation engine for generating synthetic tumor phylogenies with known ground truths. This is critical for validating new algorithms and profiling performance across different noise regimes. Users can configure:
-
-- **Topology:** Parameters for defining tree structure, including tree size, branching factors, and mutation attachment strategies.
-- **Noise:** Injection of realistic technical errors with customizable rates for false positives, false negatives (ADO), and missing data.
-- **Artifacts:** Simulation of doublet cells to mimic common confounders found in SCS data.
+No generative AI tools were used in the development of the `scphylo-tools` software, the writing of this manuscript, or the preparation of supporting documentation.
 
 # Acknowledgements
 
-We acknowledge the contributions of the open-source community and the authors of the underlying algorithms mentioned throughout this paper, whose work is wrapped or utilized within this toolkit.
+We acknowledge the contributions of the open-source community and the authors of the underlying algorithms whose work is wrapped within this toolkit. This work was supported by the Intramural Research Program of the National Institutes of Health, National Cancer Institute.
 
 # References
