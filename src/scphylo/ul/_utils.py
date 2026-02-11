@@ -9,7 +9,7 @@ import time
 
 import joblib
 import numpy as np
-import pkg_resources
+import importlib.resources
 
 import scphylo as scp
 
@@ -370,7 +370,7 @@ def timeit(f):
 
 def get_file(key):
     components = key.split("/")
-    return pkg_resources.resource_filename(components[0], "/".join(components[1:]))
+    return str(importlib.resources.files(components[0]).joinpath("/".join(components[1:])))
 
 
 def with_timeout(timeout):
