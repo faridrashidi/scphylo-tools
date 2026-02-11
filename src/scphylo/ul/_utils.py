@@ -1,6 +1,7 @@
 import contextlib
 import datetime
 import functools
+import importlib.resources
 import multiprocessing
 import os
 import shutil
@@ -9,7 +10,6 @@ import time
 
 import joblib
 import numpy as np
-import importlib.resources
 
 import scphylo as scp
 
@@ -19,15 +19,15 @@ def log_input(df_in):
     scp.logg.info(f"input -- size: {df_in.shape[0]}x{df_in.shape[1]}")
     scp.logg.info(
         f"input -- 0: {np.sum(df_in.values == 0)}#,"
-        f" {100*np.sum(df_in.values == 0)/size:.1f}%"
+        f" {100 * np.sum(df_in.values == 0) / size:.1f}%"
     )
     scp.logg.info(
         f"input -- 1: {np.sum(df_in.values == 1)}#,"
-        f" {100*np.sum(df_in.values == 1)/size:.1f}%"
+        f" {100 * np.sum(df_in.values == 1) / size:.1f}%"
     )
     scp.logg.info(
         f"input -- NA: {np.sum(df_in.values == 3)}#,"
-        f" {100*np.sum(df_in.values == 3)/size:.1f}%"
+        f" {100 * np.sum(df_in.values == 3) / size:.1f}%"
     )
     scp.logg.info(f"input -- CF: {is_conflict_free_gusfield(df_in)}")
 
@@ -37,15 +37,15 @@ def log_output(df_out, running_time):
     scp.logg.info(f"output -- size: {df_out.shape[0]}x{df_out.shape[1]}")
     scp.logg.info(
         f"output -- 0: {np.sum(df_out.values == 0)}#,"
-        f" {100*np.sum(df_out.values == 0)/size:.1f}%"
+        f" {100 * np.sum(df_out.values == 0) / size:.1f}%"
     )
     scp.logg.info(
         f"output -- 1: {np.sum(df_out.values == 1)}#,"
-        f" {100*np.sum(df_out.values == 1)/size:.1f}%"
+        f" {100 * np.sum(df_out.values == 1) / size:.1f}%"
     )
     scp.logg.info(
         f"output -- NA: {np.sum(df_out.values == 3)}#,"
-        f" {100*np.sum(df_out.values == 3)/size:.1f}%"
+        f" {100 * np.sum(df_out.values == 3) / size:.1f}%"
     )
     icf = is_conflict_free_gusfield(df_out)
     scp.logg.info("output -- CF: ", end="")
@@ -370,7 +370,9 @@ def timeit(f):
 
 def get_file(key):
     components = key.split("/")
-    return str(importlib.resources.files(components[0]).joinpath("/".join(components[1:])))
+    return str(
+        importlib.resources.files(components[0]).joinpath("/".join(components[1:]))
+    )
 
 
 def with_timeout(timeout):
