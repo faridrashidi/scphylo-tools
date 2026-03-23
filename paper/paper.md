@@ -13,7 +13,7 @@ authors:
     orcid: 0000-0003-4103-4904
     affiliation: 1
 affiliations:
-  - name: Laboratory of Human Carcinogenesis, Center for Cancer Research, National Cancer Institute, National Institutes of Health, Bethesda, MD, USA
+  - name: Laboratory of Human Carcinogenesis, Center for Cancer Research, National Cancer Institute, National Institutes of Health, Bethesda, MD, United States of America
     index: 1
 date: 11 January 2026
 bibliography: paper.bib
