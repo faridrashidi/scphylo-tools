@@ -35,7 +35,7 @@ elif [[ "$OS" == "ubuntu-latest" ]]; then
   sudo apt-get install libfontconfig1-dev libharfbuzz-dev libpng-dev libcairo2-dev -y
   sudo apt-get install libfribidi-dev libfreetype6-dev libtiff5-dev libjpeg-dev -y
   sudo apt-get install libopenblas0 r-base r-base-dev -y
-  sudo apt-get install libcurl4-openssl-dev libssl-dev -y
+  sudo apt-get install libcurl4-openssl-dev libssl-dev libuv1-dev -y
   pip install "rpy2<=3.5.10"
   sudo Rscript -e 'install.packages("devtools")'
   sudo Rscript -e 'install.packages("BiocManager")'
