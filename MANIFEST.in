@@ -10,14 +10,11 @@ prune .github
 
 # Include license and community health files
 include LICENSE.md
-include CONTRIBUTING.rst
-include CODE_OF_CONDUCT.md
 
 # Include package data
 include src/scphylo/datasets/*
 
 # Exclude development, configuration, and lock files
-exclude .bumpversion.cfg
 exclude .gitattributes
 exclude .gitignore
 exclude .pre-commit-config.yaml

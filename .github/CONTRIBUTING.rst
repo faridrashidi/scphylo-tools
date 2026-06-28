@@ -127,14 +127,11 @@ instructions:
 
 Creating a new release
 ----------------------
-If you are a core developer and want to create a new release, first install
-``bump2version``::
-
-    pip install bump2version
-
 Depending on the release type (major, minor, or patch), run::
 
-    bump2version {major,minor,patch}
+    make release patch
+
+Replace ``patch`` with ``minor`` or ``major`` for larger releases.
 
 By default, this will create a new tag and automatically update the
 ``__version__`` wherever necessary, commit the changes and create a new tag.
