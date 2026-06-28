@@ -30,7 +30,6 @@ dependencies = [
     "pyyaml",
     "scikit_learn",
     "scipy",
-    "setuptools",
     "seaborn",
     "termcolor",
     "tqdm",
