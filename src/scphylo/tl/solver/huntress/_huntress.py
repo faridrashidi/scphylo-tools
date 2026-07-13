@@ -247,7 +247,7 @@ def ReadFfile(df):
 
 
 def ReadFileNA(df):
-    M = df.values
+    M = df.to_numpy(copy=True)
     NA_position = np.argwhere(M == 3)
     for j in NA_position:
         M[j[0], j[1]] = 0

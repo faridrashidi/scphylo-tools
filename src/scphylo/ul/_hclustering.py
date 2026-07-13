@@ -13,9 +13,15 @@ from scphylo.external._betabinom import pmf_BetaBinomial
 
 @numba.jit(nopython=True)
 def _l1_ignore_na(a, b):
-    a[a == 3] = np.nan
-    b[b == 3] = np.nan
-    return np.nanmean(np.abs(a - b))
+    distance = 0.0
+    observed = 0
+    for i in range(a.shape[0]):
+        if a[i] != 3 and b[i] != 3 and not np.isnan(a[i]) and not np.isnan(b[i]):
+            distance += np.abs(a[i] - b[i])
+            observed += 1
+    if observed == 0:
+        return np.nan
+    return distance / observed
 
 
 def _l1_ignore_na_wrapper(x, y, **kwargs):

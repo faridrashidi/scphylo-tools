@@ -8,6 +8,16 @@ from ._helpers import skip_graphviz
 
 
 class TestUtils:
+    def test_dist_l1_ignore_na_read_only(self):
+        matrix = np.array([[0, 3, 1, 1], [1, 0, 1, 3]])
+        expected = matrix.copy()
+        matrix.setflags(write=False)
+
+        dist = scp.ul.dist_l1_ignore_na(matrix)
+
+        np.testing.assert_array_equal(dist, np.array([[0.0, 0.5], [0.5, 0.0]]))
+        np.testing.assert_array_equal(matrix, expected)
+
     def test_hclustering_1(self):
         np.random.seed(0)
         df = pd.DataFrame(np.random.randint(0, 2, size=(10, 10)))

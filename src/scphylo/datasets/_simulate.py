@@ -201,7 +201,7 @@ def add_readcount(df_in, mean_coverage=50, seed=None):
                 T_mtx[i, j] = 0
             else:
                 scp.logg.error("Wrong Input")
-    adata = ad.AnnData(df_in, dtype=int)
+    adata = ad.AnnData(df_in.astype(int))
     adata.layers["total"] = T_mtx
     adata.layers["mutant"] = T_mtx - R_mtx
     return adata
