@@ -1,5 +1,8 @@
 VALID_RELEASE_PARTS := patch minor major
 RELEASE_ARGS = $(filter-out $@,$(MAKECMDGOALS))
+UV := uv
+UV_RUN := $(UV) run --no-managed-python
+UV_SYNC := $(UV) sync --no-managed-python
 
 .PHONY: help clean lint test doc build install install-dev cythonize release $(VALID_RELEASE_PARTS)
 
@@ -24,11 +27,11 @@ clean:
 	rm -rf docs/source/sg_execution_times.rst
 
 lint:
-	pre-commit run --all-files
+	$(UV_RUN) --extra dev pre-commit run --all-files
 
 test:
 	rm -rf htmlcov
-	pytest --disable-warnings --cov=scphylo --cov-report=html ./tests
+	$(UV_RUN) --extra dev pytest --disable-warnings --cov=scphylo --cov-report=html ./tests
 	rm -rf .coverage*
 
 doc:
@@ -36,29 +39,29 @@ doc:
 	rm -rf docs/source/auto_examples
 	rm -rf docs/source/gen_modules
 	rm -rf docs/source/sg_execution_times.rst
-	cd docs && $(MAKE) clean html
-	cd docs/build/html && python -m http.server 8080
+	cd docs && $(UV_RUN) --extra docs $(MAKE) clean html
+	cd docs/build/html && $(UV_RUN) --extra docs python -m http.server 8080
 
 build:
-	python setup.py sdist
+	$(UV) build --no-managed-python
 
 install:
-	python -m pip install .
+	$(UV_SYNC) --no-editable
 
 install-dev:
 	git fetch
-	python -m pip install -e '.[dev,docs]'
-	pre-commit install
+	$(UV_SYNC) --all-extras
+	$(UV_RUN) --extra dev pre-commit install
 
 cythonize:
-	CYTHONIZE=1 pip install -e .
+	CYTHONIZE=1 $(UV_SYNC) --all-extras --reinstall-package scphylo-tools
 
 release:
 	@if [ "$(words $(RELEASE_ARGS))" -ne 1 ] || [ -n "$(filter-out $(VALID_RELEASE_PARTS),$(RELEASE_ARGS))" ]; then \
 		echo "usage: make release [patch|minor|major]"; \
 		exit 1; \
 	fi
-	uv run --extra dev bump-my-version bump $(RELEASE_ARGS)
+	$(UV_RUN) --extra dev bump-my-version bump $(RELEASE_ARGS)
 
 $(VALID_RELEASE_PARTS):
 	@:
