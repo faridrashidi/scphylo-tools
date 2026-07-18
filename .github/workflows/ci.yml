@@ -43,10 +43,8 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install pre-commit
+      - name: Install uv
+        uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
       - name: Run static analysis
         run: |
           make lint
@@ -73,6 +71,8 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
           cache: "pip"
+      - name: Install uv
+        uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
       - name: Install dependencies
         run: |
           python -m pip install setuptools
