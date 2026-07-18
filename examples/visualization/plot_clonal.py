@@ -5,6 +5,10 @@ Visualizing a tree in clonal format
 This example shows how to visualize an inferred tree.
 """
 
+from io import BytesIO
+
+import matplotlib.pyplot as plt
+
 import scphylo as scp
 
 # sphinx_gallery_thumbnail_path = "_static/thumbnails/clonal.png"
@@ -23,5 +27,6 @@ tree = scp.ul.to_tree(inferred)
 # Then we can draw the tree in `clonal` format i.e. mutations at the edges and cells at
 # at the nodes of the tree.
 
-# scp.pl.clonal_tree(tree)
-# TODO: fix
+image = scp.pl.clonal_tree(tree, show=False)
+plt.imshow(plt.imread(BytesIO(image.data), format="png"))
+plt.axis("off")

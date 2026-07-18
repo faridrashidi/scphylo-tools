@@ -1,0 +1,3 @@
+# Graphviz registers its rendering plugins from a conda post-link script.
+# Pixi requires an explicit opt-in before executing package post-link scripts.
+run-post-link-scripts = "insecure"

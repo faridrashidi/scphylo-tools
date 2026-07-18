@@ -21,6 +21,7 @@ def clonal_tree(
     output_file=None,
     color_attr=None,
     dpi=150,
+    show=True,
 ):
     """Draw the tree in clonal format.
 
@@ -45,10 +46,14 @@ def clonal_tree(
     dpi : :obj:`int`, optional
         Resolution of rendered figures – this influences the size of
         figures in notebooks, by default 150
+    show : :obj:`bool`, optional
+        Display the rendered image, by default True. When False, return the
+        ``IPython.display.Image`` instead.
 
     Returns
     -------
-    :obj:`None`
+    :obj:`object` or :obj:`None`
+        The rendered image when ``show`` is False; otherwise None.
     """
     _, graphviz_is_not_imporeted = scp.ul.import_graphviz()
     if graphviz_is_not_imporeted:
@@ -141,9 +146,12 @@ def clonal_tree(
     if output_file is not None:
         scp.io.to_png(tc, output_file, dpi)
 
-    return display(
-        Image(nx.drawing.nx_pydot.to_pydot(tc).create_png(), embed=True, retina=True)
+    image = Image(
+        nx.drawing.nx_pydot.to_pydot(tc).create_png(), embed=True, retina=True
     )
+    if show:
+        return display(image)
+    return image
 
 
 def dendro_tree(
@@ -160,6 +168,7 @@ def dendro_tree(
     distance_labels_to_bottom=4,
     annotation=None,
     output_file=None,
+    show=True,
 ):
     """Draw the tree in dendro fromat.
 
@@ -199,10 +208,14 @@ def dendro_tree(
         in to be annotated in the bottom of the tree, by default []
     output_file : :obj:`str`, optional
         Path to a file for saving the tree in, by default None
+    show : :obj:`bool`, optional
+        Display the rendered image, by default True. When False, return the
+        ``IPython.display.Image`` instead.
 
     Returns
     -------
-    :obj:`None`
+    :obj:`object` or :obj:`None`
+        The rendered image when ``show`` is False; otherwise None.
 
     Note
     ----
@@ -286,7 +299,8 @@ def dendro_tree(
     with grdevices.render_to_bytesio(
         grdevices.png, width=width, height=height, res=dpi
     ) as image:
-        p = ro.r(cmd)
+        ro.r(cmd)
+        p = ro.globalenv["p"]
         ro.r.show(p)
         if output_file is not None:
             ro.r.ggsave(
@@ -298,7 +312,10 @@ def dendro_tree(
                 dpi=dpi,
                 limitsize=False,
             )
-    return display(Image(image.getvalue(), embed=True, retina=True))
+    image = Image(image.getvalue(), embed=True, retina=True)
+    if show:
+        return display(image)
+    return image
 
 
 def newick_tree(

@@ -1,7 +1,5 @@
 import scphylo as scp
 
-from ._helpers import skip_graphviz, skip_rpy2
-
 
 class TestPlotting:
     def test_heatmap(self):
@@ -29,13 +27,12 @@ class TestPlotting:
         )
         assert True
 
-    @skip_graphviz
     def test_clonal_tree(self, test_cf_data_1):
         data = scp.io.read(test_cf_data_1)
         tree = scp.ul.to_tree(data)
-        scp.pl.clonal_tree(tree)
+        image = scp.pl.clonal_tree(tree, show=False)
+        assert image.data.startswith(b"\x89PNG\r\n\x1a\n")
 
-    @skip_graphviz
     def test_clonal_tree_with_coloring(self):
         adata = scp.datasets.high_grade_serous_ovarian_cancer_3celllines()
         df_out = adata.to_df(layer="ground")[adata.var_names[:1000]]
@@ -55,14 +52,12 @@ class TestPlotting:
         )
         assert True
 
-    @skip_rpy2("ggtree")
     def test_dendro_tree_1(self, test_cf_data_1):
         data = scp.io.read(test_cf_data_1)
         tree = scp.ul.to_tree(data)
-        scp.pl.dendro_tree(tree)
-        assert True
+        image = scp.pl.dendro_tree(tree, show=False)
+        assert image.data.startswith(b"\x89PNG\r\n\x1a\n")
 
-    @skip_rpy2("ggtree")
     def test_dendro_tree_2(self):
         adata = scp.datasets.example()
         adata = adata[adata.obs.group.isin(["C16", "C11", "C22"]), :].copy()

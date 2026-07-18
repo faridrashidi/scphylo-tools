@@ -5,6 +5,10 @@ Visualizing a tree in dendrogram format
 This example shows how to visualize an inferred tree.
 """
 
+from io import BytesIO
+
+import matplotlib.pyplot as plt
+
 import scphylo as scp
 
 # sphinx_gallery_thumbnail_path = "_static/thumbnails/dendrogram.png"
@@ -32,19 +36,21 @@ tree = scp.ul.to_tree(df_out)
 # %%
 # Finally we can draw the tree in `dendrogram` format.
 
-# scp.pl.dendro_tree(
-#     tree,
-#     cell_info=adata.obs,
-#     label_color="subclone_color",
-#     width=1200,
-#     height=600,
-#     dpi=200,
-#     distance_labels_to_bottom=3,
-#     inner_node_type="both",
-#     inner_node_size=2,
-#     annotation=[
-#         ("bar", "Axl", "Erbb3", 0.2),
-#         ("bar", "Mitf", "Mitf", 0.2),
-#     ],
-# )
-# TODO: fix
+image = scp.pl.dendro_tree(
+    tree,
+    cell_info=adata.obs,
+    label_color="subclone_color",
+    width=1200,
+    height=600,
+    dpi=200,
+    distance_labels_to_bottom=3,
+    inner_node_type="both",
+    inner_node_size=2,
+    annotation=[
+        ("bar", "Axl", "Erbb3", 0.2),
+        ("bar", "Mitf", "Mitf", 0.2),
+    ],
+    show=False,
+)
+plt.imshow(plt.imread(BytesIO(image.data), format="png"))
+plt.axis("off")

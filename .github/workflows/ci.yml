@@ -39,47 +39,44 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Python 3.11
-        uses: actions/setup-python@v5
+      - name: Set up Pixi
+        uses: prefix-dev/setup-pixi@v0.10.0
         with:
-          python-version: "3.11"
-      - name: Install uv
-        uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
+          pixi-version: v0.73.0
+          manifest-path: pyproject.toml
+          environments: lint
+          cache: true
+          locked: true
       - name: Run static analysis
-        run: |
-          make lint
+        run: pixi run --locked -e lint lint
 
   test:
     needs: lint
-    name: test on ${{ matrix.os }} with python ${{ matrix.python }}
+    name: test ${{ matrix.environment }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       max-parallel: 20
       matrix:
-        python: ["3.11", "3.12"]
+        environment: [py311, py312, py313]
         os: [ubuntu-latest, macos-latest]
-    env:
-      OS: ${{ matrix.os }}
-      PYTHON: ${{ matrix.python }}
+        include:
+          - environment: py311
+            os: macos-15-intel
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Set up Python ${{ matrix.python }}
-        uses: actions/setup-python@v5
+      - name: Set up Pixi
+        uses: prefix-dev/setup-pixi@v0.10.0
         with:
-          python-version: ${{ matrix.python }}
-          cache: "pip"
-      - name: Install uv
-        uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
-      - name: Install dependencies
-        run: |
-          python -m pip install setuptools
-          ./.scripts/ci/install_dependencies.sh
+          pixi-version: v0.73.0
+          manifest-path: pyproject.toml
+          environments: ${{ matrix.environment }}
+          cache: true
+          locked: true
       - name: Unit tests
-        run: |
-          make test
+        run: pixi run --locked -e ${{ matrix.environment }} test
 
   codeql:
     needs: lint
@@ -117,7 +114,7 @@ jobs:
       fail-fast: false
       max-parallel: 20
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest, macos-latest, macos-15-intel]
     steps:
       - uses: actions/checkout@v4
       - name: Install Python
@@ -125,7 +122,7 @@ jobs:
         with:
           python-version: "3.11"
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.22.0
+        uses: pypa/cibuildwheel@v4.1.0
       - uses: actions/upload-artifact@v4
         with:
           name: wheels-${{ matrix.os }}
@@ -138,14 +135,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install Python
-        uses: actions/setup-python@v5
+      - name: Set up Pixi
+        uses: prefix-dev/setup-pixi@v0.10.0
         with:
-          python-version: "3.11"
-      - name: Install build dependencies
-        run: python -m pip install setuptools setuptools_scm
+          pixi-version: v0.73.0
+          manifest-path: pyproject.toml
+          environments: lint
+          cache: true
+          locked: true
       - name: Build sdist
-        run: python setup.py sdist
+        run: pixi run --locked -e lint python -m build --sdist
       - uses: actions/upload-artifact@v4
         with:
           name: sdist

@@ -2,8 +2,6 @@ import pytest
 
 import scphylo as scp
 
-from ._helpers import skip_graph_tool, skip_rpy2
-
 
 class TestSolversTmp:
     def test_titch_algorithm(self):
@@ -36,14 +34,13 @@ class TestSolversTmp:
     def test_infscite(self):
         assert True
 
-    @skip_graph_tool
     def test_sbm(self):
         data = scp.datasets.test()
         out = scp.tl.sbm(data)
-        tree = scp.ul.to_tree(out)
-        assert len(tree.nodes) == 3
+        assert out.index.equals(data.index)
+        assert out.columns.equals(data.columns)
+        assert scp.ul.is_conflict_free_gusfield(out)
 
-    @skip_rpy2()
     @pytest.mark.skip(reason="Unable to import a package on GitHub!")
     def test_infercna(self):
         expr = scp.datasets.example(is_expression=True)
@@ -52,14 +49,12 @@ class TestSolversTmp:
         expr.obsm["cna"] = df_cna.loc[expr.obs_names]
         scp.pl.heatmap(expr, layer="cna")
 
-    @skip_rpy2()
     @pytest.mark.skip(reason="Unable to import a package on GitHub!")
     def test_dendro(self):
         adata = scp.datasets.example()
         scp.tl.dendro(adata)
         assert True
 
-    @skip_rpy2()
     @pytest.mark.skip(reason="Takes 6 minutes!")
     def test_cardelino(self):
         adata = scp.datasets.example()

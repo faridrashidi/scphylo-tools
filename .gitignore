@@ -154,6 +154,10 @@ gurobi.log
 # Repo specific
 scphylo.*
 
+# Pixi environments are local; keep the shared post-link configuration.
+.pixi/*
+!.pixi/config.toml
+
 # Temporary
 todo
 

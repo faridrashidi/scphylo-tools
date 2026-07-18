@@ -3,15 +3,9 @@
 import os
 import sys
 from pathlib import Path
-from sys import platform
 
 from setuptools import find_packages, setup
 from setuptools.extension import Extension
-
-if platform == "linux" or platform == "linux2":
-    os.environ["CC"] = "g++"
-elif platform == "darwin":
-    os.environ["CC"] = "clang++"
 
 extensions = [
     Extension(
@@ -106,7 +100,9 @@ try:
 except ImportError:
     HAS_CYTHON = False
 
-CYTHONIZE = bool(int(os.getenv("CYTHONIZE", 1 if HAS_CYTHON else 0)))
+# Use the checked-in C++ sources for normal installs and wheel/sdist builds.
+# Regenerating them is an explicit maintainer action (`pixi run cythonize`).
+CYTHONIZE = bool(int(os.getenv("CYTHONIZE", 0)))
 if CYTHONIZE:
     if not HAS_CYTHON:
         sys.stderr.write(

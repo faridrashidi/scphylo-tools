@@ -109,7 +109,8 @@ def dendro(
     with grdevices.render_to_bytesio(
         grdevices.png, width=width, height=height, res=dpi
     ) as image:
-        p = ro.r(cmd)
+        ro.r(cmd)
+        p = ro.globalenv["p"]
         ro.r.show(p)
 
     return display(Image(image.getvalue(), embed=True, retina=True))

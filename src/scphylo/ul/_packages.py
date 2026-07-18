@@ -23,8 +23,8 @@ def import_mpi4py():
     except ImportError:
         scp.logg.warn(
             "Unable to import `mpi4py`!",
-            "Make sure `mpi/mpich-x86_64` is already installed in your system.",
-            "Then install `mpi4py` using `pip`.",
+            "Install the locked Pixi development environment, or install an MPI "
+            "implementation and `mpi4py` manually.",
         )
         return None, True
 
@@ -42,8 +42,8 @@ def import_rpy2(name="base", how=""):
 
     except ImportError:
         scp.logg.warn(
-            "Unable to import `rpy2`, install it first as `pip install rpy2` version"
-            " `>=3.3.0`."
+            "Unable to import `rpy2`! Install the locked Pixi plotting environment "
+            "with `pixi install`, or install R and `rpy2` manually."
         )
         return None, True
 
@@ -63,8 +63,8 @@ def import_graphviz():
     except ImportError:
         scp.logg.warn(
             "Unable to import `pygraphviz`!",
-            "Make sure `Graphviz` is already installed in your system.",
-            "Then install `pygraphviz` using `pip`.",
+            "Install the locked Pixi plotting environment with `pixi install`, or "
+            "install both native Graphviz and `pygraphviz` manually.",
         )
         return None, True
 
@@ -77,6 +77,6 @@ def import_graph_tool():
     except ImportError:
         scp.logg.warn(
             "Unable to import `graph_tool`!",
-            "Make sure `graph_tool` is installed in your system.",
+            "Install the locked Pixi development environment.",
         )
         return None, True

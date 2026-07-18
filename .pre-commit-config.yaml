@@ -26,6 +26,7 @@ repos:
       - id: check-ast
       - id: check-symlinks
       - id: check-added-large-files
+        exclude: ^pixi\.lock$
       - id: check-executables-have-shebangs
       - id: fix-encoding-pragma
         args: [--remove]
@@ -49,6 +50,9 @@ repos:
     rev: v6.2.0
     hooks:
       - id: rstcheck
+        # README.rst is checked directly. Checking index.rst as well makes
+        # rstcheck miscalculate line numbers for its included README content.
+        exclude: ^docs/source/index\.rst$
         args:
           - --ignore-directives=currentmodule,autoclass,autofunction,minigallery,module,autosummary,click,toctree,bibliography
           - --ignore-roles=ref,mod

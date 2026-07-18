@@ -8,14 +8,14 @@ import scphylo as scp
 
 def sbm(data2):
     # TODO: implement
-    graph_tool, graph_tool_is_not_imported = scp.ul.import_graph_tool()
+    _, graph_tool_is_not_imported = scp.ul.import_graph_tool()
     if graph_tool_is_not_imported:
         scp.logg.error("Unable to import a package!")
 
-    from graph_tool.inference import minimize as gt_min
+    import graph_tool.all as gt
 
     def get_graph(df):
-        G = graph_tool.Graph(directed=False)
+        G = gt.Graph(directed=False)
         vtype = G.new_vertex_property("short")
         label2id = {}
 
@@ -79,8 +79,10 @@ def sbm(data2):
 
     min_blocks = 2
     max_blocks = 10
-    r = gt_min.minimize_nested_blockmodel_dl(
-        G, B_min=min_blocks, B_max=max_blocks, state_args={"clabel": vtype}
+    r = gt.minimize_nested_blockmodel_dl(
+        G,
+        state_args={"clabel": vtype},
+        multilevel_mcmc_args={"B_min": min_blocks, "B_max": max_blocks},
     )
     b = r.get_bs()[0]
 

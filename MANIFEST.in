@@ -15,13 +15,11 @@ include LICENSE.md
 include src/scphylo/datasets/*
 
 # Exclude development, configuration, and lock files
-exclude .gitattributes
 exclude .gitignore
 exclude .pre-commit-config.yaml
-exclude .readthedocs.yml
+exclude .readthedocs.yaml
 exclude .rstcheck.cfg
-exclude Makefile
-exclude uv.lock
+exclude pixi.lock
 exclude requirements.txt
 
 # Exclude build artifacts and compiled files

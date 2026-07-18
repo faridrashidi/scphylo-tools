@@ -14,26 +14,3 @@ Documentation
    cli_reference
    auto_examples/index.rst
    references
-
-..
-   Padding to avoid rstcheck crash due to include directive line number mismatch.
-   .
-   .
-   .
-   .
-   .
-   .
-   .
-   .
-   .
-   .
-   .
-   .
-   .
-   .
-   .
-   .
-   .
-   .
-   .
-   .

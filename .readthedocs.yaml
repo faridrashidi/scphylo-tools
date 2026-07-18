@@ -1,0 +1,16 @@
+version: 2
+
+build:
+  os: ubuntu-24.04
+  tools:
+    python: "latest"
+  jobs:
+    create_environment:
+      - asdf plugin add pixi
+      - asdf install pixi 0.73.0
+      - asdf global pixi 0.73.0
+    install:
+      - pixi install --locked -e docs
+    build:
+      html:
+        - pixi run --locked -e docs sphinx-build -T -b html docs/source $READTHEDOCS_OUTPUT/html

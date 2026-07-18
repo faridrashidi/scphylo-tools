@@ -3,6 +3,7 @@
 import click
 
 import scphylo as scp
+from scphylo.commands.utils._partf import partf as partf_command
 
 
 @click.group()
@@ -145,13 +146,4 @@ def cf2tree(file):
     pass
 
 
-@utils.command()
-@click.argument("data")
-@click.argument("alpha", type=float)
-@click.argument("beta", type=float)
-@click.option("--n_threads", default=1, type=int)
-@click.option("--n_samples", default=100, type=int)
-def partf(data, alpha, beta, n_threads, n_samples):
-    """Partition function."""
-    df = scp.io.read(data)
-    scp.tl.partition_function(df, alpha=alpha, beta=beta, n_samples=n_samples)
+utils.add_command(partf_command)

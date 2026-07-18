@@ -4,8 +4,6 @@ import pytest
 
 import scphylo as scp
 
-from ._helpers import skip_graphviz
-
 
 class TestUtils:
     def test_dist_l1_ignore_na_read_only(self):
@@ -68,7 +66,6 @@ class TestUtils:
         mtree = scp.ul.to_mtree(tree)
         assert len(mtree.nodes[8]["label"]) == 13
 
-    @skip_graphviz
     def test_cells_muts_rooted_at(self, test_cf_data_1):
         data = scp.io.read(test_cf_data_1)
 

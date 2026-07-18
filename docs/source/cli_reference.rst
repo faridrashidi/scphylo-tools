@@ -9,15 +9,6 @@ available commands by typing ``scphylo --help``. This produces the
 following output:
 
 
-.. click:: scphylo.commands.scphylo:cli
+.. click:: scphylo.commands._cli:cli
     :prog: scphylo
-    :commands: --help
-
-
-``mcalling`` - Run Mutation Calling
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. click:: scphylo.commands.scphylo:cli
-    :prog: scphylo
-    :commands: mcalling
     :nested: full

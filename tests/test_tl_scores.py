@@ -1,5 +1,4 @@
 import numpy as np
-import pytest
 
 import scphylo as scp
 
@@ -59,9 +58,6 @@ class TestScores:
         rf = scp.tl.rf(grnd, sol)
         assert np.abs(rf - 0.4864) < 0.0001
 
-    @pytest.mark.skip(
-        reason="Using MLTD in two tests is taking so long in test_scores!"
-    )
     def test_mltd(self, test_cf_data_1, test_cf_data_2):
         grnd = scp.io.read(test_cf_data_1)
         sol = scp.io.read(test_cf_data_2)

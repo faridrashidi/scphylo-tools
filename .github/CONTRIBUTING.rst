@@ -29,7 +29,8 @@ Clone the scphylo-tools repository from source::
 
 Install in development mode::
 
-    make install-dev
+    pixi install --locked
+    pixi run pre-commit-install
 
 
 Codebase structure
@@ -64,7 +65,7 @@ We rely on ``black`` and ``isort`` to handle most of the formatting. Both are
 integrated as pre-commit hooks. You can use ``pre-commit`` to check your
 changes::
 
-    make lint
+    pixi run lint
 
 Please remember to use tags like ``TODO[colon]`` and ``FIXME[colon]`` to
 highlight areas requiring future attention.
@@ -74,7 +75,7 @@ Testing
 -------
 We use ``pytest`` for automated testing. To execute the tests, run::
 
-    make test
+    pixi run test
 
 
 Writing documentation
@@ -90,24 +91,28 @@ modifications:
 
 In order to build the documentation, run::
 
-    make doc
+    pixi run docs
 
 
 Building on a new machine
 -------------------------
-To build the shared object (``.so``) files, execute::
+Pixi installs the compilers and all package dependencies and builds the editable
+package from the checked-in C++ sources::
 
-    python setup.py build
-    python setup.py build_ext --inplace
-    pip install -e .
+    pixi install --locked
+
+To create and validate the wheel and source distribution that are uploaded to
+PyPI, run::
+
+    pixi run package
 
 
 Building cpp files
 ------------------
-To generate ``.cpp`` files from ``.pyx`` sources, execute::
+Normal installs use the checked-in generated files. After changing a ``.pyx``
+source, regenerate its ``.cpp`` file explicitly::
 
-    CYTHONIZE=1 python setup.py install
-    pip install -e .
+    pixi run cythonize
 
 
 Submitting a PR
@@ -129,15 +134,12 @@ Creating a new release
 ----------------------
 Depending on the release type (major, minor, or patch), run::
 
-    make release patch
+    pixi run release patch
 
 Replace ``patch`` with ``minor`` or ``major`` for larger releases.
 
 By default, this will create a new tag and automatically update the
 ``__version__`` wherever necessary, commit the changes and create a new tag.
-If you have uncommitted files, you can use the ``--allow-dirty`` flag to
-include them in the commit.
-
 After bumping the version, push the commit **AND** the newly created tag to
 upstream. This can be done by setting ``push.followtags=true`` in your git
 config or by using ``git push --atomic <branch> <tag>``.

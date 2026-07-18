@@ -1,9 +1,6 @@
-import pytest
 from click.testing import CliRunner
 
 from scphylo.commands import cli
-
-from ._helpers import skip_graphviz
 
 
 class TestCommandsSolver:
@@ -130,7 +127,6 @@ class TestCommandsSolver:
         )
         assert result.exit_code == 0
 
-    @skip_graphviz
     def test_cf2tree(self, test_dir):
         result = self.runner.invoke(
             cli,
@@ -142,7 +138,6 @@ class TestCommandsSolver:
         )
         assert result.exit_code == 0
 
-    @pytest.mark.skip(reason="Error Don't know!")
     def test_partf(self, test_data):
         result = self.runner.invoke(
             cli,
@@ -152,13 +147,14 @@ class TestCommandsSolver:
                 test_data,
                 "0.0001",
                 "0.1",
-                "--n_threads 2",
-                "--n_samples 100",
+                "--n_threads",
+                "2",
+                "--n_samples",
+                "100",
             ],
         )
         assert result.exit_code == 0
 
-    @pytest.mark.skip(reason="PyTest issue with multithreading!")
     def test_booster(self, test_data):
         result = self.runner.invoke(
             cli,
@@ -168,16 +164,20 @@ class TestCommandsSolver:
                 test_data,
                 "0.0000001",
                 "0.1",
-                "--solver scite",
-                "--n_samples 100",
-                "--sample_size 15",
-                "--n_jobs 2",
-                "--n_iterations 10000",
+                "--solver",
+                "scite",
+                "--n_samples",
+                "100",
+                "--sample_size",
+                "15",
+                "--n_jobs",
+                "2",
+                "--n_iterations",
+                "10000",
             ],
         )
         assert result.exit_code == 0
 
-    @pytest.mark.skip(reason="pyBnB issue with CLI!")
     def test_bnb(self, test_data):
         result = self.runner.invoke(
             cli,
@@ -185,7 +185,8 @@ class TestCommandsSolver:
                 "solver",
                 "bnb",
                 test_data,
-                "-b simulated",
+                "-b",
+                "simulated",
             ],
         )
         assert result.exit_code == 0

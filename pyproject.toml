@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61.0", "setuptools_scm>=8.0", "wheel", "Cython"]
+requires = ["setuptools>=61.0", "setuptools_scm>=8.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -12,12 +12,12 @@ dependencies = [
     "apted",
     "biopython",
     "click",
-    "cython",
     "cyvcf2",
     "ete3",
     "graphviz",
     "ipython",
     "joblib",
+    "legacy-cgi; python_version >= '3.13'",
     "matplotlib",
     "natsort",
     "networkx",
@@ -102,7 +102,8 @@ where = ["src"]
 [tool.setuptools_scm]
 
 [tool.cibuildwheel]
-build = "cp3*-* pp3*-*"
+# Publish wheels only for the CPython versions covered by the locked CI matrix.
+build = "cp31{1,2,3}-*"
 
 [tool.bumpversion]
 current_version = "0.0.5"
@@ -112,14 +113,132 @@ tag = true
 tag_name = "v{new_version}"
 parse = '(?P<major>\d+)\.(?P<minor>\d+)\.(?P<patch>\d+)'
 serialize = ["{major}.{minor}.{patch}"]
+pre_commit_hooks = ["pixi lock", "git add pixi.lock"]
+
+[[tool.bumpversion.files]]
+filename = "pyproject.toml"
+regex = true
+search = '(?m)^version = "{current_version}"$'
+replace = 'version = "{new_version}"'
 
 [[tool.bumpversion.files]]
 filename = "src/scphylo/__init__.py"
 search = '__version__ = "{current_version}"'
 replace = '__version__ = "{new_version}"'
 
-[[tool.bumpversion.files]]
-filename = "uv.lock"
-regex = true
-search = '(?ms)(\[\[package\]\]\nname = "scphylo-tools"\nversion = )"{current_version}"'
-replace = '\1"{new_version}"'
+[tool.pixi.workspace]
+channels = ["conda-forge", "bioconda"]
+platforms = ["linux-64", "osx-64", "osx-arm64"]
+requires-pixi = ">=0.73.0,<0.74"
+
+[tool.pixi.workspace.conda-pypi-map]
+conda-forge = { location = "https://raw.githubusercontent.com/prefix-dev/parselmouth/main/files/compressed_mapping.json", mapping-mode = "replace" }
+bioconda = { mapping = { cyvcf2 = "cyvcf2" }, mapping-mode = "replace", same-name-heuristic = false }
+
+# Prefer pre-built conda packages for the Python runtime dependencies that are
+# available there. The remaining project dependencies are resolved from PyPI.
+[tool.pixi.dependencies]
+python = ">=3.11,<3.14"
+cxx-compiler = "*"
+setuptools = ">=61"
+setuptools-scm = ">=8"
+wheel = "*"
+anndata = "*"
+biopython = "*"
+# Bump My Version cannot currently parse Click's 8.3+ sentinel defaults.
+click = "<8.3"
+cyvcf2 = "*"
+ete3 = "*"
+ipython = "*"
+joblib = "*"
+matplotlib = "*"
+natsort = "*"
+networkx = "*"
+numba = "*"
+numpy = "*"
+pandas = "*"
+pyyaml = "*"
+scikit-learn = "*"
+scipy = "*"
+seaborn = "*"
+termcolor = "*"
+tqdm = "*"
+
+# System and cross-language plotting dependencies. Installing these through
+# Pixi replaces the former Homebrew, apt, pip, and Rscript setup steps.
+[tool.pixi.feature.plotting.dependencies]
+graphviz = "*"
+python-graphviz = "*"
+pygraphviz = "*"
+r-base = ">=4.5,<4.6"
+rpy2 = ">=3.6,<3.7"
+bioconductor-ggtree = ">=4,<4.1"
+bioconductor-ggtreeextra = ">=1.20,<1.21"
+r-ape = "*"
+r-aplot = "*"
+r-cowplot = "*"
+r-ggplot2 = "*"
+
+# Solver backends included in every development and test environment.
+[tool.pixi.feature.solvers.dependencies]
+bioconductor-graph = "*"
+graph-tool = ">=2.98,<3"
+mpi4py = "*"
+
+[tool.pixi.pypi-dependencies]
+scphylo-tools = { path = ".", editable = true }
+
+[tool.pixi.feature.dev.dependencies]
+cython = "*"
+pre-commit = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-xdist = "*"
+bump-my-version = "*"
+ipykernel = "*"
+python-build = "*"
+twine = "*"
+
+[tool.pixi.feature.docs.dependencies]
+furo = "*"
+memory_profiler = "*"
+nbsphinx = "*"
+pandoc = "*"
+pydata-sphinx-theme = "*"
+pypandoc = "*"
+sphinx = "<6"
+sphinx-click = "*"
+sphinx-gallery = "*"
+sphinxcontrib-bibtex = "*"
+
+[tool.pixi.feature.py311.dependencies]
+python = "3.11.*"
+
+[tool.pixi.feature.py312.dependencies]
+python = "3.12.*"
+
+[tool.pixi.feature.py313.dependencies]
+python = "3.13.*"
+
+[tool.pixi.environments]
+default = { features = ["dev", "plotting", "solvers"], solve-group = "default" }
+lint = { features = ["dev", "py311"], solve-group = "py311" }
+docs = { features = ["docs", "plotting", "py311"], solve-group = "py311" }
+py311 = { features = ["dev", "plotting", "solvers", "py311"], solve-group = "py311" }
+py312 = { features = ["dev", "plotting", "solvers", "py312"], solve-group = "py312" }
+py313 = { features = ["dev", "plotting", "solvers", "py313"], solve-group = "py313" }
+
+[tool.pixi.tasks]
+clean = "rm -rf docs/build htmlcov .coverage .coverage.* docs/source/scphylo* docs/source/auto_examples docs/source/gen_modules docs/source/sg_execution_times.rst dist build"
+lint = { cmd = "pre-commit run --all-files", default-environment = "lint" }
+test = { cmd = "pytest --disable-warnings --cov=scphylo --cov-report=html tests", default-environment = "default" }
+test-plotting = { cmd = "pytest --disable-warnings tests/test_pl.py", default-environment = "default" }
+docs = { cmd = "sphinx-build -M html docs/source docs/build --keep-going", default-environment = "docs" }
+docs-serve = { cmd = "python -m http.server 8080", cwd = "docs/build/html", depends-on = ["docs"], default-environment = "docs" }
+pre-commit-install = { cmd = "pre-commit install", default-environment = "default" }
+cythonize = { cmd = "python setup.py build_ext --inplace", env = { CYTHONIZE = "1" }, default-environment = "default" }
+_clean-dist = "rm -rf dist build"
+build = { cmd = "python -m build", depends-on = ["_clean-dist"], default-environment = "default" }
+check-dist = { cmd = "twine check dist/*", depends-on = ["build"], default-environment = "default" }
+package = { depends-on = ["check-dist"] }
+release = { cmd = "bump-my-version bump {{ part }}", args = [{ arg = "part" }], default-environment = "default" }

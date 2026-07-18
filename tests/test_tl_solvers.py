@@ -1,6 +1,6 @@
 import scphylo as scp
 
-from ._helpers import skip_gurobi, skip_mpi4py, skip_rpy2
+from ._helpers import skip_gurobi, skip_rpy2
 
 
 class TestSolvers:
@@ -14,12 +14,10 @@ class TestSolvers:
         assert scp.ul.is_conflict_free_gusfield(df_out)
         assert scp.ul.is_conflict_free(df_out)
 
-    @skip_mpi4py
     def test_bnb_simulated(self):
         df_out = scp.tl.bnb(self.df_in, bounding="simulated")
         assert scp.ul.is_conflict_free_gusfield(df_out)
 
-    @skip_mpi4py
     def test_bnb_real(self):
         df_out = scp.tl.bnb(self.df_in, bounding="real", time_limit=20)
         assert scp.ul.is_conflict_free_gusfield(df_out)
