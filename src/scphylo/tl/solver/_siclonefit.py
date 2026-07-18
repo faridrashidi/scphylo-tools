@@ -76,7 +76,7 @@ def siclonefit(
         f"-fp {alpha} "
         f"-fn {beta} "
         "-df 0 "
-        f"-missing {np.sum(I_mtr == 3)/(I_mtr.size)} "
+        f"-missing {np.sum(I_mtr == 3) / (I_mtr.size)} "
         f"-iter {n_iters} "
         f"-cellNames {tmpdir.name}/siclonefit.cellnames "
         f"-geneNames {tmpdir.name}/siclonefit.genenames "

@@ -153,7 +153,7 @@ def to_cfmatrix(tree):
     for leaf in leaves:
         nodes = nx.dijkstra_path(tree, root, leaf)
         mut = []
-        for first, second in zip(nodes, nodes[1:]):
+        for first, second in zip(nodes, nodes[1:], strict=False):
             mut += tree.edges[(first, second)]["label"].split(
                 tree.graph["splitter_mut"]
             )
@@ -181,10 +181,10 @@ def to_mtree(tree):
         The mutation tree in which mutations are in nodes.
     """
     tree2 = nx.DiGraph()
-    for u, v, l in tree.edges.data("label"):
+    for u, v, label in tree.edges.data("label"):
         if tree.in_degree(u) == 0:
             tree2.add_node(u, label="root")
-        muts = l.split(tree.graph["splitter_mut"])
+        muts = label.split(tree.graph["splitter_mut"])
         tree2.add_node(v, label=muts)
         tree2.add_edge(u, v)
     return tree2
@@ -200,7 +200,7 @@ def _to_newick(tree):
         node_ids = _children(node_id)
         if len(node_ids) == 0:
             cells = tree.nodes[node_id]["label"].split(tree.graph["splitter_cell"])
-            return "(" + ",".join(cells) + f")Node{node_id+1}"
+            return "(" + ",".join(cells) + f")Node{node_id + 1}"
         elif len(node_ids) > 0:
             cells = tree.nodes[node_id]["label"].split(tree.graph["splitter_cell"])
             if not ("––" in cells or "root" in cells):
@@ -209,13 +209,13 @@ def _to_newick(tree):
                     + ",".join(cells)
                     + ","
                     + ",".join([_newick_recursive(node_id) for node_id in node_ids])
-                    + f")Node{node_id+1}"
+                    + f")Node{node_id + 1}"
                 )
             else:
                 return (
                     "("
                     + ",".join([_newick_recursive(node_id) for node_id in node_ids])
-                    + f")Node{node_id+1}"
+                    + f")Node{node_id + 1}"
                 )
         else:
             return None

@@ -82,7 +82,7 @@ def gpps(
     time_limit,
     n_threads,
 ):
-    """gpps.
+    """Gpps.
 
     an ILP-based approach for inferring cancer progression with mutation losses from
     single cell data :cite:`gpps`.

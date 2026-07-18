@@ -61,9 +61,9 @@ Tests structure:
 
 Code style guide
 ----------------
-We rely on ``black`` and ``isort`` to handle most of the formatting. Both are
-integrated as pre-commit hooks. You can use ``pre-commit`` to check your
-changes::
+We use ``ruff`` for linting, import sorting, and formatting, and ``ty`` for
+static type checking. Both are integrated as pre-commit hooks. You can use
+``pre-commit`` to check your changes::
 
     pixi run lint
 

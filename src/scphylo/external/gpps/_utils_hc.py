@@ -79,9 +79,8 @@ class Node:
                 print(f'\t"{self.id_node}" [label="{self.name}"];')
             else:
                 print(
-                    '\t"{}" [color=indianred1, style=filled, label="{}"];'.format(
-                        self.id_node, self.name[:-1]
-                    )
+                    f'\t"{self.id_node}" [color=indianred1, style=filled, '
+                    f'label="{self.name[:-1]}"];'
                 )
 
     def print_node_dot_file(self, fout):
@@ -92,9 +91,8 @@ class Node:
                 fout.write(f'\t"{self.id_node}" [label="{self.name}"];\n')
             else:
                 fout.write(
-                    '\t"{}" [color=indianred1, style=filled, label="{}"];\n'.format(
-                        self.id_node, self.name[:-1]
-                    )
+                    f'\t"{self.id_node}" [color=indianred1, style=filled, '
+                    f'label="{self.name[:-1]}"];\n'
                 )
 
 
@@ -338,7 +336,7 @@ def import_ilp_out(ilp_matrix, k_dollo, mutation_names):
         mut_names.append(mut)
         mut_ids.append(mut_index)
         for _ in range(k_dollo):
-            mut_names.append("%s---" % mut)
+            mut_names.append(f"{mut}---")
             mut_ids.append(mut_index)
         mut_index += 1
 

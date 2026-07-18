@@ -66,7 +66,7 @@ def mutect2(outdir, normal, ref, time, mem, afterok):
         cmds += cmd([f"module load {scp.settings.tools['gatk']}"])
         cmds += cmd(
             [
-                f'gatk --java-options "-Xmx{int(mem)-10}g"',
+                f'gatk --java-options "-Xmx{int(mem) - 10}g"',
                 "Mutect2",
                 f"--reference {config['ref']}",
                 f"--input {outdir}/{sample}.markdup_bqsr.bam",
@@ -77,7 +77,7 @@ def mutect2(outdir, normal, ref, time, mem, afterok):
         )
         cmds += cmd(
             [
-                f'gatk --java-options "-Xmx{int(mem)-10}g"',
+                f'gatk --java-options "-Xmx{int(mem) - 10}g"',
                 "FilterMutectCalls",
                 f"--reference {config['ref']}",
                 f"--variant {outdir}/{sample}.tmp.mutect2.vcf",

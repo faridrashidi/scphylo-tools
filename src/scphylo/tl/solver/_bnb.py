@@ -442,7 +442,9 @@ def make_constraints_np_matrix(
                         # will be added define new B variable
                         b_pq = B_vars_offset + num_var_B
                         num_var_B += 1
-                        for row_list, col, sign in zip((r01, r10), (p, q), (1, -1)):
+                        for row_list, col, sign in zip(
+                            (r01, r10), (p, q), (1, -1), strict=False
+                        ):
                             for row in row_list:
                                 var_list = (
                                     zero_vars if matrix[row, col] == 0 else na_vars
@@ -501,7 +503,9 @@ def make_constraints_np_matrix(
                         num_var_C += 1
                         c_pq1 = C_vars_offset + num_var_C
                         num_var_C += 1
-                        for row_list, col, sign in zip((r01, r10), (p, q), (1, -1)):
+                        for row_list, col, sign in zip(
+                            (r01, r10), (p, q), (1, -1), strict=False
+                        ):
                             for row in row_list:
                                 var_list = (
                                     zero_vars if matrix[row, col] == 0 else na_vars
@@ -545,22 +549,22 @@ def is_conflict_free_gusfield_and_get_two_columns_in_coflicts(I_mtr, na_value):
 
     Ip = I_mtr.copy()
     Ip[Ip == na_value] = 0
-    O, idx = sort_bin(Ip)
+    sorted_matrix, idx = sort_bin(Ip)
     # TD: delete duplicate columns
-    # print(O, '\n')
-    Lij = np.zeros(O.shape, dtype=int)
-    for i in range(O.shape[0]):
+    # print(sorted_matrix, '\n')
+    Lij = np.zeros(sorted_matrix.shape, dtype=int)
+    for i in range(sorted_matrix.shape[0]):
         maxK = 0
-        for j in range(O.shape[1]):
-            if O[i, j] == 1:
+        for j in range(sorted_matrix.shape[1]):
+            if sorted_matrix[i, j] == 1:
                 Lij[i, j] = maxK
                 maxK = j + 1
     # print(Lij, '\n')
     Lj = np.amax(Lij, axis=0)
     # print(Lj, '\n')
-    for i in range(O.shape[0]):
-        for j in range(O.shape[1]):
-            if O[i, j] == 1:
+    for i in range(sorted_matrix.shape[0]):
+        for j in range(sorted_matrix.shape[1]):
+            if sorted_matrix[i, j] == 1:
                 if Lij[i, j] != Lj[j]:
                     return False, (idx[j], idx[Lj[j] - 1])
     return True, (None, None)
@@ -846,9 +850,9 @@ class BnB(pybnb.Problem):
         self.boundingAlg = boundingAlg
         self.delta_na = None
         if self.has_na:
-            assert (
-                boundingAlg.na_support
-            ), "Input has N/A coordinates but bounding algorithm doesn't support it."
+            assert boundingAlg.na_support, (
+                "Input has N/A coordinates but bounding algorithm doesn't support it."
+            )
             self.delta_na = sp.lil_matrix(
                 I_mtr.shape, dtype=np.int8
             )  # the coordinates with na that are decided to be 1
@@ -917,9 +921,9 @@ class BnB(pybnb.Problem):
                 newnode.state[0].count_nonzero() == self.bound_value
             ):  # current_obj == lb => no need to explore
                 need_for_new_nodes = False
-            assert (
-                newnode.queue_priority is not None
-            ), "Right before adding a node its priority in the queue is not set!"
+            assert newnode.queue_priority is not None, (
+                "Right before adding a node its priority in the queue is not set!"
+            )
             yield newnode
 
         if need_for_new_nodes:
@@ -978,9 +982,9 @@ class BnB(pybnb.Problem):
                     after_here=new_bound - nf01,
                     icf=node_icf,
                 )
-                assert (
-                    node.queue_priority is not None
-                ), "Right before adding a node its priority in the queue is not set!"
+                assert node.queue_priority is not None, (
+                    "Right before adding a node its priority in the queue is not set!"
+                )
                 yield node
 
 

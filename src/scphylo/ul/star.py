@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """Collect STAR alignment summaries into a tabular report."""
 
 import glob

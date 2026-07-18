@@ -1,5 +1,5 @@
 import random
-from functools import lru_cache
+from functools import cache
 
 import numpy as np
 
@@ -14,7 +14,7 @@ __author__ = "Simone Ciccolella"
 __date__ = "11/30/21"
 
 
-@lru_cache(maxsize=None)
+@cache
 def cell_row_likelihood(input_row, node_genotype, alpha, beta):
     """Calculate a cell's log-likelihood at a candidate tree node."""
     likelihood = 0
@@ -115,13 +115,12 @@ def hill_climbing(
     current_lh, _ = greedy_tree_likelihood(
         start_tree, start_nid_dict, input_scs, alpha, beta
     )
-    scp.logg.debug("Initial log-likelihood: %f" % current_lh)
+    scp.logg.debug(f"Initial log-likelihood: {current_lh:f}")
 
     current_iteration = 1
     while current_iteration < max_iterations:
-
         if current_iteration % 10 == 0:
-            scp.logg.debug("Current iteration: %d" % current_iteration)
+            scp.logg.debug(f"Current iteration: {current_iteration:d}")
 
         neighbors = generate_neighborhood(current_tree, current_dict, neighborhood_size)
         next_eval = -np.inf
@@ -139,7 +138,7 @@ def hill_climbing(
             current_tree = next_sol[0]
             current_dict = next_sol[1]
             current_lh = next_eval
-            scp.logg.debug("Found a better solution with likelihood: %f" % current_lh)
+            scp.logg.debug(f"Found a better solution with likelihood: {current_lh:f}")
         current_iteration += 1
 
     return current_tree, current_dict

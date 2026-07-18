@@ -70,7 +70,7 @@ def _get_tree(
     # geom_tippoint(aes(color={label_color}), size={tiplab_size}) +
     geom_tiplab(aes(color={label_color}),
                 align=TRUE,
-                linesize={line_size/4},
+                linesize={line_size / 4},
                 angle=-90,
                 hjust=-0.1,
                 size={tiplab_size},
@@ -118,7 +118,7 @@ def _add_chromplot_helper(name, length):
     cmd = f"""
     p2 <- ggplot(data=info1) +
     geom_rect(aes(xmin=id_index-0.3, xmax=id_index+0.3,
-                  ymax={length/1000000}, ymin=0, fill='white', color='black'),
+                  ymax={length / 1000000}, ymin=0, fill='white', color='black'),
               show.legend=FALSE) +
     scale_fill_identity(guide='none') +
     scale_color_identity(guide='none') +
@@ -138,7 +138,7 @@ def _add_chromplot_helper(name, length):
     labs(y='chr{name}', x='')
     p2 <- p2 + geom_segment(x=4-0.3, y=2, xend=4+0.3, yend=2,
                             size=0.1, color='blue')
-    p <- p %>% insert_bottom(p2, height={length/500000000})
+    p <- p %>% insert_bottom(p2, height={length / 500000000})
     """
     return cmd
 
@@ -153,8 +153,8 @@ def _add_chromplot():
 def _clonal_cell_mutation_list(tree):
     muts_list = []
     cells_list = []
-    for _, v, l in tree.edges.data("label"):
-        muts = l.split(tree.graph["splitter_mut"])
+    for _, v, label in tree.edges.data("label"):
+        muts = label.split(tree.graph["splitter_mut"])
         if "––" not in tree.nodes[v]["label"]:
             cells = tree.nodes[v]["label"].split(tree.graph["splitter_cell"])
             for mut in muts:
@@ -177,19 +177,19 @@ def _newick_info2_mutation_list(tree):
         if tree2.in_degree(node) == 0:
             row.append(
                 {
-                    "newick_label": f"Node{node+1}",
+                    "newick_label": f"Node{node + 1}",
                     "nmuts_label": "root",
-                    "nodeid_label": f"[{node+1}]",
-                    "both_label": f"[{node+1}]: root",
+                    "nodeid_label": f"[{node + 1}]",
+                    "both_label": f"[{node + 1}]: root",
                 }
             )
         else:
             row.append(
                 {
-                    "newick_label": f"Node{node+1}",
+                    "newick_label": f"Node{node + 1}",
                     "nmuts_label": f"{len(tree2.nodes[node]['label'])}",
-                    "nodeid_label": f"[{node+1}]",
-                    "both_label": f"[{node+1}]: {len(tree2.nodes[node]['label'])}",
+                    "nodeid_label": f"[{node + 1}]",
+                    "both_label": f"[{node + 1}]: {len(tree2.nodes[node]['label'])}",
                 }
             )
     info2 = pd.DataFrame(row)
@@ -204,14 +204,14 @@ def _newick_info2_mutation_list(tree):
                 row.append(
                     {
                         "index": mut,
-                        "node_id": f"[{node+1}]",
+                        "node_id": f"[{node + 1}]",
                     }
                 )
             else:
                 row.append(
                     {
                         "index": mut,
-                        "Node": f"[{node+1}]",
+                        "Node": f"[{node + 1}]",
                         "Ensemble": ens,
                         "Gene": gene,
                         "Chrom": chrom,

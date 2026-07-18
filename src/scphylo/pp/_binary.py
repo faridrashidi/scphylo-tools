@@ -38,9 +38,9 @@ def binarym_statistics(df):
     b = (df == 1).sum().sum()
     d = (df == 3).sum().sum()
     scp.logg.info(f"size = {df.shape[0]} × {df.shape[1]}")
-    scp.logg.info(f"    REF     = {a:6d} ({100*a/t:2.1f}%)")
-    scp.logg.info(f"    HET     = {b:6d} ({100*b/t:2.1f}%)")
-    scp.logg.info(f"    UNKNOWN = {d:6d} ({100*d/t:2.1f}%)")
+    scp.logg.info(f"    REF     = {a:6d} ({100 * a / t:2.1f}%)")
+    scp.logg.info(f"    HET     = {b:6d} ({100 * b / t:2.1f}%)")
+    scp.logg.info(f"    UNKNOWN = {d:6d} ({100 * d / t:2.1f}%)")
 
 
 def consensus_combine(df):

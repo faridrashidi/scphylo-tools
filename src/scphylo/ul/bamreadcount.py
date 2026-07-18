@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """Convert bam-readcount output into an annotated AnnData matrix."""
 
 import glob

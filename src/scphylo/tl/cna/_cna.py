@@ -34,7 +34,7 @@ def infercna(expr, ref_cells, genome="hg19", show_heatmap=False):
 
     Examples
     --------
-    >>> cna_log = scp.tl.infercna(crc1, {'normal': ['NC_502']})
+    >>> cna_log = scp.tl.infercna(crc1, {"normal": ["NC_502"]})
     """
     infercna, infercna_is_not_imported = scp.ul.import_rpy2(
         "infercna",

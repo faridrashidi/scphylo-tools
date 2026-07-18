@@ -16,9 +16,9 @@ def read_CF_matrix_to_int_dictionary(path_CFmatrix_file):
     with open(path_CFmatrix_file) as input_file:
         mut_ids = input_file.readline().strip().split()[1:]
         m = len(mut_ids)
-        assert (
-            len(set(mut_ids)) == m
-        ), "ERROR. Repeating mutations present in column names."
+        assert len(set(mut_ids)) == m, (
+            "ERROR. Repeating mutations present in column names."
+        )
 
         E = {}
         for line in input_file.readlines():
@@ -56,7 +56,7 @@ def get_dependency_from_conflict_free_matrix(mut1, mut2, matrix):
         matrix is represented as dictionary of dictionaries with elements
         matrix[cell_id][mut_id]
 
-    Returns:
+    Returns
     -------
     This function can return one of the following five values or report error (unknown
     case encountered).
@@ -138,9 +138,9 @@ def prepare_dependencies(
     all_mut_ids, input_folder, output_file, max_num_submatrices, disable_tqdm
 ):
     """Aggregate mutation dependencies from conflict-free submatrices."""
-    assert len(set(all_mut_ids)) == len(
-        all_mut_ids
-    ), "ERROR. Mutation ids must be unique."
+    assert len(set(all_mut_ids)) == len(all_mut_ids), (
+        "ERROR. Mutation ids must be unique."
+    )
 
     dependencies = {}
     for mut1 in all_mut_ids:

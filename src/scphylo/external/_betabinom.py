@@ -354,7 +354,6 @@ def logcf(x, i, d):
     b2 = c4 * b1 - i * b2
 
     while abs(a2 * b1 - a1 * b2) > abs(cfVSmall * b1 * a2):
-
         c3 = c2 * c2 * x
         c2 = c2 + d
         c4 = c4 + d

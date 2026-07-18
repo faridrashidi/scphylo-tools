@@ -207,7 +207,8 @@ def similarity(tree1, tree2, mode="sigmoid", sigmoid_mult=10.0, cores=1):
     """
     Compute the similarity score of the two trees.
 
-    Parameters:
+    Parameters
+    ----------
     tree1 (Tree): MP3-treesim tree representation
     tree2 (Tree): MP3-treesim tree representation
 
@@ -220,7 +221,8 @@ def similarity(tree1, tree2, mode="sigmoid", sigmoid_mult=10.0, cores=1):
                  sigmoid calculation.
     cores (int); Number of cores used for the computation.
 
-    Returns:
+    Returns
+    -------
     float: Similarity score
     """
     if mode not in ["sigmoid", "intersection", "union", "geometric"]:
@@ -296,13 +298,15 @@ def build_tree(T, labeled_only=False, exclude=None):
     The tree must have a attribute `label` for each node. Labels in a node
     must be separated by a comma.
 
-    Parameters:
+    Parameters
+    ----------
     T (nx.nx_agraph): Tree in networkx representation
     labeled_only (bool): If true nodes without attribute `label`
     will be ignored, meaning that T is a partially labeled tree.
     exclude (list(str)): List of labels to exclude from computation
 
-    Returns:
+    Returns
+    -------
     Tree: MP3-treesim tree representation
     """
     if not nx.is_tree(T):

@@ -85,9 +85,9 @@ def write_dictionary_of_dictionaries_to_file(D, path_output_file):
     """
     row_ids = list(D.keys())
     column_ids = list(D[row_ids[0]].keys())
-    assert (
-        len(row_ids) > 0 and len(column_ids) > 0
-    ), "ERROR. Number of columns or number of rows equal to zero."
+    assert len(row_ids) > 0 and len(column_ids) > 0, (
+        "ERROR. Number of columns or number of rows equal to zero."
+    )
 
     for row_id in row_ids:
         assert set(D[row_id].keys()) == set(column_ids), (
@@ -116,7 +116,7 @@ def get_row_ids_from_2D_hash(D):
     ---------
     D: dictionary of dictionaries
 
-    Returns:
+    Returns
     -------
     Array of strings representing list of keys of D.
     """
@@ -133,7 +133,7 @@ def get_column_ids_from_2D_hash(D):
         It is assumed that this dictionary is such that D[x].keys() is the same for
         all x \in D.keys().
 
-    Returns:
+    Returns
     -------
     Array of strings representing list of keys of D.
     """
@@ -237,7 +237,7 @@ def compute_weights_from_dependencies_file(path_dependencies_file):
         Expected header of this file can be found below in expected_header_line variable
         and it explains columns present in dependencies file.
 
-    Returns:
+    Returns
     -------
     3-D dictionary weights accessed as follows: weights[mut1][mut2][dependency]
     Here, dependency can be any of ANCESTOR_DESCENDANT, DESCENDANT_ANCESTOR or
@@ -321,10 +321,8 @@ def get_ordered_list_of_mutations_from_input_matrix(path_noisy_SC_matrix):
     cell_ids = list(D.keys())
     mut_ids = list(D[cell_ids[0]].keys())
 
-    negative_num_ones = (
-        {}
-    )  # = (-1)*(number of ones in a column). Consequently, mutations having more ones
-    # will be added to tree first.
+    # Negative number of ones in a column. Mutations with more ones are added first.
+    negative_num_ones = {}
     for mut_id in mut_ids:
         negative_num_ones[mut_id] = (-1) * len(
             [D[cell_id][mut_id] for cell_id in cell_ids if D[cell_id][mut_id] == 1]
@@ -338,9 +336,9 @@ def get_ordered_list_of_mutations_from_input_matrix(path_noisy_SC_matrix):
 def get_next_mutation(weights, existing_mutations):
     """Choose the next mutation using its aggregate dependency advantage."""
     mut_ids = list(weights.keys())
-    assert len(existing_mutations) < len(
-        mut_ids
-    ), "ERROR in calling function get_next_mutation. All mutations have been used."
+    assert len(existing_mutations) < len(mut_ids), (
+        "ERROR in calling function get_next_mutation. All mutations have been used."
+    )
 
     candidates_for_addition = [x for x in mut_ids if x not in existing_mutations]
 

@@ -258,10 +258,10 @@ def iscistree(df_input, alpha, beta, n_iters=np.inf):
 
         node = None
         for clade in tree.find_clades():
-            if clade.name == f"{D.shape[0]-1}":
+            if clade.name == f"{D.shape[0] - 1}":
                 node = clade
         tree.root_with_outgroup(node)
-        tree.prune(f"{D.shape[0]-1}")
+        tree.prune(f"{D.shape[0] - 1}")
         return tree
 
     def denoise_linear(I_mtr, alpha, beta, opt_tree):

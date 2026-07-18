@@ -148,7 +148,7 @@ def siclonefit(
         iscfs = [x[2] for x in output]
         best_i = np.Inf
         best = np.Inf
-        for i, items in enumerate(zip(scores, iscfs)):
+        for i, items in enumerate(zip(scores, iscfs, strict=False)):
             score, iscf = items
             if iscf and score < best:
                 best_i = i

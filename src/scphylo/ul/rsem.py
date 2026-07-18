@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """Collect RSEM gene-expression results into an AnnData dataset."""
 
 import glob

@@ -19,7 +19,7 @@ def sciphi(df_input):
     matrix_I = df_input.values
     with open(f"{tmpdir}/sciphi.mpileup", "w") as fout:
         for j in range(matrix_I.shape[1]):
-            line = f"seq1\t{(j+1)*100}\tA"
+            line = f"seq1\t{(j + 1) * 100}\tA"
             r = q = ""
             for i in range(matrix_I.shape[0]):
                 if matrix_I[i, j] == 0:

@@ -1,8 +1,7 @@
 """scPhylo Module."""
 
-from scphylo import datasets, io
+from scphylo import datasets, io, pl, pp, settings, tl, ul
 from scphylo import logging as logg
-from scphylo import pl, pp, settings, tl, ul
 
 __author__ = ", ".join(["Farid Rashidi"])
 __maintainer__ = ", ".join(["Farid Rashidi"])

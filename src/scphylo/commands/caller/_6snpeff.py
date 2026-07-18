@@ -55,7 +55,7 @@ def snpeff(outdir, ref, time, mem, afterok):
         cmds += cmd([f"module load {scp.settings.tools['snpeff']}"])
         cmds += cmd(
             [
-                f"java -Xmx{int(mem)-4}g -jar $SNPEFF_JAR",
+                f"java -Xmx{int(mem) - 4}g -jar $SNPEFF_JAR",
                 "-hgvs",
                 # "-cancer",
                 # f"-cancerSamples {1}",

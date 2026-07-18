@@ -63,14 +63,14 @@ def varfilter(outdir, ref, time, mem, afterok):
         cmds += cmd([f"module load {scp.settings.tools['gatk']}"])
         cmds += cmd(
             [
-                f'gatk --java-options "-Xmx{int(mem)-10}g"',
+                f'gatk --java-options "-Xmx{int(mem) - 10}g"',
                 "IndexFeatureFile",
                 f"--input {outdir}/{sample}.vcf",
             ]
         )
         cmds += cmd(
             [
-                f'gatk --java-options "-Xmx{int(mem)-10}g"',
+                f'gatk --java-options "-Xmx{int(mem) - 10}g"',
                 "VariantFiltration",
                 f"--reference {config['ref']}",
                 f"--variant {outdir}/{sample}.vcf",
@@ -85,7 +85,7 @@ def varfilter(outdir, ref, time, mem, afterok):
         )
         cmds += cmd(
             [
-                f'gatk --java-options "-Xmx{int(mem)-10}g"',
+                f'gatk --java-options "-Xmx{int(mem) - 10}g"',
                 "SelectVariants",
                 f"--variant {outdir}/{sample}.tmp.filtered.vcf",
                 f"--output {outdir}/{sample}.filtered.vcf",

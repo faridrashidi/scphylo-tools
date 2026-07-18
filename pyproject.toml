@@ -127,6 +127,59 @@ filename = "src/scphylo/__init__.py"
 search = '__version__ = "{current_version}"'
 replace = '__version__ = "{new_version}"'
 
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[tool.ruff.lint]
+explicit-preview-rules = true
+preview = true
+select = [
+    "B",
+    "BLE",
+    "C4",
+    "D",
+    "E4",
+    "E7",
+    "E9",
+    "E501",
+    "F",
+    "I",
+    "PGH004",
+    "PYI033",
+    "RUF100",
+    "S307",
+    "TID",
+    "UP",
+    "W605",
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
+[tool.ty.src]
+include = ["src", "tests", "examples"]
+
+# The existing codebase is largely untyped. Keep its current diagnostic
+# categories visible as warnings while allowing new categories to block commits.
+[tool.ty.rules]
+invalid-argument-type = "warn"
+invalid-assignment = "warn"
+no-matching-overload = "warn"
+not-subscriptable = "warn"
+parameter-already-assigned = "warn"
+too-many-positional-arguments = "warn"
+unresolved-attribute = "warn"
+unresolved-import = "warn"
+unsupported-operator = "warn"
+
+[tool.ty.terminal]
+error-on-warning = false
+output-format = "concise"
+
 [tool.pixi.workspace]
 channels = ["conda-forge", "bioconda"]
 platforms = ["linux-64", "osx-64", "osx-arm64"]
@@ -237,7 +290,7 @@ test = { cmd = "pytest --cov=scphylo --cov-report=html tests", default-environme
 test-plotting = { cmd = "pytest tests/test_pl.py", default-environment = "default" }
 docs = { cmd = "sphinx-build -M html docs/source docs/build -W --keep-going", default-environment = "docs" }
 docs-serve = { cmd = "python -m http.server 8080", cwd = "docs/build/html", depends-on = ["docs"], default-environment = "docs" }
-pre-commit-install = { cmd = "pre-commit install", default-environment = "default" }
+pre-commit-install = { cmd = "pre-commit install --hook-type pre-commit --hook-type pre-push", default-environment = "default" }
 cythonize = { cmd = "python setup.py build_ext --inplace", env = { CYTHONIZE = "1" }, default-environment = "default" }
 _clean-dist = "rm -rf dist build"
 build = { cmd = "python -m build", depends-on = ["_clean-dist"], default-environment = "default" }

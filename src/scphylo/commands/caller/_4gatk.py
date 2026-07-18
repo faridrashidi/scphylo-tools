@@ -68,7 +68,7 @@ def gatk(outdir, ref, dna_or_rna, time, mem, afterok):
         cmds += cmd([f"module load {scp.settings.tools['gatk']}"])
         cmds += cmd(
             [
-                f'gatk --java-options "-Xmx{int(mem)-10}g"',
+                f'gatk --java-options "-Xmx{int(mem) - 10}g"',
                 "AddOrReplaceReadGroups",
                 f"--INPUT {outdir}/{sample}.mapped.bam",
                 f"--OUTPUT {outdir}/{sample}.rgadded.bam",
@@ -82,7 +82,7 @@ def gatk(outdir, ref, dna_or_rna, time, mem, afterok):
         )
         cmds += cmd(
             [
-                f'gatk --java-options "-Xmx{int(mem)-10}g"',
+                f'gatk --java-options "-Xmx{int(mem) - 10}g"',
                 "MarkDuplicates",
                 f"--INPUT {outdir}/{sample}.rgadded.bam",
                 f"--OUTPUT {outdir}/{sample}.markdup.bam",
@@ -99,7 +99,7 @@ def gatk(outdir, ref, dna_or_rna, time, mem, afterok):
         if dna_or_rna == "rna":
             cmds += cmd(
                 [
-                    f'gatk --java-options "-Xmx{int(mem)-10}g"',
+                    f'gatk --java-options "-Xmx{int(mem) - 10}g"',
                     "SplitNCigarReads",
                     f"--reference {config['ref']}",
                     f"--input {outdir}/{sample}.markdup.bam",
@@ -108,7 +108,7 @@ def gatk(outdir, ref, dna_or_rna, time, mem, afterok):
             )
         cmds += cmd(
             [
-                f'gatk --java-options "-Xmx{int(mem)-10}g"',
+                f'gatk --java-options "-Xmx{int(mem) - 10}g"',
                 "BaseRecalibrator",
                 f"--reference {config['ref']}",
                 (
@@ -123,7 +123,7 @@ def gatk(outdir, ref, dna_or_rna, time, mem, afterok):
         )
         cmds += cmd(
             [
-                f'gatk --java-options "-Xmx{int(mem)-10}g"',
+                f'gatk --java-options "-Xmx{int(mem) - 10}g"',
                 "ApplyBQSR",
                 f"--reference {config['ref']}",
                 f"--bqsr-recal-file {outdir}/{sample}.markdup_bqsr.report",

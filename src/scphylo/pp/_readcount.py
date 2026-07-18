@@ -178,10 +178,10 @@ def statistics(adata):
     c = (G == 2).sum().sum()
     d = (G == 3).sum().sum()
     scp.logg.info(f"size = {adata.shape[0]} × {adata.shape[1]}")
-    scp.logg.info(f"    HOM_REF = {a:6d} ({100*a/t:2.1f}%)")
-    scp.logg.info(f"    HET     = {b:6d} ({100*b/t:2.1f}%)")
-    scp.logg.info(f"    HOM_ALT = {d:6d} ({100*d/t:2.1f}%)")
-    scp.logg.info(f"    UNKNOWN = {c:6d} ({100*c/t:2.1f}%)")
+    scp.logg.info(f"    HOM_REF = {a:6d} ({100 * a / t:2.1f}%)")
+    scp.logg.info(f"    HET     = {b:6d} ({100 * b / t:2.1f}%)")
+    scp.logg.info(f"    HOM_ALT = {d:6d} ({100 * d / t:2.1f}%)")
+    scp.logg.info(f"    UNKNOWN = {c:6d} ({100 * c / t:2.1f}%)")
 
 
 def group_obs_apply_func(adata, group_key, func=np.nansum, layer=None):

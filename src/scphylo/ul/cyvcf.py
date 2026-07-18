@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """Convert an annotated VCF file into an AnnData genotype dataset."""
 
 import sys
@@ -70,4 +69,4 @@ if len(adata.obs_names) == 2:
         adata.var[f"{obs}_TOTAL_READS"] = adata[obs].layers["total"][0]
         adata.var[f"{obs}_MUTANT_READS"] = adata[obs].layers["mutant"][0]
 adata.var.to_csv(outdir + f"/{basename}.tsv", sep="\t")
-adata.write(outdir + f"/_{basename[:-len('.ann')]}.h5ad.gz", compression="gzip")
+adata.write(outdir + f"/_{basename[: -len('.ann')]}.h5ad.gz", compression="gzip")

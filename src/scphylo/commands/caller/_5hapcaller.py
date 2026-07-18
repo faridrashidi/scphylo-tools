@@ -75,7 +75,7 @@ def hapcaller(outdir, ref, dna_or_rna, time, mem, afterok):
             if dna_or_rna == "rna":
                 cmds += cmd(
                     [
-                        f'gatk --java-options "-Xmx{int(mem[0])-10}g"',
+                        f'gatk --java-options "-Xmx{int(mem[0]) - 10}g"',
                         "HaplotypeCaller",
                         f"--reference {config['ref']}",
                         f"--input {outdir}/{sample}.markdup_bqsr.bam",
@@ -98,7 +98,7 @@ def hapcaller(outdir, ref, dna_or_rna, time, mem, afterok):
             else:
                 cmds += cmd(
                     [
-                        f'gatk --java-options "-Xmx{int(mem[0])-10}g"',
+                        f'gatk --java-options "-Xmx{int(mem[0]) - 10}g"',
                         "HaplotypeCaller",
                         f"--reference {config['ref']}",
                         f"--input {outdir}/{sample}.markdup_bqsr.bam",
@@ -135,7 +135,7 @@ def hapcaller(outdir, ref, dna_or_rna, time, mem, afterok):
             cmds += cmd([f"mkdir -p {outdir}/_hapcaller"])
             cmds += cmd(
                 [
-                    f'gatk --java-options "-Xmx{int(mem[1])-10}g"',
+                    f'gatk --java-options "-Xmx{int(mem[1]) - 10}g"',
                     "CombineGVCFs",
                     f"--reference {config['ref']}",
                     f"--variant {files}",
@@ -171,7 +171,7 @@ def hapcaller(outdir, ref, dna_or_rna, time, mem, afterok):
             cmds += cmd([f"mkdir -p {outdir}/_hapcaller"])
             cmds += cmd(
                 [
-                    f'gatk --java-options "-Xmx{int(mem[1])-10}g"',
+                    f'gatk --java-options "-Xmx{int(mem[1]) - 10}g"',
                     "GenotypeGVCFs",
                     f"--reference {config['ref']}",
                     f"--variant {outdir}/_hapcaller/combinedcalls.{chrom}.g.vcf",

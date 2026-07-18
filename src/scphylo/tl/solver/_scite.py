@@ -204,9 +204,9 @@ def infscite(
     df_output = df_input.copy()
     df_output[:] = 0
     for i in range(df_output.shape[0]):
-        muts = nx.shortest_path(G, source=f"{df_input.shape[0]}", target=f"{i+1}")
+        muts = nx.shortest_path(G, source=f"{df_input.shape[0]}", target=f"{i + 1}")
         # muts.remove("Root")
-        muts.remove(f"{i+1}")
+        muts.remove(f"{i + 1}")
         if len(muts) > 0:
             df_output.loc[df_output.index[i], muts] = 1
 

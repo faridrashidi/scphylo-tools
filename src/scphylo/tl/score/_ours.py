@@ -196,10 +196,10 @@ def mltd(df_grnd, df_sol):
 
     def _convert_tree_to_mtld_input(tree, file):
         with open(file, "w") as fout:
-            for u, v, l in tree.edges.data("label"):
+            for u, v, label in tree.edges.data("label"):
                 if tree.in_degree(u) == 0:
                     fout.write(f"{u}=\n")
-                muts = l.split(tree.graph["splitter_mut"])
+                muts = label.split(tree.graph["splitter_mut"])
                 fout.write(f"{v}={','.join(muts)}\n")
             for u in tree.nodes:
                 children = [str(n) for n in tree.neighbors(u)]

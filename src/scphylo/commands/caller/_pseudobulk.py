@@ -103,7 +103,7 @@ def pseudobulk(outdir, ref, time, mem, afterok):
             cmds += cmd([f"mkdir -p {outdir}/_calling"])
             cmds += cmd(
                 [
-                    f'gatk --java-options "-Xmx{int(mem[1])-10}g"',
+                    f'gatk --java-options "-Xmx{int(mem[1]) - 10}g"',
                     "GenotypeGVCFs",
                     f"--reference {config['ref']}",
                     f"--variant {files}",

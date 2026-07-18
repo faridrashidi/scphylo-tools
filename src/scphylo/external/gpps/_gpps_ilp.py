@@ -40,8 +40,8 @@ def gpps_ilp(
     num_mutations = len(input_matrix[0])
 
     # scp.logg.debug("Num samples: %d" % num_samples)
-    scp.logg.debug("Num mutations: %d" % num_mutations)
-    scp.logg.debug("Num clones: %d" % num_clones)
+    scp.logg.debug(f"Num mutations: {num_mutations:d}")
+    scp.logg.debug(f"Num clones: {num_clones:d}")
 
     # ==================================================================#
     # ========================== GUROBI MODEL ==========================#
