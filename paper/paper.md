@@ -29,7 +29,7 @@ Cancer is a dynamic evolutionary process driven by the acquisition of somatic mu
 
 Reconstructing the evolutionary history of a tumor from SCS data presents unique computational challenges. These datasets are plagued by high noise levels, including Allele Drop-Out (ADO), false positives, missing data, and doublet artifacts [@ReviewBinary; @RashidiMehrabadi2022]. Consequently, a diverse array of computational tools has been developed to address these challenges, including stochastic methods like SCITE [@SCITE], infSCITE [@infSCITE], OncoNEM [@OncoNEM], SiFit [@SiFit], and SiCloneFit [@SiCloneFit]; combinatorial approaches such as PhISCS [@PhISCS], PhISCS-BnB [@PhISCS-BnB], SPhyR [@SPhyR], ScisTree [@ScisTree], gpps [@gpps], and SASC [@SASC]; and specialized methods including HUNTRESS [@HUNTRESS], SCIPhI [@SCIPhI], and Scelestial [@Scelestial].
 
-However, the software landscape remains highly fragmented. Existing methods typically function as standalone binaries or scripts with inconsistent input/output formats, rendering comparative analysis difficult. Researchers attempting to utilize these tools face a laborious process of installation, data conversion, and script wrapping. Furthermore, integrating these tools into modern Python-based environments (e.g., alongside SCANPY [@SCANPY] or Biopython [@Biopython]) often requires custom development. `scphylo-tools` addresses these challenges by wrapping diverse state-of-the-art algorithms into a single, cohesive Python API.
+However, the software landscape remains highly fragmented. Existing methods typically function as standalone binaries or scripts with inconsistent input/output formats, rendering comparative analysis difficult. Researchers attempting to utilize these tools face a laborious process of installation, data conversion, and script wrapping. Furthermore, integrating these tools into modern Python-based environments (e.g., alongside SCANPY [@SCANPY] or Biopython [@Biopython]) often requires custom development. `scphylo-tools` addresses these challenges by providing a single, cohesive Python API that wraps independently developed standalone applications, including Trisicell [@Trisicell-Boost], SCITE, PhISCS, and HUNTRESS.
 
 The target audience includes computational biologists, bioinformaticians, and cancer researchers who need to:
 
@@ -65,7 +65,7 @@ Key implementation decisions include using pandas DataFrames for genotype matric
 
 # Research Impact Statement
 
-`scphylo-tools` has been used in several published research studies:
+`scphylo-tools` has supported several published studies by providing unified access to the standalone Trisicell application:
 
 - Analysis of melanoma subclonal evolution and immunotherapy resistance mechanisms [@Gruen_2023]
 - Development of the Trisicell-PartF algorithm for evaluating inferred subclonal structures [@Trisicell-PartF]
