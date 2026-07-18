@@ -381,7 +381,7 @@ bool RBTNode ::IsLeftChild()
 // memory. free recursively
 void RBTNode ::Clear()
 {
-    // NOTE: the current node is not deleted!!!!
+    // NOTE the current node is not deleted!!!!
     // recursively delete
     if (pLeft != NULL)
     {
@@ -1816,7 +1816,7 @@ bool RBT ::IsSameUnrootedTree(RBT &rhs)
 RBTNode *RBT ::ReconstructNewickInternal(const string &strNewick)
 {
     // Build RBT by a given Newick string
-    // NOTE: we assume the tree is in the form of (1,(2,3)) form
+    // NOTE we assume the tree is in the form of (1,(2,3)) form
     // THAT IS, WE DO NOT ALLOW PRECEEDING SYMBOLS
     // return the constructed root node for the current substring
     // define commonly used symbol in Newick

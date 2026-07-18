@@ -98,7 +98,7 @@ bool GetTripleType(TreeNode *pn1, TreeNode *pn2, TreeNode *pn3, pair<pair<TreeNo
 // this can be convenient in some cases
 bool ReadinPhyloTreesNewick(ifstream &inFile, int numLeaves, vector<PhylogenyTreeBasic *> &treePtrList, TaxaMapper *pTMapper)
 {
-    // NOTE: RETURN TRUE IF NO LABEL ADJUSTMENT IS DONE
+    // NOTE RETURN TRUE IF NO LABEL ADJUSTMENT IS DONE
     // RETURN FALSE IF WE SWITCHED LABEL BY DECREASING BY ONE
     // figure out leave num
     bool fNoChange = true;

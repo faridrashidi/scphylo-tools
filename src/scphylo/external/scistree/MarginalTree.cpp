@@ -305,7 +305,7 @@ void CollapseEquivTrees(const vector<MarginalTree> &listOrigTrees, vector<Margin
 
 bool ReadinMarginalTreesNewick(ifstream &inFile, int numLeaves, vector<MarginalTree> &treeList, TaxaMapper *pTMapper, bool fDup)
 {
-    // NOTE: RETURN TRUE IF NO LABEL ADJUSTMENT IS DONE
+    // NOTE RETURN TRUE IF NO LABEL ADJUSTMENT IS DONE
     // RETURN FALSE IF WE SWITCHED LABEL BY DECREASING BY ONE
     // figure out leave num
     bool fNoChange = true;
@@ -416,7 +416,7 @@ bool ReadinMarginalTreesNewickWLenString(const string &strNewick, int numLeaves,
     //YW_ASSERT_INFO(pTMapper != NULL, "Stop here2");
     // mark the change
     bool fNoChange = true;
-    // NOTE: RETURN TRUE IF NO LABEL ADJUSTMENT IS DONE
+    // NOTE RETURN TRUE IF NO LABEL ADJUSTMENT IS DONE
     // RETURN FALSE IF WE SWITCHED LABEL BY DECREASING BY ONE
     // figure out leave num
 
@@ -478,7 +478,7 @@ bool ReadinMarginalTreesNewickWLenString(const string &strNewick, int numLeaves,
 bool ReadinMarginalTreesNewickWLen(ifstream &inFile, int numLeaves, vector<MarginalTree> &treeList, TaxaMapper *pTMapper)
 {
     //YW_ASSERT_INFO(pTMapper != NULL, "Stop here");
-    // NOTE: RETURN TRUE IF NO LABEL ADJUSTMENT IS DONE
+    // NOTE RETURN TRUE IF NO LABEL ADJUSTMENT IS DONE
     // RETURN FALSE IF WE SWITCHED LABEL BY DECREASING BY ONE
     // figure out leave num
     bool fNoChange = true;
@@ -760,9 +760,9 @@ void FindChainsInTree(const MarginalTree &tree1, map<vector<int>, int> &foundCha
 }
 
 // construct a marginal tree from nodes and parent info
-// NOTE: this function does not take distance. Therefore, we arbitarily assign nodes to their respective
+// NOTE this function does not take distance. Therefore, we arbitarily assign nodes to their respective
 // heights and thus also assign branch length
-// ALSO NOTE: when we assign branch length, the branch length are set uniformly distributed within [0-1].
+// ALSO NOTE when we assign branch length, the branch length are set uniformly distributed within [0-1].
 void InitMarginalTree(MarginalTree &mTree, int numLeaves, const vector<int> &listLabels, const vector<int> &listParentNodePos)
 {
     //cout << "numLeaves = " << numLeaves << endl;

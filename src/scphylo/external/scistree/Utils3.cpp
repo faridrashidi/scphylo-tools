@@ -21,7 +21,7 @@ YWHashTable :: YWHashTable( int nB ) : numBuckets( nB)
 
 YWHashTable :: ~YWHashTable()
 {
-    // NOTE: has to free memory here
+    // NOTE has to free memory here
     for( unsigned int i=0; i<hashTable.size(); ++i)
     {
         delete hashTable[i];

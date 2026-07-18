@@ -110,7 +110,7 @@ private:
 
 // some other useful functions
 // this structure defines what rows to keep and what not to, and for each removed row, which row it comes from (i.e. duplicate)
-// NOTE: we are dealing with the current rows only. THat is, the removal may be in stages
+// NOTE we are dealing with the current rows only. THat is, the removal may be in stages
 // in each stage, we only consider what we have so far
 typedef struct
 {

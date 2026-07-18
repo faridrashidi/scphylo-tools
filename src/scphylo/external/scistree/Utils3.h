@@ -40,7 +40,7 @@ class YWHashTable
 {
 public:
     YWHashTable(int numBuckets = 100);
-    ~YWHashTable(); // NOTE: has to free memory here
+    ~YWHashTable(); // NOTE has to free memory here
     void AddItem(YWHashItem *pItem);
     YWHashItem *GetIdenticalItem(YWHashItem *pItem);
     YWHashItem *GetFirstItem();
