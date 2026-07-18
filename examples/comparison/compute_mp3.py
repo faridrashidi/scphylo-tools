@@ -1,9 +1,7 @@
-"""
-Comparing two trees by MP3
---------------------------
+"""MP3 comparison.""" "\n---------------"
 
-This example shows how to compare/measure two inferred genotype data (trees).
-"""
+# %%
+# This example shows how to compare or measure two inferred genotype trees.
 
 import scphylo as scp
 

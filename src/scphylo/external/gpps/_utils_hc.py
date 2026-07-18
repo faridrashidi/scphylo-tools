@@ -10,6 +10,8 @@ __date__ = "11/30/21"
 
 
 class Node:
+    """Represent a mutation gain or loss node in a GPPS tree."""
+
     def __init__(
         self,
         name,
@@ -61,6 +63,7 @@ class Node:
             self.genotype_profile = [0 for x in range(tot_mutations)]
 
     def is_ancestor_of(self, node):
+        """Return whether this node is an ancestor of another node."""
         par = node.parent
         while par:
             if par == self:
@@ -69,6 +72,7 @@ class Node:
         return False
 
     def print_node_dot(self):
+        """Print this node and its parent edge in DOT syntax."""
         if self.parent is None:
             print(f'\t"{self.parent.id_node}" -> "{self.id_node}";')
             if "-" not in self.name:
@@ -81,6 +85,7 @@ class Node:
                 )
 
     def print_node_dot_file(self, fout):
+        """Write this node and its parent edge in DOT syntax."""
         if self.parent is None:
             fout.write(f'\t"{self.parent.id_node}" -> "{self.id_node}";\n')
             if "-" not in self.name:
@@ -94,6 +99,7 @@ class Node:
 
 
 def add_edge(start, end):
+    """Connect two nodes and update their parent-child relationship."""
     start.children.append(end)
     end.parent = start
 
@@ -117,6 +123,7 @@ def __print_tree_file(node, fout):
 
 
 def print_dot_tree(node):
+    """Print a mutation tree in DOT syntax."""
     print("digraph phylogeny {")
     print(f'\t"{node.id_node}" [label="{node.name}"];')
     __print_tree(node)
@@ -124,6 +131,7 @@ def print_dot_tree(node):
 
 
 def print_dot_tree_file(node, fout):
+    """Write a mutation tree to a file in DOT syntax."""
     fout.write("digraph phylogeny {\n")
     fout.write(f'\t"{node.id_node}" [label="{node.name}"];\n')
     __print_tree_file(node, fout)
@@ -140,6 +148,7 @@ def __copy_tree_rec(node, cp_parent, nid_dict):
 
 
 def copy_tree(root):
+    """Copy a mutation tree and return its node lookup."""
     nid_nodes = {}
     cp_root = Node(
         root.name,
@@ -155,6 +164,7 @@ def copy_tree(root):
 
 
 def contains(col1, col2):
+    """Return whether every value in one genotype column contains another."""
     for i in range(len(col1)):
         if not col1[i] >= col2[i]:
             return False
@@ -162,6 +172,7 @@ def contains(col1, col2):
 
 
 def build_tree_from_file(ilp_matrix, mutations_names, mutations_ids, tot_mutations):
+    """Build a mutation tree from a GPPS ILP matrix."""
     executable = scp.ul.executable("gpps_tree", "gpps tree scripts")
     tmpdir = scp.ul.tmpdirsys(suffix=".gpps")
     np.savetxt(
@@ -235,6 +246,7 @@ def build_tree_from_file(ilp_matrix, mutations_names, mutations_ids, tot_mutatio
 
 
 def calculate_genotype_profile_subtree(node, nid_dict):
+    """Recalculate genotype profiles for a node and its descendants."""
     if node.parent:
         gt_par_cp = node.parent.genotype_profile.copy()
         if node.loss:
@@ -253,6 +265,7 @@ def calculate_genotype_profile_subtree(node, nid_dict):
 
 
 def prune_and_reattach(node_prune, node_reattach, nid_dict):
+    """Move a subtree beneath another node when the move is valid."""
     if node_prune.is_ancestor_of(node_reattach):
         return False
     node_prune.parent.children.remove(node_prune)
@@ -268,6 +281,7 @@ def prune_and_reattach(node_prune, node_reattach, nid_dict):
 
 
 def is_loss_valid(node, mut_id):
+    """Return whether a mutation loss has a matching ancestral gain."""
     par = node.parent
     while par:
         if par.mut_id == mut_id:
@@ -277,6 +291,7 @@ def is_loss_valid(node, mut_id):
 
 
 def is_already_lost(node, mut_id):
+    """Return whether a mutation was already lost on the ancestral path."""
     par = node.parent
     while par:
         if par.loss and par.mut_id == mut_id:
@@ -286,6 +301,7 @@ def is_already_lost(node, mut_id):
 
 
 def delete_node(node, nid_dict):
+    """Delete a node while reconnecting its children to its parent."""
     parent = node.parent
     # node.parent = None
     parent.children.remove(node)
@@ -298,6 +314,7 @@ def delete_node(node, nid_dict):
 
 
 def check_subtree_losses(node, nid_dict):
+    """Remove invalid or repeated mutation losses from a subtree."""
     if node.loss:
         valid = is_loss_valid(node, node.mut_id)
         lost = is_already_lost(node, node.mut_id)
@@ -312,6 +329,7 @@ def check_subtree_losses(node, nid_dict):
 
 
 def import_ilp_out(ilp_matrix, k_dollo, mutation_names):
+    """Convert an ILP output matrix into a GPPS mutation tree."""
     mut_names = []
     mut_ids = []
 

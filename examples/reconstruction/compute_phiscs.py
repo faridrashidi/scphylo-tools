@@ -1,10 +1,8 @@
-"""
-Reconstruct tree by PhISCS
---------------------------
+"""PhISCS reconstruction.""" "\n----------------------"
 
-This example shows how to construct a phylogenetic tree using PhISCS on a
-binary single-cell genotype matrix.
-"""
+# %%
+# This example shows how to construct a phylogenetic tree using PhISCS on a
+# binary single-cell genotype matrix.
 
 import scphylo as scp
 

@@ -1,10 +1,8 @@
-"""
-Reconstruct tree by HUNTRESS
-----------------------------
+"""HUNTRESS reconstruction.""" "\n------------------------"
 
-This example shows how to construct a phylogenetic tree using HUNTRESS on a
-binary single-cell genotype matrix.
-"""
+# %%
+# This example shows how to construct a phylogenetic tree using HUNTRESS on a
+# binary single-cell genotype matrix.
 
 import scphylo as scp
 

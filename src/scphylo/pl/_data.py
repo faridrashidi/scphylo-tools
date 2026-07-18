@@ -92,5 +92,6 @@ def heatmap(
 
 
 def plot_dist(adata, attr):
+    """Plot the upper-triangular values of a pairwise distance matrix."""
     x = adata.obsp[attr][np.triu_indices(adata.shape[0], 1)]
     plt.hist(x, bins=50)

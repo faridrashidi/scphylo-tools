@@ -7,6 +7,7 @@ import scphylo as scp
 def write_cmds_get_main(
     df, jobname, time, mem, module, nthread, email, tmpdir, afterok=None
 ):
+    """Write job commands and return the platform-specific launch command."""
     cmdfile = f"{tmpdir}/cmd/{jobname}.sh"
     logdir = f"{tmpdir}/log/{jobname}"
     scp.ul.mkdir(f"{tmpdir}/cmd")
@@ -70,6 +71,7 @@ def write_cmds_get_main(
 
 
 def cmd(arr, islast=False):
+    """Join command arguments and append a shell continuation when needed."""
     if islast:
         return " ".join(arr)
     else:

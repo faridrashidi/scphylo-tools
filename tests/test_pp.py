@@ -1,16 +1,22 @@
+"""Verify preprocessing operations for matrices and trees."""
+
 import scphylo as scp
 
 from ._helpers import skip_gurobi
 
 
 class TestPreProcessing:
+    """Exercise binary, read-count, and tree preprocessing helpers."""
+
     @skip_gurobi
     def test_bifiltering(self):
+        """Verify the shape produced by bidirectional filtering."""
         df_in = scp.datasets.test()
         df_filtered = scp.pp.bifiltering(df_in, 0.5, 0.2)
         assert df_filtered.shape == (10, 4)
 
     def test_binary(self):
+        """Verify binary-matrix filters and consensus combination."""
         scp.settings.verbosity = (
             0  # UnicodeEncodeError: 'ascii' codec can't encode character '\xd7'
         )
@@ -26,6 +32,7 @@ class TestPreProcessing:
         assert df_in.shape == (11, 452)
 
     def test_readcount(self):
+        """Verify read-count filters and cell selection helpers."""
         scp.settings.verbosity = (
             0  # UnicodeEncodeError: 'ascii' codec can't encode character '\xd7'
         )
@@ -43,6 +50,7 @@ class TestPreProcessing:
         assert adata.shape == (2, 267)
 
     def test_tree(self):
+        """Verify tree collapsing and cell sampling."""
         adata = scp.datasets.high_grade_serous_ovarian_cancer_3celllines()
         df_out = adata.to_df(layer="ground")[adata.var_names[:1000]]
         tree = scp.ul.to_tree(df_out)

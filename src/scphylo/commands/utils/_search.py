@@ -11,6 +11,7 @@ import scphylo as scp
 
 
 def run_scistree(df_in, alpha, beta, outfile):
+    """Run ScisTree for one error-rate pair and return its likelihood."""
     type(outfile)
     # scp.settings.logfile = f"{outfile}/fn_{beta}-fp_{alpha}.log"
     scp.settings.verbosity = "error"

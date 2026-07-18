@@ -2,16 +2,19 @@ import scphylo as scp
 
 
 def binarym_filter_private_mutations(df):
+    """Remove mutations observed in only one cell from a binary matrix."""
     df.drop(df.columns[df.sum() == 1], axis=1, inplace=True)
 
 
 def binarym_filter_clonal_mutations(df):
+    """Remove mutations observed in every cell from a binary matrix."""
     x = (df == 1).sum()
     x = x[x == df.shape[0]]
     df.drop(x.index, axis=1, inplace=True)
 
 
 def binarym_filter_nonsense_mutations(df, alt_in=2, ref_in=1):
+    """Remove mutations lacking sufficient alternate or reference support."""
     df.drop(
         df.columns[
             ~(
@@ -29,6 +32,7 @@ def binarym_filter_nonsense_mutations(df, alt_in=2, ref_in=1):
 
 
 def binarym_statistics(df):
+    """Log genotype-state counts for a binary mutation matrix."""
     t = df.shape[0] * df.shape[1]
     a = (df == 0).sum().sum()
     b = (df == 1).sum().sum()

@@ -17,6 +17,7 @@ def gpps_ilp(
     time_limit=86400,
     n_threads=1,
 ):
+    """Infer a Dollo phylogeny genotype matrix with a Gurobi ILP."""
     gp, gp_is_not_imported = scp.ul.import_gurobi()
     if gp_is_not_imported:
         scp.logg.error("Unable to import a package!")

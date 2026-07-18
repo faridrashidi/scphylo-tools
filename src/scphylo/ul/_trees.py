@@ -105,9 +105,7 @@ def to_tree(df):
         ].index
         if len(untilnow_cell) > 0:
             clusters[node] = f"{tree.graph['splitter_cell'].join(untilnow_cell)}"
-            tumor_cells += list(
-                y for y in tree.graph["splitter_cell"].join(untilnow_cell)
-            )
+            tumor_cells.extend(tree.graph["splitter_cell"].join(untilnow_cell))
         else:
             clusters[node] = "––"
 
@@ -194,7 +192,7 @@ def to_mtree(tree):
 
 def _to_newick(tree):
     def _children(at):
-        return list(n for n in tree.neighbors(at))
+        return list(tree.neighbors(at))
 
     root = scp.ul.root_id(tree)
 
@@ -299,7 +297,7 @@ def _split_labels(tree1, tree2):
 
 def _to_apted(sl_tree):
     def _children(at):
-        return list(n for n in sl_tree.neighbors(at))
+        return list(sl_tree.neighbors(at))
 
     def _apted_recursive(node):
         subgs = "{" + sl_tree.nodes[node]["label"]
@@ -316,6 +314,7 @@ def _to_apted(sl_tree):
 
 
 def root_id(tree):
+    """Return the root node identifier of a directed tree."""
     for x in tree.nodes:
         if tree.in_degree(x) == 0:
             return x
@@ -323,6 +322,7 @@ def root_id(tree):
 
 
 def partition_cells(tree, node):
+    """Partition cells by whether they descend from the given node label."""
     nd = tree.graph["splitter_cell"].join(node)
     cells = []
     for x in list(nx.algorithms.traversal.depth_first_search.dfs_tree(tree, nd).nodes):
@@ -334,6 +334,7 @@ def partition_cells(tree, node):
 
 
 def cells_rooted_at(tree, node_id):
+    """Return cells carrying every mutation assigned to a tree node."""
     muts = tree.graph["mutation_list"][tree.graph["mutation_list"].Node == node_id]
     if muts.index.shape[0] == 0:
         return np.array([])
@@ -343,6 +344,7 @@ def cells_rooted_at(tree, node_id):
 
 
 def muts_rooted_at(tree, node_id):
+    """Return mutations assigned to a node and its descendant subtree."""
     muts = tree.graph["mutation_list"][tree.graph["mutation_list"].Node == node_id]
     if muts.index.shape[0] == 0:
         return np.array([])
@@ -357,4 +359,5 @@ def muts_rooted_at(tree, node_id):
 
 
 def is_leaf(tree, node):
+    """Return whether a node represents a non-root cell-bearing leaf."""
     return "––" not in tree.nodes[node]["label"] and tree.in_degree(node) != 0

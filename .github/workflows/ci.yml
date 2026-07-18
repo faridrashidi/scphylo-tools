@@ -50,6 +50,25 @@ jobs:
       - name: Run static analysis
         run: pixi run --locked -e lint lint
 
+  docs:
+    needs: init
+    if: ${{ github.event_name == 'schedule' || needs.init.outputs.skip == 'false' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Pixi
+        uses: prefix-dev/setup-pixi@v0.10.0
+        with:
+          pixi-version: v0.73.0
+          manifest-path: pyproject.toml
+          environments: docs
+          cache: true
+          locked: true
+      - name: Build documentation with warnings as errors
+        run: pixi run --locked -e docs docs
+
   test:
     needs: lint
     name: test ${{ matrix.environment }} on ${{ matrix.os }}

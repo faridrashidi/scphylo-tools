@@ -6,8 +6,9 @@ import scphylo as scp
 
 
 def is_paired(indir):
+    """Describe FASTQ samples and whether they contain paired reads."""
     files = glob.glob(f"{indir}/*.fastq.gz")
-    last_char_set = {x[-len(".fastq.gz") - 2 : -len(".fastq.gz")] for x in files}
+    last_char_set = {x.removesuffix(".fastq.gz")[-2:] for x in files}
     temp = []
     if last_char_set == {"_1", "_2"}:
         for file in files:
@@ -22,6 +23,7 @@ def is_paired(indir):
 
 
 def get_samples_df(outdir, normal=None):
+    """Build a table of BAM samples, optionally excluding a normal sample."""
     files = glob.glob(f"{outdir}/*.markdup_bqsr.bam")
     temp = []
     for file in files:

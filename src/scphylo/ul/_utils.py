@@ -15,6 +15,7 @@ import scphylo as scp
 
 
 def log_input(df_in):
+    """Log dimensions and genotype-state counts for an input matrix."""
     size = df_in.shape[0] * df_in.shape[1]
     scp.logg.info(f"input -- size: {df_in.shape[0]}x{df_in.shape[1]}")
     scp.logg.info(
@@ -33,6 +34,7 @@ def log_input(df_in):
 
 
 def log_output(df_out, running_time):
+    """Log dimensions, genotype states, validity, and runtime for an output."""
     size = df_out.shape[0] * df_out.shape[1]
     scp.logg.info(f"output -- size: {df_out.shape[0]}x{df_out.shape[1]}")
     scp.logg.info(
@@ -60,6 +62,7 @@ def log_output(df_out, running_time):
 
 
 def log_flip(df_in, df_out):
+    """Log genotype flips and inferred error rates between two matrices."""
     flips_0_1, flips_1_0, flips_na_0, flips_na_1 = count_flips(
         df_in.values, df_out.values, 3
     )
@@ -74,6 +77,7 @@ def log_flip(df_in, df_out):
 
 
 def calc_nll_matrix(df_in, df_out, alpha, beta):
+    """Calculate the negative log-likelihood of an inferred genotype matrix."""
     if alpha == 0 or beta == 0:
         return None
     columns = np.intersect1d(df_in.columns, df_out.columns)
@@ -102,6 +106,7 @@ def calc_nll_matrix(df_in, df_out, alpha, beta):
 
 
 def stat(df_in, df_out, alpha, beta, running_time):
+    """Log a summary comparing input and inferred genotype matrices."""
     log_input(df_in)
     log_output(df_out, running_time)
     log_flip(df_in, df_out)
@@ -110,6 +115,8 @@ def stat(df_in, df_out, alpha, beta, running_time):
 
 
 def parse_params_file(filename):
+    """Parse simulation and error-rate parameters encoded in a filename."""
+
     def _parse_params_file_helper(param):
         try:
             value = basename.split(f"{param}_")[1]
@@ -144,6 +151,7 @@ def parse_params_file(filename):
 
 
 def parse_log_file(filename):
+    """Parse runtime and error-rate statistics from a solver log file."""
     result = {}
     _, basename = dir_base(filename)
     result["tool"] = basename.split(".")[-1]
@@ -164,6 +172,7 @@ def parse_log_file(filename):
 
 
 def parse_score_file(filename):
+    """Parse key-value scores from a solver score file."""
     result = {}
     _, basename = dir_base(filename)
     result["tool"] = basename.split(".")[-1]
@@ -175,6 +184,7 @@ def parse_score_file(filename):
 
 
 def count_flips(I_mtr, O_mtr, na_value=3):
+    """Count state changes between input and output genotype matrices."""
     flips_0_1 = 0
     flips_1_0 = 0
     flips_na_0 = 0
@@ -194,6 +204,7 @@ def count_flips(I_mtr, O_mtr, na_value=3):
 
 
 def infer_rates(I_mtr, O_mtr, na_value=3):
+    """Infer false-negative, false-positive, and missing-data rates."""
     flips_0_1, flips_1_0, flips_na_0, flips_na_1 = count_flips(I_mtr, O_mtr, na_value)
     fn_rate = flips_0_1 / ((O_mtr == 1) & (I_mtr != na_value)).sum()
     fp_rate = flips_1_0 / ((O_mtr == 0) & (I_mtr != na_value)).sum()
@@ -303,43 +314,52 @@ def is_conflict_free_gusfield(df_in):
 
 
 def tmpdir(prefix="scphylo.", suffix=".scphylo", dirname="."):
+    """Create a temporary directory and return its path."""
     return tempfile.mkdtemp(suffix=suffix, prefix=prefix, dir=dirname)
 
 
 def tmpfile(prefix="scphylo.", suffix=".scphylo", dirname="."):
+    """Create a temporary file and return its path."""
     return tempfile.mkstemp(suffix=suffix, prefix=prefix, dir=dirname)[1]
 
 
 def tmpdirsys(prefix="scphylo.", suffix=".scphylo", dirname="."):
+    """Create a managed temporary-directory object."""
     return tempfile.TemporaryDirectory(suffix=suffix, prefix=prefix)
 
 
 def cleanup(dirname):
+    """Remove a directory tree."""
     shutil.rmtree(dirname)
 
 
 def remove(filename):
+    """Remove a file when it exists."""
     if os.path.exists(filename):
         os.remove(filename)
 
 
 def dir_base(infile):
+    """Return the directory and extension-free basename of a path."""
     basename = os.path.splitext(os.path.basename(infile))[0]
     dirname = os.path.dirname(infile)
     return dirname, basename
 
 
 def dirbase(infile):
+    """Return a path with its final extension removed."""
     return os.path.splitext(infile)[0]
 
 
 def mkdir(indir):
+    """Create a directory when absent and return its path."""
     if not os.path.exists(indir):
         os.makedirs(indir)
     return indir
 
 
 def executable(binary, appname):
+    """Locate an executable in PATH or the configured tools directory."""
     executable = shutil.which(binary)
     if executable is None:
         if not os.path.exists(f"{scp.settings.tools}/{binary}"):
@@ -352,6 +372,8 @@ def executable(binary, appname):
 
 
 def timeit(f):
+    """Wrap a callable to log its execution time."""
+
     def wrap(*args, **kwargs):
         start_time = time.time()
         ret = f(*args, **kwargs)
@@ -369,6 +391,7 @@ def timeit(f):
 
 
 def get_file(key):
+    """Resolve a package resource key to a filesystem path."""
     components = key.split("/")
     return str(
         importlib.resources.files(components[0]).joinpath("/".join(components[1:]))
@@ -376,15 +399,17 @@ def get_file(key):
 
 
 def with_timeout(timeout):
+    """Return a decorator that limits a call to the given number of seconds."""
+
     def decorator(decorated):
         @functools.wraps(decorated)
         def inner(*args, **kwargs):
-            pool = multiprocessing.pool.ThreadPool(1)
-            async_result = pool.apply_async(decorated, args, kwargs)
-            try:
-                return async_result.get(timeout)
-            except multiprocessing.TimeoutError:
-                return None
+            with multiprocessing.pool.ThreadPool(1) as pool:
+                async_result = pool.apply_async(decorated, args, kwargs)
+                try:
+                    return async_result.get(timeout)
+                except multiprocessing.TimeoutError:
+                    return None
 
         return inner
 
@@ -393,6 +418,8 @@ def with_timeout(timeout):
 
 @contextlib.contextmanager
 def tqdm_joblib(tqdm_object):
+    """Update a tqdm progress bar as Joblib batches complete."""
+
     class TqdmBatchCompletionCallback(joblib.parallel.BatchCompletionCallBack):
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
@@ -411,6 +438,7 @@ def tqdm_joblib(tqdm_object):
 
 
 def split_mut(mut):
+    """Split an encoded mutation identifier into genomic components."""
     try:
         ref = mut.split(".")[-2]
         pos = mut.split(".")[-3]

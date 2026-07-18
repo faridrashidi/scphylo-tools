@@ -23,6 +23,7 @@ def Reconstruct(
     post_fn=0.1,
     n_proc=7,
 ):
+    """Reconstruct a conflict-free genotype matrix with Huntress."""
     global prfp
     prfp = postprcoef
     q = Queue()
@@ -119,6 +120,7 @@ def Reconstruct(
 
 
 def Auto_fnfp(q, tune_ran, m_input, m_NA_est, m_input_raw, fnfp, fnc):
+    """Tune Huntress coefficients and enqueue the best reconstruction."""
     # Ensure tune_ran is not empty to avoid IndexError
     if not tune_ran:
         return
@@ -150,6 +152,7 @@ def Auto_fnfp(q, tune_ran, m_input, m_NA_est, m_input_raw, fnfp, fnc):
 
 
 def deleteNas(M_in, M_out):
+    """Clear reconstructed entries that correspond to missing input values."""
     M_o = M_out.copy()
     NA_position = np.argwhere(M_in == 3)
     for j in NA_position:
@@ -158,6 +161,7 @@ def deleteNas(M_in, M_out):
 
 
 def greedyPtreeNew(M_input):
+    """Greedily reconstruct a perfect phylogeny without missing values."""
     M_copy = M_input.copy()
 
     ISet1 = np.argsort(sum(M_copy))
@@ -190,6 +194,7 @@ def greedyPtreeNew(M_input):
 
 
 def greedyPtreeNA(M_input, approx_order, oc, hc):
+    """Greedily reconstruct a perfect phylogeny with missing values."""
     overlap_coeff = oc
     hist_coeff = hc
 
@@ -242,11 +247,13 @@ def greedyPtreeNA(M_input, approx_order, oc, hc):
 
 
 def ReadFfile(df):
+    """Convert a genotype data frame to a Boolean matrix."""
     M = df.values.astype(bool)
     return M
 
 
 def ReadFileNA(df):
+    """Convert a genotype frame to Boolean after clearing missing values."""
     M = df.to_numpy(copy=True)
     NA_position = np.argwhere(M == 3)
     for j in NA_position:
@@ -255,6 +262,7 @@ def ReadFileNA(df):
 
 
 def Estimated_Matrix(df):
+    """Impute missing entries with their mutation's observed frequency."""
     M = df.values.astype(float)
     for i in range(M.shape[1]):
         if np.sum(M[:, i] != 3) == 0:
@@ -268,11 +276,13 @@ def Estimated_Matrix(df):
 
 
 def ReadFasis(df):
+    """Return the underlying matrix values without conversion."""
     M = df.values
     return M
 
 
 def postprocess_col(df_input, matrix_recons, pfn, pfp):
+    """Refine a reconstruction by alternating row and column assignments."""
     M_noisy = ReadFasis(df_input.copy())
     M_nds = matrix_recons.copy().astype(bool)
     Mtemp = c_m_col(ReadFasis(df_input.copy()), M_nds, pc_fn=pfn, pc_fp=pfp)
@@ -293,6 +303,7 @@ def postprocess_col(df_input, matrix_recons, pfn, pfp):
 
 
 def f_d_col(node_piv, M_samples, p_fp=0.005, p_fn=0.1):
+    """Calculate error-model distances from a column to candidate nodes."""
     M_nodes = M_samples.copy()
     D10 = (M_nodes.T == 0).astype(int).dot(node_piv == 1)
     D11 = (M_nodes.T == 1).astype(int).dot(node_piv == 1)
@@ -308,6 +319,7 @@ def f_d_col(node_piv, M_samples, p_fp=0.005, p_fn=0.1):
 
 
 def f_d_row(node_piv, M_samples, p_fp=0.005, p_fn=0.1):
+    """Calculate error-model distances from a row to candidate nodes."""
     M_nodes = M_samples.copy()
     distances = np.zeros(M_nodes.shape[0])
     D10 = (M_nodes == 0).astype(int).dot(node_piv == 1)
@@ -324,6 +336,7 @@ def f_d_row(node_piv, M_samples, p_fp=0.005, p_fn=0.1):
 
 
 def c_m_col(M_input, M_nodes, pc_fp=0.0001, pc_fn=0.1):
+    """Assign each input column to its nearest candidate node."""
     M_out = M_input.copy()
     for i in range(M_input.shape[1]):
         pivot_v = M_input[:, i]
@@ -334,6 +347,7 @@ def c_m_col(M_input, M_nodes, pc_fp=0.0001, pc_fn=0.1):
 
 
 def c_m_row(M_input, M_nodes, pc_fp=0.0001, pc_fn=0.1):
+    """Assign each input row to its nearest candidate node."""
     M_out = M_input.copy()
     for i in range(M_input.shape[0]):
         pivot_v = M_input[i, :]

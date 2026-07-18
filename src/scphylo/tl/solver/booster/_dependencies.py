@@ -10,6 +10,7 @@ UNDEFINED_DEPENDENCY = 4
 
 
 def read_CF_matrix_to_int_dictionary(path_CFmatrix_file):
+    """Read a conflict-free matrix into a nested integer dictionary."""
     assert os.path.exists(path_CFmatrix_file), "ERROR. No file " + path_CFmatrix_file
 
     with open(path_CFmatrix_file) as input_file:
@@ -117,6 +118,7 @@ def get_dependency_from_conflict_free_matrix(mut1, mut2, matrix):
 
 
 def is_float(value):
+    """Return whether a value can be converted to a float."""
     try:
         float(value)
         return True
@@ -125,6 +127,7 @@ def is_float(value):
 
 
 def float_to_string(float_number, num_decimals=2):
+    """Format a numeric value with a fixed number of decimal places."""
     if is_float(float_number):
         return ("{:." + str(num_decimals) + "f}").format(float_number)
     else:
@@ -134,6 +137,7 @@ def float_to_string(float_number, num_decimals=2):
 def prepare_dependencies(
     all_mut_ids, input_folder, output_file, max_num_submatrices, disable_tqdm
 ):
+    """Aggregate mutation dependencies from conflict-free submatrices."""
     assert len(set(all_mut_ids)) == len(
         all_mut_ids
     ), "ERROR. Mutation ids must be unique."

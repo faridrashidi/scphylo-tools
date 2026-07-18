@@ -1,10 +1,8 @@
-"""
-Reconstruct tree by gpps
-------------------------
+"""GPPS reconstruction.""" "\n--------------------"
 
-This example shows how to construct a phylogenetic tree using gpps on a
-binary single-cell genotype matrix.
-"""
+# %%
+# This example shows how to construct a phylogenetic tree using GPPS on a binary
+# single-cell genotype matrix.
 
 import scphylo as scp
 

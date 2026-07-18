@@ -5,6 +5,7 @@ import scphylo as scp
 
 
 def sciphi(df_input):
+    """Run SCIPhI on a single-cell genotype matrix."""
     # TODO: implement
     executable = scp.ul.executable("sciphi", "SCIPhI")
 

@@ -32,13 +32,13 @@ def read_matrix_from_file_into_hash(path_matrix_file):
     assert len(input_lines) > 0, "ERROR. Input file " + path_matrix_file + " is empty."
 
     header_entries = input_lines[0].strip().split()
-    column_ids = header_entries[1 : len(header_entries)]
+    column_ids = header_entries[1:]
     num_columns = len(column_ids)
     assert num_columns != 0, (
         "ERROR. Number of columns in " + path_matrix_file + " equals zero. Exiting!!!"
     )
 
-    input_lines_without_header = input_lines[1 : len(input_lines)]
+    input_lines_without_header = input_lines[1:]
     D = {}
     for line in input_lines_without_header:
         line_columns = line.strip().split()
@@ -175,7 +175,7 @@ def get_CF_matrix_from_parent_vector(parent, D, alpha, beta):
         best_score = score[ROOT]
         best_mut = ROOT
 
-        muts_to_visit = list(child_id for child_id in children[ROOT])
+        muts_to_visit = list(children[ROOT])
         while len(muts_to_visit) > 0:
             mut_id = muts_to_visit.pop(0)
             parent_id = parent[mut_id]
@@ -316,6 +316,7 @@ def compute_weights_from_dependencies_file(path_dependencies_file):
 # this function is used to give an order of mutations in which they will be added to
 # the big tree
 def get_ordered_list_of_mutations_from_input_matrix(path_noisy_SC_matrix):
+    """Order mutations by decreasing prevalence in the noisy matrix."""
     D = hash_entries_to_integers(read_matrix_from_file_into_hash(path_noisy_SC_matrix))
     cell_ids = list(D.keys())
     mut_ids = list(D[cell_ids[0]].keys())
@@ -335,6 +336,7 @@ def get_ordered_list_of_mutations_from_input_matrix(path_noisy_SC_matrix):
 
 
 def get_next_mutation(weights, existing_mutations):
+    """Choose the next mutation using its aggregate dependency advantage."""
     mut_ids = list(weights.keys())
     assert len(existing_mutations) < len(
         mut_ids
@@ -374,7 +376,7 @@ def reconstruct_big_tree(
     output_files_prefix,
     disable_tqdm,
 ):
-
+    """Reconstruct a full mutation tree from aggregated dependencies."""
     weights = compute_weights_from_dependencies_file(path_dependencies_file)
     D = hash_entries_to_integers(read_matrix_from_file_into_hash(path_noisy_SC_matrix))
 

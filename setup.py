@@ -82,6 +82,7 @@ extensions = [
 
 
 def no_cythonize(extensions, **_ignore):
+    """Replace Cython source paths with their checked-in C++ counterparts."""
     for extension in extensions:
         sources = []
         for sfile in extension.sources:

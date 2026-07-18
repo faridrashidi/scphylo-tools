@@ -86,6 +86,7 @@ def bnb(df_input, bounding, time_limit=86400):
 
 
 def solve_by_BnB(matrix_in, na_value, bounding_alg, time_limit):
+    """Solve a matrix-correction problem and return the required flips."""
     result = bnb_solve(
         matrix_in,
         bounding_algorithm=bounding_alg,
@@ -104,10 +105,12 @@ def solve_by_BnB(matrix_in, na_value, bounding_alg, time_limit):
 
 
 def all_None(*args):
+    """Return whether every argument is ``None``."""
     return args.count(None) == len(args)
 
 
 def calculate_column_intersections(matrix, for_loop=False, row_by_row=False):
+    """Calculate which mutation columns intersect in at least one row."""
     ret = np.empty((matrix.shape[1], matrix.shape[1]), dtype=bool)
     mask_1 = matrix == 1
 
@@ -127,12 +130,14 @@ def calculate_column_intersections(matrix, for_loop=False, row_by_row=False):
 
 
 def zero_or_na(vec, na_value=-1):
+    """Return a mask selecting zero and missing entries."""
     return np.logical_or(vec == 0, vec == na_value)
 
 
 def make_sure_variable_exists(
     memory_matrix, row, col, num_var_F, map_f2ij, var_list, na_value
 ):
+    """Create and register a SAT flip variable when one is absent."""
     if memory_matrix[row, col] < 0:
         num_var_F += 1
         map_f2ij[num_var_F] = (row, col)
@@ -142,6 +147,7 @@ def make_sure_variable_exists(
 
 
 def get_effective_matrix(I_mtr, delta01, delta_na_to_1, change_na_to_0=False):
+    """Apply regular and missing-value flips to a genotype matrix."""
     x = np.array(I_mtr + delta01, dtype=np.int8)
     if delta_na_to_1 is not None:
         na_indices = delta_na_to_1.nonzero()
@@ -161,6 +167,7 @@ def make_twosat_model_from_np(
     heuristic_setting=None,
     compact_formulation=True,
 ):
+    """Build a weighted two-SAT model from conflict constraints."""
     if eps is None:
         eps = 1 / (len(zero_vars) + len(na_vars))
 
@@ -234,6 +241,7 @@ def twosat_solver(
     eps=0,
     compact_formulation=False,
 ):
+    """Solve the weighted two-SAT relaxation of matrix correction."""
     global rec_num
     rec_num += 1
     assert not cluster_rows, "Not implemented yet"
@@ -463,8 +471,9 @@ def make_constraints_np_matrix(
                         x = np.empty((r01.shape[0] + r10.shape[0], 2), dtype=int)
                         x[: len(r01), 0] = r01
                         x[: len(r01), 1] = p
-                        x[-len(r10) :, 0] = r10
-                        x[-len(r10) :, 1] = q
+                        r10_slice = slice(-len(r10), None)
+                        x[r10_slice, 0] = r10
+                        x[r10_slice, 1] = q
 
                         for a, b, ind in itertools.product(r01, r10, range(x.shape[0])):
                             for row, col in [
@@ -523,6 +532,8 @@ def make_constraints_np_matrix(
 
 
 def is_conflict_free_gusfield_and_get_two_columns_in_coflicts(I_mtr, na_value):
+    """Check conflict freedom and return one conflicting column pair."""
+
     def sort_bin(a):
         b = np.transpose(a)
         b_view = np.ascontiguousarray(b).view(
@@ -556,6 +567,8 @@ def is_conflict_free_gusfield_and_get_two_columns_in_coflicts(I_mtr, na_value):
 
 
 class BoundingAlgAbstract:
+    """Define the interface for branch-and-bound lower-bound strategies."""
+
     def __init__(
         self,
         matrix=None,
@@ -576,6 +589,7 @@ class BoundingAlgAbstract:
         self.na_support = na_support
 
     def reset(self, matrix):
+        """Reset the strategy for a new input matrix."""
         scp.logg.error("The method not implemented")
 
     def get_bound(self, delta):
@@ -587,12 +601,15 @@ class BoundingAlgAbstract:
         scp.logg.error("The method not implemented")
 
     def get_name(self):
+        """Return the strategy class name."""
         return type(self).__name__
 
     def get_state(self):
+        """Return serializable strategy state for a search node."""
         return None
 
     def set_state(self, state):
+        """Restore strategy state from a search node."""
         assert state is None
 
     def get_extra_info(self):
@@ -605,16 +622,21 @@ class BoundingAlgAbstract:
         return copy.copy(self._extraInfo)
 
     def get_priority(self, till_here, this_step, after_here, icf=False):
+        """Calculate the queue priority for a search node."""
         return -after_here
 
     def get_times(self):
+        """Return accumulated model-building and optimization times."""
         return self._times
 
     def get_init_node(self):
+        """Return an optional initial search node."""
         return None
 
 
 class TwoSatBounding(BoundingAlgAbstract):
+    """Compute branch-and-bound lower bounds with weighted two-SAT."""
+
     def __init__(
         self,
         priority_version=-1,
@@ -650,6 +672,7 @@ class TwoSatBounding(BoundingAlgAbstract):
         self.only_descendant_rows = only_descendant_rows
 
     def get_name(self):
+        """Return a name encoding the strategy configuration."""
         params = [
             type(self).__name__,
             self.priority_version,
@@ -662,12 +685,14 @@ class TwoSatBounding(BoundingAlgAbstract):
         return "_".join(params_str)
 
     def reset(self, matrix):
+        """Reset the two-SAT strategy for a new input matrix."""
         self.matrix = matrix  # TD: make the model here and do small alterations later
 
         # self.na_value = infer_na_value(matrix)
         self._times = {"model_preparation_time": 0, "optimization_time": 0}
 
     def get_init_node(self):
+        """Build an initial search node from the two-SAT relaxation."""
         node = pybnb.Node()
         solution, model_time, opt_time, lb = twosat_solver(
             self.matrix,
@@ -704,6 +729,7 @@ class TwoSatBounding(BoundingAlgAbstract):
         return node
 
     def get_bound(self, delta, delta_na=None):
+        """Calculate a lower bound after applying the proposed flips."""
         # make this dynamic when more nodes were getting explored
         if self.next_lb is not None:
             lb = self.next_lb
@@ -771,6 +797,7 @@ class TwoSatBounding(BoundingAlgAbstract):
         return ret
 
     def get_priority(self, till_here, this_step, after_here, icf=False):
+        """Calculate queue priority using the configured priority version."""
         if icf:
             return self.matrix.shape[0] * self.matrix.shape[1] + 10
         else:
@@ -796,6 +823,8 @@ class TwoSatBounding(BoundingAlgAbstract):
 
 
 class BnB(pybnb.Problem):
+    """Implement a pybnb problem for conflict-free matrix correction."""
+
     def __init__(self, I_mtr, boundingAlg: BoundingAlgAbstract, na_value=None):
         """[summary].
 
@@ -834,18 +863,22 @@ class BnB(pybnb.Problem):
         self.bound_value = self.boundingAlg.get_bound(self.delta)
 
     def sense(self):
+        """Return the minimization objective sense."""
         return pybnb.minimize
 
     def objective(self):
+        """Return the flip count for a conflict-free search state."""
         if self.icf:
             return self.delta.count_nonzero()
         else:
             return pybnb.Problem.infeasible_objective(self)
 
     def bound(self):
+        """Return the current node's lower bound."""
         return self.bound_value
 
     def save_state(self, node):
+        """Save the current problem state into a search node."""
         node.state = (
             self.delta,
             self.icf,
@@ -856,6 +889,7 @@ class BnB(pybnb.Problem):
         )
 
     def load_state(self, node):
+        """Restore the problem state from a search node."""
         (
             self.delta,
             self.icf,
@@ -867,9 +901,11 @@ class BnB(pybnb.Problem):
         self.boundingAlg.set_state(boundingAlgState)
 
     def get_current_matrix(self):
+        """Return the input matrix with current flips applied."""
         return get_effective_matrix(self.I_mtr, self.delta, self.delta_na)
 
     def branch(self):
+        """Yield child nodes that repair one side of a column conflict."""
         if self.icf:
             return
 
@@ -949,6 +985,7 @@ class BnB(pybnb.Problem):
 
 
 def bnb_solve(matrix, bounding_algorithm, na_value=None, time_limit=None):
+    """Run the branch-and-bound solver and return its corrected matrix."""
     problem1 = BnB(matrix, bounding_algorithm, na_value=na_value)
     solver = pybnb.solver.Solver()
     results1 = solver.solve(

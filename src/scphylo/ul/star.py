@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+"""Collect STAR alignment summaries into a tabular report."""
+
 import glob
 import sys
 
@@ -8,6 +10,7 @@ import scphylo as scp
 
 
 def get_numreads_percmapped(file):
+    """Parse mapping statistics from a STAR final log file."""
     data = {
         "total_reads": None,
         "uniquely_mapped": None,

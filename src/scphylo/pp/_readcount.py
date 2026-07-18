@@ -127,6 +127,8 @@ def filter_mut_reference_must_present_in_at_least(adata, min_cells=1):
 
 
 def mut_seperated_by_cell_group(adata, group_key):
+    """Calculate the mutant fraction for each mutation and cell group."""
+
     def func(x):
         # a = ((x == 1) | (x == 3)).sum(axis=0) / (x != 2).sum(axis=0)
         # b = (x == 2).sum(axis=0) / x.shape[0]
@@ -145,12 +147,14 @@ def mut_seperated_by_cell_group(adata, group_key):
 
 
 def remove_nonsense_cells(adata):
+    """Remove cells whose genotype entries are all reference or unknown."""
     G = adata.layers["genotype"]
     good_cells = ((G == 0) | (G == 2)).sum(axis=1) != G.shape[0]
     keep_cell_by_list(adata, adata.obs_names.to_numpy()[good_cells])
 
 
 def build_scmatrix(adata):
+    """Populate the binary single-cell matrix from genotype states."""
     G = adata.layers["genotype"]
     adata.X[G == 0] = 0
     adata.X[(G == 1) | (G == 3)] = 1
@@ -166,6 +170,7 @@ def build_scmatrix(adata):
 
 
 def statistics(adata):
+    """Log genotype-state counts for read-count data."""
     G = adata.layers["genotype"]
     t = adata.shape[0] * adata.shape[1]
     a = (G == 0).sum().sum()
@@ -180,6 +185,8 @@ def statistics(adata):
 
 
 def group_obs_apply_func(adata, group_key, func=np.nansum, layer=None):
+    """Apply a column-wise aggregation to each observation group."""
+
     def getX(x):
         if layer is not None:
             return x.layers[layer]
@@ -200,6 +207,7 @@ def group_obs_apply_func(adata, group_key, func=np.nansum, layer=None):
 
 
 def filter_snpeff(adata, exome=False):
+    """Filter SnpEff annotations to supported protein-coding variants."""
     a = adata.var.Transcript_BioType == "protein_coding"
     b = adata.var.Feature_Type == "transcript"
     # c = adata.var.Annotation.isin(["synonymous_variant", "missense_variant"])

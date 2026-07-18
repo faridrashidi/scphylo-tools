@@ -1,10 +1,8 @@
-"""
-Reconstruct tree by Trisicell-PartF
------------------------------------
+"""Trisicell-PartF assessment.""" "\n---------------------------"
 
-This example shows how to assess a phylogenetic tree using Trisicell-PartF on a
-binary single-cell genotype matrix.
-"""
+# %%
+# This example shows how to assess a phylogenetic tree using Trisicell-PartF on a
+# binary single-cell genotype matrix.
 
 import scphylo as scp
 

@@ -131,6 +131,7 @@ def infscite(
     n_restarts=3,
     experiment=False,
 ):
+    """Run infSCITE on a single-cell genotype matrix."""
     # TODO: implement
     scp.logg.info(
         f"running infSCITE with alpha={alpha}, beta={beta}, n_iters={n_iters}, "

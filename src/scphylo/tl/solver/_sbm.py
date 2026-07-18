@@ -7,6 +7,7 @@ import scphylo as scp
 
 
 def sbm(data2):
+    """Infer a nested stochastic block model for the input matrix."""
     # TODO: implement
     _, graph_tool_is_not_imported = scp.ul.import_graph_tool()
     if graph_tool_is_not_imported:

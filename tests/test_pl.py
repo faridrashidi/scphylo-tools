@@ -1,8 +1,13 @@
+"""Verify plotting helpers and their rendered output."""
+
 import scphylo as scp
 
 
 class TestPlotting:
+    """Exercise heatmap and tree plotting workflows."""
+
     def test_heatmap(self):
+        """Verify heatmaps for genotype data and inferred flips."""
         adata = scp.datasets.example()
         adata = adata[adata.obs.group.isin(["C16", "C11", "C22"]), :].copy()
         scp.pp.filter_mut_vaf_greater_than_coverage_mutant_greater_than(
@@ -28,12 +33,14 @@ class TestPlotting:
         assert True
 
     def test_clonal_tree(self, test_cf_data_1):
+        """Verify that clonal-tree rendering returns PNG data."""
         data = scp.io.read(test_cf_data_1)
         tree = scp.ul.to_tree(data)
         image = scp.pl.clonal_tree(tree, show=False)
         assert image.data.startswith(b"\x89PNG\r\n\x1a\n")
 
     def test_clonal_tree_with_coloring(self):
+        """Verify clonal-tree rendering with cell colors and numeric labels."""
         adata = scp.datasets.high_grade_serous_ovarian_cancer_3celllines()
         df_out = adata.to_df(layer="ground")[adata.var_names[:1000]]
         tree = scp.ul.to_tree(df_out)
@@ -53,12 +60,14 @@ class TestPlotting:
         assert True
 
     def test_dendro_tree_1(self, test_cf_data_1):
+        """Verify that dendrogram rendering returns PNG data."""
         data = scp.io.read(test_cf_data_1)
         tree = scp.ul.to_tree(data)
         image = scp.pl.dendro_tree(tree, show=False)
         assert image.data.startswith(b"\x89PNG\r\n\x1a\n")
 
     def test_dendro_tree_2(self):
+        """Verify annotated dendrogram rendering from inferred genotypes."""
         adata = scp.datasets.example()
         adata = adata[adata.obs.group.isin(["C16", "C11", "C22"]), :].copy()
         scp.pp.filter_mut_vaf_greater_than_coverage_mutant_greater_than(

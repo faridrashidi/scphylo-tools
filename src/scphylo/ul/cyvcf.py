@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+"""Convert an annotated VCF file into an AnnData genotype dataset."""
+
 import sys
 
 import anndata as ad

@@ -1,8 +1,13 @@
+"""Verify partition-function estimation."""
+
 import scphylo as scp
 
 
 class TestParitionFunction:
+    """Exercise mutation and cell partition-function queries."""
+
     def test_partition_function(self):
+        """Verify that sampled partition probabilities are nonnegative."""
         df_in = scp.datasets.test()
         probs = scp.tl.partition_function(
             df_in,

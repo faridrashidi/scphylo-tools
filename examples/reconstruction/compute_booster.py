@@ -1,10 +1,8 @@
-"""
-Reconstruct tree by Trisicell-Boost
------------------------------------
+"""Trisicell-Boost reconstruction.""" "\n--------------------------------"
 
-This example shows how to construct a phylogenetic tree using Trisicell-Boost on a
-binary single-cell genotype matrix.
-"""
+# %%
+# This example shows how to construct a phylogenetic tree using Trisicell-Boost on a
+# binary single-cell genotype matrix.
 
 import scphylo as scp
 

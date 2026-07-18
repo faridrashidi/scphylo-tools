@@ -16,6 +16,7 @@ __date__ = "11/30/21"
 
 @lru_cache(maxsize=None)
 def cell_row_likelihood(input_row, node_genotype, alpha, beta):
+    """Calculate a cell's log-likelihood at a candidate tree node."""
     likelihood = 0
     for j in range(len(input_row)):
         if input_row[j] == "0":
@@ -39,6 +40,7 @@ def cell_row_likelihood(input_row, node_genotype, alpha, beta):
 
 
 def greedy_tree_likelihood(tree, nid_dict, input_scs, alpha, beta):
+    """Score a tree by greedily attaching cells to their best nodes."""
     type(tree)
     likelihood = 0
     attachment = []
@@ -60,6 +62,7 @@ def greedy_tree_likelihood(tree, nid_dict, input_scs, alpha, beta):
 
 
 def get_expect_matrix(tree, nid_dict, input_scs, alpha, beta):
+    """Build the expected genotype matrix from greedy cell attachments."""
     _, attachment = greedy_tree_likelihood(tree, nid_dict, input_scs, alpha, beta)
     e_matrix = []
 
@@ -78,6 +81,7 @@ def get_expect_matrix(tree, nid_dict, input_scs, alpha, beta):
 
 
 def generate_neighborhood(start_tree, start_nid_dict, neighborhood_size):
+    """Generate valid prune-and-reattach neighbors of a tree."""
     type(start_nid_dict)
     neighbors = []
     while len(neighbors) < neighborhood_size:
@@ -105,6 +109,7 @@ def hill_climbing(
     beta,
     input_scs,
 ):
+    """Improve a tree by hill climbing over prune-and-reattach neighbors."""
     current_tree = start_tree
     current_dict = start_nid_dict
     current_lh, _ = greedy_tree_likelihood(
@@ -141,6 +146,7 @@ def hill_climbing(
 
 
 def gpps_hc(input_matrix, ilp_matrix, alpha, beta, k_dollo, mut_names, ns=30, mi=100):
+    """Refine a GPPS ILP solution with hill climbing."""
     imported_tree, imported_nid_dict = import_ilp_out(ilp_matrix, k_dollo, mut_names)
 
     hc_best_tree, hc_best_dict = hill_climbing(

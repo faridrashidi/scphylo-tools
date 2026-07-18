@@ -220,6 +220,7 @@ ha1, hprob, hswap = 0.0, 0.0, False
 
 
 def AlterForIntegralChecks_Others(value):
+    """Coerce a value to an integer according to the configured policy."""
     # If non integral values are allowed then returns math.floor(value) otherwise only
     # allows value if it equals math.floor(value)
     if NonIntegralValuesAllowed_Others:
@@ -231,6 +232,7 @@ def AlterForIntegralChecks_Others(value):
 
 
 def Generalabminuscd(a, b, c, d):
+    """Calculate ``a * b - c * d`` while limiting cancellation error."""
     if (a == 0.0) or (b == 0.0) or (c == 0.0) or (d == 0.0):
         return a * b - c * d
     amr, ae = math.frexp(a)
@@ -262,11 +264,13 @@ def Generalabminuscd(a, b, c, d):
 
 
 def logfbit2dif(x):
+    """Calculate the difference between consecutive second derivatives."""
     # Calculation of logfbit2(x)-logfbit2(1+x).
     return 0.5 * (((x + 1.0) * (x + 2.0)) ** -2)
 
 
 def logfbit2(x):
+    """Calculate the second derivative of the Stirling error term."""
     # Second derivative of error part of Stirling's formula where
     # log(x!) = log(sqrt(twopi))+(x+0.5)*log(x+1)-(x+1)+logfbit(x).
     if x >= 10000000000.0:
@@ -291,11 +295,13 @@ def logfbit2(x):
 
 
 def logfbit4dif(x):
+    """Calculate the difference between consecutive fourth derivatives."""
     # Calculation of logfbit4(x)-logfbit4(1+x).
     return (10.0 * x * (x + 3.0) + 23.0) * (((x + 1.0) * (x + 2.0)) ** -4)
 
 
 def logfbit4(x):
+    """Calculate the fourth derivative of the Stirling error term."""
     # Fourth derivative of error part of Stirling's formula where
     # log(x!) = log(sqrt(twopi))+(x+0.5)*log(x+1)-(x+1)+logfbit(x).
     if x >= 10000000000.0:
@@ -321,6 +327,7 @@ def logfbit4(x):
 
 
 def log0(x):
+    """Calculate ``log(1 + x)`` accurately for small values."""
     # Accurate and quicker calculation of log(1+x), particularly for small x.
     # Code from Wolfgang Ehrhardt.
     if x > 4.0:
@@ -334,6 +341,7 @@ def log0(x):
 
 
 def logcf(x, i, d):
+    """Evaluate the continued fraction used by the logarithm helpers."""
     # Continued fraction for calculation of
     # 1/i + x/(i+d) + x*x/(i+2*d) + x*x*x/(i+3d) + ...
     c1 = 2.0 * d
@@ -372,6 +380,7 @@ def logcf(x, i, d):
 
 
 def log1(x):
+    """Calculate ``log(1 + x) - x`` accurately for small values."""
     # Accurate calculation of log(1+x)-x, particularly for small x.
     if abs(x) < 0.01:
         term = x / (2.0 + x)
@@ -388,6 +397,7 @@ def log1(x):
 
 
 def logfbitdif(x):
+    """Calculate the difference between consecutive Stirling error terms."""
     # Calculation of logfbit(x)-logfbit(1+x). x must be > -1.
     if x < -0.65:
         return (x + 1.5) * log0(1.0 / (x + 1.0)) - 1.0
@@ -397,6 +407,7 @@ def logfbitdif(x):
 
 
 def logfbita(x):
+    """Calculate the Stirling approximation error term."""
     # Error part of Stirling's formula where math.log(x!) =
     # math.log(math.sqrtt(twopi))+(x+0.5)*math.log(x+1)-(x+1)+logfbita(x).
     # Are we ever concerned about the relative error involved in this function?
@@ -434,6 +445,7 @@ def logfbita(x):
 
 
 def logfbit(x):
+    """Calculate the logarithmic factorial Stirling error term."""
     # Calculates log of x factorial - log(sqrt(2*pi)) +(x+1) -(x+0.5)*log(x+1)
     # using the error part of Stirling's formula
     # (see Abramowitz & Stegun# s series 6.1.41)
@@ -504,8 +516,8 @@ def logfbit(x):
             i = len(coeffs) - 1
             lgam = coeffs[i] * logcf(-x / 2.0, i + 2.0, 1.0)
             # print(i, coeffs[i],lgam)
-            for i in range(i - 1, 0, -1):
-                lgam = coeffs[i] - x * lgam
+            for index in range(i - 1, 0, -1):
+                lgam = coeffs[index] - x * lgam
                 # print(i,lgam)
             return (
                 (
@@ -522,8 +534,8 @@ def logfbit(x):
                 2.0**-i
             ) + (3.0**-i) * logcf(-x / 3.0, i, 1.0)
             # print(i,coeffs2[i-3],lgam)
-            for i in range(i - 3, -1, -1):
-                lgam = coeffs2[i] - x * lgam
+            for index in range(i - 3, -1, -1):
+                lgam = coeffs2[index] - x * lgam
                 # print(i,lgam)
             return (x * lgam + Onep25Minusln2Minuseulers_const) * x + lfb_1
         elif x <= 2.5:
@@ -531,8 +543,8 @@ def logfbit(x):
             i = len(coeffs) - 1
             lgam = coeffs[i] * logcf(-x / 2.0, i + 2.0, 1.0)
             # print(i, coeffs[i],lgam)
-            for i in range(i - 1, 0, -1):
-                lgam = coeffs[i] - x * lgam
+            for index in range(i - 1, 0, -1):
+                lgam = coeffs[index] - x * lgam
                 # print(lgam)
             coeffs0Minus1Third = 0
             FiveOver3Minusln3Minuseulers_const = 0
@@ -549,8 +561,8 @@ def logfbit(x):
             i = len(coeffs) - 1
             lgam = coeffs[i] * logcf(-x / 2.0, i + 2.0, 1.0)
             # print(i, coeffs[i],lgam)
-            for i in range(i - 1, 0, -1):
-                lgam = coeffs[i] - x * lgam
+            for index in range(i - 1, 0, -1):
+                lgam = coeffs[index] - x * lgam
                 # print(lgam)
             Forty7Over48Minusln4Minuseulers_const = 0
             return (
@@ -570,6 +582,7 @@ def logfbit(x):
 
 
 def lfbaccdif1(a, b):
+    """Calculate a difference between two related Stirling error terms."""
     # Calculates logfbit(b)-logfbit(a+b) accurately for a > 0 & b >= 0.
     # Reasonably accurate for a >=0 & b < 0.
     if a < 0.0:
@@ -686,10 +699,10 @@ def lfbaccdif1(a, b):
                 - scale3 / 3.0 * (1.0 / (1.0 - x3) - i * logcf(x3, i + 1.0, 1.0))
             )
 
-        for i in range(i - 3, -1, -1):
+        for index in range(i - 3, -1, -1):
             acc = a * y2 - x1 * acc
-            y2 = coeffs2[i] - y1 * y2
-            x2 = coeffs2[i] - x1 * x2
+            y2 = coeffs2[index] - y1 * y2
+            x2 = coeffs2[index] - x1 * x2
         return s1 + (
             y1 * y1 * acc - a * (x2 * (x1 + y1) + Onep25Minusln2Minuseulers_const)
         )
@@ -698,6 +711,7 @@ def lfbaccdif1(a, b):
 
 
 def hypergeometricTerm(ai, aji, aki, amkji):
+    """Calculate a hypergeometric probability term from table counts."""
     # Probability that hypergeometric variate from a population with total type Is of
     # aki+ai, total type IIs of amkji+aji, has ai type Is and aji type IIs selected.
     # Parameterised this way for use with the Beta Negative Binomial distribution.
@@ -765,6 +779,7 @@ def hypergeometricTerm(ai, aji, aki, amkji):
 
 
 def hypergeometric(ai, aji, aki, amkji, comp):  # , ha1, hprob, hswap):
+    """Calculate a hypergeometric cumulative or survival probability."""
     # Probability that hypergeometric variate from a population with total type Is of
     # aki+ai, total type IIs of amkji+aji, has up to ai type Is selected in a sample
     # of size aji+ai.
@@ -959,6 +974,7 @@ def hypergeometric(ai, aji, aki, amkji, comp):  # , ha1, hprob, hswap):
 
 
 def PBB(i, ssmi, beta_shape1, beta_shape2):
+    """Calculate an auxiliary beta-negative-binomial probability term."""
     global hTerm
     hTerm = hypergeometricTerm(i, ssmi, beta_shape1, beta_shape2)
     return (
@@ -970,6 +986,7 @@ def PBB(i, ssmi, beta_shape1, beta_shape2):
 
 
 def pmf_BetaNegativeBinomial(i, r, beta_shape1, beta_shape2):
+    """Calculate a beta-negative-binomial probability mass."""
     i = AlterForIntegralChecks_Others(i)
     if r <= 0.0 or beta_shape1 <= 0.0 or beta_shape2 <= 0.0:
         raise ValueError
@@ -987,6 +1004,7 @@ def pmf_BetaNegativeBinomial(i, r, beta_shape1, beta_shape2):
 
 
 def CBNB0(i, r, beta_shape1, beta_shape2, toBeAdded):
+    """Calculate a beta-negative-binomial cumulative probability."""
     global ha1, hprob, hswap
     if r < 2.0 or beta_shape2 < 2.0:
         # Assumption here that i is integral or greater than 4.
@@ -1037,6 +1055,7 @@ def CBNB0(i, r, beta_shape1, beta_shape2, toBeAdded):
 
 
 def CBNB2(i, r, beta_shape1, beta_shape2):
+    """Calculate a stabilized beta-negative-binomial cumulative probability."""
     ss = min(r, beta_shape2)
     bs2 = max(r, beta_shape2)
     r = ss
@@ -1088,6 +1107,7 @@ def CBNB2(i, r, beta_shape1, beta_shape2):
 
 
 def ccBNB5(ilim, rr, a, bb):
+    """Calculate a beta-negative-binomial tail correction."""
     if rr > bb:
         r = rr
         b = bb
@@ -1123,6 +1143,7 @@ def ccBNB5(ilim, rr, a, bb):
 
 
 def cdf_BetaNegativeBinomial(i, r, beta_shape1, beta_shape2):
+    """Calculate the beta-negative-binomial cumulative distribution."""
     i = math.floor(i)
     if r <= 0.0 or beta_shape1 <= 0.0 or beta_shape2 <= 0.0:
         raise ValueError
@@ -1133,6 +1154,7 @@ def cdf_BetaNegativeBinomial(i, r, beta_shape1, beta_shape2):
 
 
 def sf_BetaNegativeBinomial(i, r, beta_shape1, beta_shape2):
+    """Calculate the beta-negative-binomial survival function."""
     i = math.floor(i)
     mrb2 = max(r, beta_shape2)
     other = min(r, beta_shape2)
@@ -1251,6 +1273,7 @@ def sf_BetaNegativeBinomial(i, r, beta_shape1, beta_shape2):
 
 
 def pmf_BetaBinomial(i, sample_size, beta_shape1, beta_shape2):
+    """Calculate a beta-binomial probability mass."""
     i = AlterForIntegralChecks_Others(i)
     sample_size = AlterForIntegralChecks_Others(sample_size)
     # These probably should be checked once, when creating a BetaBinomial distribution
@@ -1272,6 +1295,7 @@ def pmf_BetaBinomial(i, sample_size, beta_shape1, beta_shape2):
 
 
 def cdf_BetaBinomial(i, sample_size, beta_shape1, beta_shape2):
+    """Calculate the beta-binomial cumulative distribution."""
     i = math.floor(i)
     sample_size = AlterForIntegralChecks_Others(sample_size)
     if (beta_shape1 <= 0.0) or (beta_shape2 <= 0.0) or (sample_size < 0.0):
@@ -1284,6 +1308,7 @@ def cdf_BetaBinomial(i, sample_size, beta_shape1, beta_shape2):
 
 
 def sf_BetaBinomial(i, sample_size, beta_shape1, beta_shape2):
+    """Calculate the beta-binomial survival function."""
     i = math.floor(i)
     sample_size = AlterForIntegralChecks_Others(sample_size)
     if (beta_shape1 <= 0.0) or (beta_shape2 <= 0.0) or (sample_size < 0.0):
@@ -1298,6 +1323,7 @@ def sf_BetaBinomial(i, sample_size, beta_shape1, beta_shape2):
 
 # Hypergeometric & Negative Hpergeometric pmfs, cdfs & sfs for completeness
 def pmf_hypergeometric(type1s, sample_size, tot_type1, pop_size):
+    """Calculate a hypergeometric probability mass."""
     type1s = AlterForIntegralChecks_Others(type1s)
     sample_size = AlterForIntegralChecks_Others(sample_size)
     tot_type1 = AlterForIntegralChecks_Others(tot_type1)
@@ -1319,6 +1345,7 @@ def pmf_hypergeometric(type1s, sample_size, tot_type1, pop_size):
 
 
 def cdf_hypergeometric(type1s, sample_size, tot_type1, pop_size):
+    """Calculate the hypergeometric cumulative distribution."""
     type1s = math.floor(type1s)
     sample_size = AlterForIntegralChecks_Others(sample_size)
     tot_type1 = AlterForIntegralChecks_Others(tot_type1)
@@ -1341,6 +1368,7 @@ def cdf_hypergeometric(type1s, sample_size, tot_type1, pop_size):
 
 
 def sf_hypergeometric(type1s, sample_size, tot_type1, pop_size):
+    """Calculate the hypergeometric survival function."""
     type1s = math.floor(type1s)
     sample_size = AlterForIntegralChecks_Others(sample_size)
     tot_type1 = AlterForIntegralChecks_Others(tot_type1)
@@ -1363,6 +1391,7 @@ def sf_hypergeometric(type1s, sample_size, tot_type1, pop_size):
 
 
 def pmf_neghypergeometric(type2s, type1s_reqd, tot_type1, pop_size):
+    """Calculate a negative-hypergeometric probability mass."""
     type2s = AlterForIntegralChecks_Others(type2s)
     type1s_reqd = AlterForIntegralChecks_Others(type1s_reqd)
     tot_type1 = AlterForIntegralChecks_Others(tot_type1)
@@ -1388,6 +1417,7 @@ def pmf_neghypergeometric(type2s, type1s_reqd, tot_type1, pop_size):
 
 
 def cdf_neghypergeometric(type2s, type1s_reqd, tot_type1, pop_size):
+    """Calculate the negative-hypergeometric cumulative distribution."""
     type2s = math.floor(type2s)
     type1s_reqd = AlterForIntegralChecks_Others(type1s_reqd)
     tot_type1 = AlterForIntegralChecks_Others(tot_type1)
@@ -1407,6 +1437,7 @@ def cdf_neghypergeometric(type2s, type1s_reqd, tot_type1, pop_size):
 
 
 def sf_neghypergeometric(type2s, type1s_reqd, tot_type1, pop_size):
+    """Calculate the negative-hypergeometric survival function."""
     type2s = math.floor(type2s)
     type1s_reqd = AlterForIntegralChecks_Others(type1s_reqd)
     tot_type1 = AlterForIntegralChecks_Others(tot_type1)

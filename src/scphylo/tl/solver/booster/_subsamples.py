@@ -19,6 +19,7 @@ def subsampling(
     tmpdir,
     disable_tqdm,
 ):
+    """Solve random cell or mutation subsamples in parallel."""
     if solver.lower() == "scite":
         time_limit = n_iterations
 

@@ -145,6 +145,7 @@ def add_noise(df_in, alpha, beta, missing):
 
 
 def add_doublets(df_ground, df_noisy, alpha, beta, missing, doublet):
+    """Add simulated doublet cells to ground-truth and noisy matrices."""
     df_doublet = df_noisy.copy()
     doublet_cells = []
     for _ in range(int(doublet * df_ground.shape[0])):

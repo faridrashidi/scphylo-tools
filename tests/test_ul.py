@@ -1,3 +1,5 @@
+"""Verify general-purpose matrix and tree utilities."""
+
 import numpy as np
 import pandas as pd
 import pytest
@@ -6,7 +8,10 @@ import scphylo as scp
 
 
 class TestUtils:
+    """Exercise clustering, conversion, traversal, and helper utilities."""
+
     def test_dist_l1_ignore_na_read_only(self):
+        """Verify L1 distance without mutating a read-only input matrix."""
         matrix = np.array([[0, 3, 1, 1], [1, 0, 1, 3]])
         expected = matrix.copy()
         matrix.setflags(write=False)
@@ -17,22 +22,26 @@ class TestUtils:
         np.testing.assert_array_equal(matrix, expected)
 
     def test_hclustering_1(self):
+        """Verify hierarchical clustering on a synthetic binary matrix."""
         np.random.seed(0)
         df = pd.DataFrame(np.random.randint(0, 2, size=(10, 10)))
         clusters = scp.ul.hclustering(df)
         assert clusters[6].value_counts()[5] == 3
 
     def test_hclustering_2(self):
+        """Verify hierarchical clustering with the L1 metric."""
         adata = scp.datasets.example()
         clusters = scp.ul.hclustering(adata.to_df(), metric="l1")
         assert len(clusters) == 81
 
     def test_hclustering_3(self):
+        """Verify hierarchical clustering with the cosine metric."""
         adata = scp.datasets.example()
         clusters = scp.ul.hclustering(adata.to_df(), metric="cosine")
         assert len(clusters) == 81
 
     def test_dist_dendro(self):
+        """Verify the aggregate dendrogram distance for example data."""
         scp.settings.verbosity = 0
         adata = scp.datasets.example()
         dist = scp.ul.dist_dendro(adata)
@@ -40,6 +49,7 @@ class TestUtils:
         assert dist.sum() < 262457
 
     def test_tree_to_cfmatrix(self):
+        """Verify a lossless tree-to-matrix round trip."""
         df_in = scp.datasets.test()
         df_out = scp.tl.phiscsb(df_in, alpha=0.0000001, beta=0.1)
         tree = scp.ul.to_tree(df_out)
@@ -48,6 +58,7 @@ class TestUtils:
         pd.testing.assert_frame_equal(df_out, df_out2, check_dtype=False)
 
     def test_tree_to_mtree(self):
+        """Verify conversion from a cell tree to a mutation tree."""
         df_in = scp.datasets.test()
         df_out = scp.tl.phiscsb(df_in, alpha=0.0000001, beta=0.1)
         tree = scp.ul.to_tree(df_out)
@@ -55,18 +66,21 @@ class TestUtils:
         assert len(tree.nodes) == 13
 
     def test_to_tree(self, test_cf_data_1):
+        """Verify the node and edge counts of a converted tree."""
         data = scp.io.read(test_cf_data_1)
         tree = scp.ul.to_tree(data)
         assert len(list(tree.nodes)) == 10
         assert len(list(tree.edges)) == 9
 
     def test_mtree(self, test_cf_data_1):
+        """Verify mutation labels after mutation-tree conversion."""
         data = scp.io.read(test_cf_data_1)
         tree = scp.ul.to_tree(data)
         mtree = scp.ul.to_mtree(tree)
         assert len(mtree.nodes[8]["label"]) == 13
 
     def test_cells_muts_rooted_at(self, test_cf_data_1):
+        """Verify rooted cell and mutation queries after tree collapse."""
         data = scp.io.read(test_cf_data_1)
 
         tree = scp.ul.to_tree(data)
@@ -88,6 +102,7 @@ class TestUtils:
         assert res.shape[0] == 51
 
     def test_general(self, test_cf_data_1):
+        """Verify executable lookup, path parsing, and timing helpers."""
         with pytest.raises(RuntimeError):
             scp.ul.executable("kDPFC", "SPhyR")
 

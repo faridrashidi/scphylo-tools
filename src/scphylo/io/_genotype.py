@@ -100,6 +100,8 @@ def _read_nwk(filepath):
 
 
 def to_vcf(adata, filepath):
+    """Write genotype and read-count data from an AnnData object to VCF."""
+
     def _calculate_pl(ref_count, alt_count):
         if ref_count == 0 and alt_count == 0:
             return [0, 0, 0]

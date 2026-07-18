@@ -155,7 +155,7 @@ def rscistree(adata, alpha=0, beta=0, n_threads=1, mode="haploid"):
         fout.write(f"{mode.upper()} {len(snvs)} {len(cells)}\n")
         for j in range(len(snvs)):
             for i in range(len(cells)):
-                fout.write(f"{R[i,j]} {V[i,j]}     ")
+                fout.write(f"{R[i, j]} {V[i, j]}     ")
             fout.write("\n")
 
     cmd = [

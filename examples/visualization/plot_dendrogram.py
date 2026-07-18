@@ -1,9 +1,7 @@
-"""
-Visualizing a tree in dendrogram format
----------------------------------------
+"""Dendrogram tree visualization.""" "\n------------------------------"
 
-This example shows how to visualize an inferred tree.
-"""
+# %%
+# This example shows how to visualize an inferred tree as a dendrogram.
 
 from io import BytesIO
 

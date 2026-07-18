@@ -90,6 +90,7 @@ docs = [
     "sphinx_gallery",
     "sphinx_rtd_theme",
     "sphinxcontrib-bibtex",
+    "truststore",
     "typing_extensions",
 ]
 
@@ -210,6 +211,7 @@ sphinx = "<6"
 sphinx-click = "*"
 sphinx-gallery = "*"
 sphinxcontrib-bibtex = "*"
+truststore = "*"
 
 [tool.pixi.feature.py311.dependencies]
 python = "3.11.*"
@@ -231,9 +233,9 @@ py313 = { features = ["dev", "plotting", "solvers", "py313"], solve-group = "py3
 [tool.pixi.tasks]
 clean = "rm -rf docs/build htmlcov .coverage .coverage.* docs/source/scphylo* docs/source/auto_examples docs/source/gen_modules docs/source/sg_execution_times.rst dist build"
 lint = { cmd = "pre-commit run --all-files", default-environment = "lint" }
-test = { cmd = "pytest --disable-warnings --cov=scphylo --cov-report=html tests", default-environment = "default" }
-test-plotting = { cmd = "pytest --disable-warnings tests/test_pl.py", default-environment = "default" }
-docs = { cmd = "sphinx-build -M html docs/source docs/build --keep-going", default-environment = "docs" }
+test = { cmd = "pytest --cov=scphylo --cov-report=html tests", default-environment = "default" }
+test-plotting = { cmd = "pytest tests/test_pl.py", default-environment = "default" }
+docs = { cmd = "sphinx-build -M html docs/source docs/build -W --keep-going", default-environment = "docs" }
 docs-serve = { cmd = "python -m http.server 8080", cwd = "docs/build/html", depends-on = ["docs"], default-environment = "docs" }
 pre-commit-install = { cmd = "pre-commit install", default-environment = "default" }
 cythonize = { cmd = "python setup.py build_ext --inplace", env = { CYTHONIZE = "1" }, default-environment = "default" }

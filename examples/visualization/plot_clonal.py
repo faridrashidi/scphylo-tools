@@ -1,9 +1,7 @@
-"""
-Visualizing a tree in clonal format
------------------------------------
+"""Clonal tree visualization.""" "\n--------------------------"
 
-This example shows how to visualize an inferred tree.
-"""
+# %%
+# This example shows how to visualize an inferred tree in clonal format.
 
 from io import BytesIO
 

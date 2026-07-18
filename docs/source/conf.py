@@ -16,12 +16,15 @@ import os
 import sys
 from pathlib import Path
 
+import truststore
 from pybtex.plugin import register_plugin
 from pybtex.style.formatting.unsrt import Style as UnsrtStyle
 from pybtex.style.labels import BaseLabelStyle
 from sphinx_gallery.sorting import ExplicitOrder, FileNameSortKey
 
 import scphylo as scp
+
+truststore.inject_into_ssl()
 
 HERE = Path(__file__).parent
 sys.path.insert(0, str(HERE.parent.parent))
@@ -83,11 +86,11 @@ master_doc = "index"
 
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
-    "numpy": ("https://docs.scipy.org/doc/numpy/", None),
-    "scipy": ("https://docs.scipy.org/doc/scipy/reference/", None),
-    "networkx": ("https://networkx.github.io/documentation/stable/", None),
+    "numpy": ("https://numpy.org/doc/stable/", None),
+    "scipy": ("https://docs.scipy.org/doc/scipy/", None),
+    "networkx": ("https://networkx.org/documentation/stable/", None),
     "pandas": ("https://pandas.pydata.org/pandas-docs/stable/", None),
-    "matplotlib": ("https://matplotlib.org/", None),
+    "matplotlib": ("https://matplotlib.org/stable/", None),
     "sklearn": ("https://scikit-learn.org/stable/", None),
     "seaborn": ("https://seaborn.pydata.org/", None),
     "anndata": ("https://anndata.readthedocs.io/en/latest/", None),
@@ -161,12 +164,16 @@ html_show_sphinx = False
 
 # a simple label style which uses the bibtex keys for labels
 class MyLabelStyle(BaseLabelStyle):
+    """Use bibliography entry keys as citation labels."""
+
     def format_labels(self, sorted_entries):
+        """Yield the key of each sorted bibliography entry."""
         for entry in sorted_entries:
             yield entry.key
 
 
 class MyStyle(UnsrtStyle):
+    """Format bibliography entries with key-based citation labels."""
 
     default_label_style = MyLabelStyle
 
@@ -175,18 +182,19 @@ register_plugin("pybtex.style.formatting", "mystyle", MyStyle)
 
 
 def setup(app):
-    """[summary].
+    """Configure the Sphinx application.
 
     Parameters
     ----------
-    app : [type]
-        [description]
+    app : sphinx.application.Sphinx
+        Sphinx application being initialized.
     """
     app.config.pygments_dark_style = "default"
 
 
 # -- sphinx gallery ------------------------------------------
 def reset_matplotlib(gallery_conf, fname):
+    """Reset Matplotlib before rendering a Sphinx Gallery example."""
     import matplotlib as mpl
 
     mpl.use("agg")
@@ -226,7 +234,6 @@ sphinx_gallery_conf = {
         "sphinx_gallery": None,
     },
     "line_numbers": False,
-    "compress_images": ("images", "thumbnails"),
     "inspect_global_variables": False,
     "backreferences_dir": "gen_modules/backreferences",
     "doc_module": "scphylo",

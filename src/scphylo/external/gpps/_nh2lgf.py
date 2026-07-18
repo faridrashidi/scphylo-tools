@@ -20,7 +20,7 @@ note = ""
 # is a name (or a bootstrap value in the case of an internal node),
 # and 'B' is a branch length
 def node(suffix, count, nodes, arcs):
-
+    """Parse one Newick node and append it to the node collection."""
     assert not suffix.startswith("("), "\n\ninput not in nh format"
 
     # eat until ',', ')' or ';'
@@ -41,7 +41,7 @@ def node(suffix, count, nodes, arcs):
 # where 'N' is a 'node' object (base case), and 'X' is a 'subtrees'
 # object (recursive case)
 def subtree(suffix, count, nodes, arcs):
-
+    """Parse a leaf node or nested Newick subtree."""
     if suffix.startswith("("):  # recursive case
         return subtrees(suffix, count, nodes, arcs)
 
@@ -52,7 +52,7 @@ def subtree(suffix, count, nodes, arcs):
 # for recieving and processing a 'subtrees' object, i.e. of the form
 # '(S,S,..,S)' where 'S' is a 'subtree' object
 def subtrees(suffix, count, nodes, arcs):
-
+    """Parse a parenthesized sequence of Newick subtrees."""
     assert ")" in suffix, "\n\ninput not in nh format"
 
     suffix = suffix[1:]  # eat the '('
@@ -79,6 +79,7 @@ def subtrees(suffix, count, nodes, arcs):
 
 
 def newick_to_edgelist(input_string):
+    """Convert a Newick string into node and edge collections."""
     s = input_string
     assert s.find(";") == len(s) - 1, "\n\nerror: input not in nh format"
     assert s.count("(") == s.count(")"), "\n\nerror: input not in nh format"

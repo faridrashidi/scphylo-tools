@@ -19,6 +19,7 @@ def example(is_expression=False):
 
 
 def test():
+    """Load the small genotype dataset used by the package tests."""
     df = scp.io.read(scp.ul.get_file("scphylo.datasets/test/test.tsv"))
     return df
 

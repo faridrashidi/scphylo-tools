@@ -34,7 +34,6 @@ repos:
       - id: mixed-line-ending
         args: [--fix=lf]
       - id: trailing-whitespace
-        exclude: ^.bumpversion.cfg$
       - id: check-case-conflict
       - id: check-docstring-first
       # -   id: check-yaml
@@ -46,16 +45,6 @@ repos:
       - id: script-must-have-extension
         name: Check executable files use .sh extension
         types: [shell, executable]
-  - repo: https://github.com/rstcheck/rstcheck
-    rev: v6.2.0
-    hooks:
-      - id: rstcheck
-        # README.rst is checked directly. Checking index.rst as well makes
-        # rstcheck miscalculate line numbers for its included README content.
-        exclude: ^docs/source/index\.rst$
-        args:
-          - --ignore-directives=currentmodule,autoclass,autofunction,minigallery,module,autosummary,click,toctree,bibliography
-          - --ignore-roles=ref,mod
   - repo: https://github.com/asottile/blacken-docs
     rev: 1.16.0
     hooks:
@@ -71,7 +60,7 @@ repos:
     hooks:
       - id: python-no-eval
       - id: python-use-type-annotations
-      # -   id: python-check-blanket-noqa
+      - id: python-check-blanket-noqa
       - id: rst-backticks
       - id: rst-directive-colons
       - id: rst-inline-touching-normal
@@ -97,7 +86,7 @@ repos:
             flake8-bugbear,
             flake8-blind-except,
           ]
-        args: [--max-line-length=88, --config=setup.cfg]
+        args: [--max-line-length=88]
   - repo: https://github.com/asottile/yesqa
     rev: v1.5.0
     hooks:

@@ -1,3 +1,5 @@
+"""Verify simulation, noise generation, and bundled dataset loaders."""
+
 import pytest
 
 import scphylo as scp
@@ -6,8 +8,11 @@ from ._helpers import skip_rpy2
 
 
 class TestDatasets:
+    """Exercise dataset generation and loading helpers."""
+
     @skip_rpy2("oncoNEM")
     def test_simulate_1(self):
+        """Verify that noisy OncoNEM simulation creates conflicts."""
         df_in = scp.datasets.simulate(
             n_cells=100, n_muts=100, n_clones=5, alpha=0.001, beta=0.4, missing=0.2
         )
@@ -16,6 +21,7 @@ class TestDatasets:
 
     @skip_rpy2("oncoNEM")
     def test_simulate_2(self):
+        """Verify that adding noise to a clean simulation creates conflicts."""
         df_ground = scp.datasets.simulate(
             n_cells=100, n_muts=100, n_clones=5, alpha=0, beta=0, missing=0
         )
@@ -23,12 +29,14 @@ class TestDatasets:
         assert not scp.ul.is_conflict_free_gusfield(df_noisy)
 
     def test_add_noise(self):
+        """Verify that added observation noise creates genotype conflicts."""
         df = scp.datasets.test()
         df[df == 3] = 0
         df_noisy = scp.datasets.add_noise(df, alpha=0.001, beta=0.1, missing=0.2)
         assert not scp.ul.is_conflict_free_gusfield(df_noisy)
 
     def test_add_readcount(self):
+        """Verify that simulated read-count layers preserve matrix shape."""
         df = scp.datasets.test()
         adata = scp.datasets.add_readcount(df, mean_coverage=60, seed=5)
         assert adata.layers["total"].shape == df.shape
@@ -38,10 +46,12 @@ class TestDatasets:
         "func, n, m", [(scp.datasets.example, 83, 452), (scp.datasets.test, 20, 20)]
     )
     def test_load_datasets_grid(self, func, n, m):
+        """Verify the expected shape of each parameterized dataset."""
         adata = func()
         assert adata.shape == (n, m)
 
     def test_load_datasets(self):
+        """Verify the expected shapes of all bundled datasets."""
         adata = scp.datasets.example()
         assert adata.shape == (83, 452)
         adata = scp.datasets.test()

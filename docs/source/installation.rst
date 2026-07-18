@@ -55,6 +55,5 @@ If you encounter any issues, please feel free to open a `GitHub issue`_.
 
 .. _PyPI: https://pypi.org/project/scphylo-tools
 .. _Pixi: https://pixi.prefix.dev/latest/installation/
-.. _Github: https://github.com/faridrashidi/scphylo-tools
 .. _Github issue: https://github.com/faridrashidi/scphylo-tools/issues/new/choose
 .. _contributing guide: https://github.com/faridrashidi/scphylo-tools/blob/main/.github/CONTRIBUTING.rst

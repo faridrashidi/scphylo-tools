@@ -2,6 +2,7 @@ import scphylo as scp
 
 
 def import_gurobi():
+    """Import Gurobi and report whether the dependency is unavailable."""
     try:
         import gurobipy as gp
 
@@ -16,6 +17,7 @@ def import_gurobi():
 
 
 def import_mpi4py():
+    """Import mpi4py and report whether the dependency is unavailable."""
     try:
         import mpi4py
 
@@ -30,6 +32,7 @@ def import_mpi4py():
 
 
 def import_rpy2(name="base", how=""):
+    """Import an R package through rpy2 and report whether it is unavailable."""
     try:
         import logging
 
@@ -56,6 +59,7 @@ def import_rpy2(name="base", how=""):
 
 
 def import_graphviz():
+    """Import PyGraphviz and report whether the dependency is unavailable."""
     try:
         import pygraphviz
 
@@ -70,6 +74,7 @@ def import_graphviz():
 
 
 def import_graph_tool():
+    """Import graph-tool and report whether the dependency is unavailable."""
     try:
         import graph_tool
 

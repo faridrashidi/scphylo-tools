@@ -1,5 +1,3 @@
-import warnings
-
 import numba
 import numpy as np
 import pandas as pd
@@ -29,6 +27,7 @@ def _l1_ignore_na_wrapper(x, y, **kwargs):
 
 
 def dist_l1_ignore_na(I_mtr, n_jobs=1):
+    """Compute pairwise L1 distances while ignoring missing values."""
     dist = pairwise_distances(
         I_mtr, metric=_l1_ignore_na_wrapper, force_all_finite="allow-nan", n_jobs=n_jobs
     )
@@ -65,6 +64,7 @@ def _cosine_ignore_na_wrapper(x, y, **kwargs):
 
 
 def dist_cosine_ignore_na(I_mtr, n_jobs=1):
+    """Compute pairwise cosine distances while ignoring missing values."""
     dist = pairwise_distances(
         I_mtr,
         metric=_cosine_ignore_na_wrapper,
@@ -76,25 +76,40 @@ def dist_cosine_ignore_na(I_mtr, n_jobs=1):
 
 
 def _dist_dendro(T, V, I_mtr):
-    warnings.filterwarnings("ignore")
     PROB_SEQ_ERROR = 0.001
 
     def logSum_1(x, y):
-        big = np.copy(x)
-        big[x < y] = y[x < y]
-        small = np.copy(x)
-        small[x >= y] = y[x >= y]
-        tmp = big + np.log(1 + np.exp(small - big))
-        # tmp[np.bitwise_and(x==-np.inf, y==-np.inf)] = -np.inf
-        # tmp[np.bitwise_and(x==np.inf, y==np.inf)] = np.inf
-        return tmp
+        return np.logaddexp(x, y)
 
-    D = np.divide(V, T)
+    D = np.full(V.shape, np.nan, dtype=np.float64)
+    np.divide(V, T, out=D, where=T != 0)
 
-    Mu = np.nanmean(D, axis=0)
-    Var = np.nanvar(D, axis=0, ddof=1)
-    a = ((1 - Mu) * Mu / Var - 1) * Mu
-    b = ((1 - Mu) * Mu / Var - 1) * (1 - Mu)
+    observed = np.isfinite(D)
+    observed_count = observed.sum(axis=0)
+    Mu = np.full(D.shape[1], np.nan, dtype=np.float64)
+    np.divide(
+        np.where(observed, D, 0).sum(axis=0),
+        observed_count,
+        out=Mu,
+        where=observed_count > 0,
+    )
+    centered = np.where(observed, D - Mu, 0)
+    Var = np.full(D.shape[1], np.nan, dtype=np.float64)
+    np.divide(
+        np.square(centered).sum(axis=0),
+        observed_count - 1,
+        out=Var,
+        where=observed_count > 1,
+    )
+    ratio = np.full(D.shape[1], np.nan, dtype=np.float64)
+    np.divide(
+        (1 - Mu) * Mu,
+        Var,
+        out=ratio,
+        where=np.isfinite(Var) & (Var != 0),
+    )
+    a = (ratio - 1) * Mu
+    b = (ratio - 1) * (1 - Mu)
     bad_muts = (
         (a <= 0) | (b <= 0) | np.isnan(a) | np.isnan(b) | np.isinf(a) | np.isinf(b)
     )
@@ -110,27 +125,34 @@ def _dist_dendro(T, V, I_mtr):
     for i in range(T.shape[0]):
         for j in range(T.shape[1]):
             if T[i, j] != 0:
-                lPz0[i, j] = np.log(
-                    sp.stats.binom.pmf(V[i, j], T[i, j], PROB_SEQ_ERROR)
-                )
-                lPz1[i, j] = np.log(pmf_BetaBinomial(V[i, j], T[i, j], a[j], b[j]))
+                probability0 = sp.stats.binom.pmf(V[i, j], T[i, j], PROB_SEQ_ERROR)
+                probability1 = pmf_BetaBinomial(V[i, j], T[i, j], a[j], b[j])
+                lPz0[i, j] = -np.inf if probability0 == 0 else np.log(probability0)
+                lPz1[i, j] = -np.inf if probability1 == 0 else np.log(probability1)
 
     Pg = np.sum(I_mtr == 1, axis=0) / I_mtr.shape[0]
-    lPg = np.log(Pg)
-    l1Pg = np.log(1 - Pg)
+    lPg = np.full(Pg.shape, -np.inf, dtype=np.float64)
+    np.log(Pg, out=lPg, where=Pg > 0)
+    one_minus_Pg = 1 - Pg
+    l1Pg = np.full(Pg.shape, -np.inf, dtype=np.float64)
+    np.log(one_minus_Pg, out=l1Pg, where=one_minus_Pg > 0)
     lupiall = logSum_1(lPz0 + l1Pg, lPz1 + lPg)
 
     dist = np.zeros((T.shape[0], T.shape[0]), dtype=np.float64)
     for i in range(T.shape[0]):
         ldowni = logSum_1(lPz0[i, :] + lPz0 + l1Pg, lPz1[i, :] + lPz1 + lPg)
         lupi = logSum_1(lupiall[i, :] + lupiall, ldowni)
-        dist[i, :] = np.sum(lupi - ldowni, axis=1)
+        contribution = np.zeros_like(lupi)
+        same_infinity = np.isinf(lupi) & (lupi == ldowni)
+        np.subtract(lupi, ldowni, out=contribution, where=~same_infinity)
+        dist[i, :] = np.sum(contribution, axis=1)
 
     dist = dist - np.min(dist) + 1
     return dist, bad_muts
 
 
 def dist_dendro(adata):
+    """Compute DENDRO distances and remove unsupported mutations."""
     T = adata.layers["total"]
     V = adata.layers["mutant"]
     G = adata.layers["genotype"]

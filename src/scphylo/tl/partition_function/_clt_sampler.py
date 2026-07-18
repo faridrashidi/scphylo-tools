@@ -117,4 +117,5 @@ def clt_sample_rec(
 
 
 def row_leafness_score(row_a, row_b):
+    """Return the shared mutation mass of two probability rows."""
     return np.sum(np.minimum(row_a, row_b))

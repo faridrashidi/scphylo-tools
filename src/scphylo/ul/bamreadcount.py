@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+"""Convert bam-readcount output into an annotated AnnData matrix."""
+
 import glob
 import sys
 
@@ -7,6 +9,7 @@ import pandas as pd
 
 
 def get_nucleotides(line):
+    """Parse nucleotide counts and coverage from a bam-readcount line."""
     ref = line.split()[2].upper()
     char = {"A": 0, "C": 0, "G": 0, "T": 0, "N": 0}
     char[ref] = int(line.split()[4].split(":")[1])
@@ -19,6 +22,7 @@ def get_nucleotides(line):
 
 
 def is_mut(x):
+    """Infer genotype status and mutant-read count for one variant row."""
     g = 3
     if x["COV"] > 0:
         g = 0

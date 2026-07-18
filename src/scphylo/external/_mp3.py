@@ -11,6 +11,8 @@ __date__ = "9/24/21"
 
 
 class Tree:
+    """Represent a labeled tree and its lowest-common-ancestor index."""
+
     def __init__(self, T, label_to_nodes, node_to_labels, label_set):
         """Tree class.
 
@@ -34,6 +36,8 @@ class Tree:
 
 
 class LCA:
+    """Index lowest common ancestors by tree nodes and labels."""
+
     def __init__(self, T, T_label_to_node, T_node_to_labels):
         """LCA class.
 
@@ -53,12 +57,14 @@ class LCA:
             self.LCA_dict[(lca[0][0], lca[0][1])] = lca[1]
 
     def lca_nodes(self, node1, node2):
+        """Return the lowest common ancestor of two nodes."""
         try:
             return self.LCA_dict[node1, node2]
         except KeyError:
             return self.LCA_dict[node2, node1]
 
     def lca_labels(self, label1, label2):
+        """Count lowest common ancestors for every pair of labeled nodes."""
         nodes1 = self.LCA_label_dict[label1]
         nodes2 = self.LCA_label_dict[label2]
 
@@ -70,9 +76,11 @@ class LCA:
         return lca_mset
 
     def label_to_node(self, label):
+        """Return the nodes associated with a label."""
         return self.LCA_label_dict[label]
 
     def node_to_labels(self, node):
+        """Return the labels associated with a node."""
         return self.LCA_node2lbl[node]
 
     def __str__(self):
@@ -81,12 +89,15 @@ class LCA:
 
 
 class ExtValue:
+    """Assign stable synthetic labels to otherwise unlabeled nodes."""
+
     def __init__(self):
         """Extvalue class."""
         self.counter = 1
         self.nodes = defaultdict(set)
 
     def get(self, node):
+        """Return the synthetic label set associated with a node."""
         if node not in self.nodes:
             self.nodes[node].add(f"EXT{self.counter}")
             self.counter += 1
@@ -94,6 +105,7 @@ class ExtValue:
 
 
 def sigmoid(x, mult=10.0):
+    """Map a normalized score through a bounded sigmoid transform."""
     if x == 0:
         return 0
     if x == 1:
@@ -102,6 +114,7 @@ def sigmoid(x, mult=10.0):
 
 
 def intersect_mset_card(list_lca1, list_lca2):
+    """Return the cardinality of two intersecting LCA multisets."""
     mset1 = defaultdict(int)
     mset2 = defaultdict(int)
 
@@ -121,6 +134,7 @@ def intersect_mset_card(list_lca1, list_lca2):
 
 
 def is_equal_struct(triple, LCA1, LCA2):
+    """Compare the ancestral structure of a label triple in two trees."""
     t = sorted(triple)
     t_set = set(triple)
 
@@ -185,6 +199,7 @@ def is_equal_struct(triple, LCA1, LCA2):
 
 
 def get_nset_sig(x_i, x_u):
+    """Blend intersection and union scores with a sigmoid weight."""
     return x_u + sigmoid(x_i) * (x_i - x_u)
 
 

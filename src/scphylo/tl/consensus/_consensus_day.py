@@ -61,6 +61,7 @@ def _find_set_of_internal_nodes(tree):
 
 
 def consensus_day(sc1, sc2):
+    """Build the Day consensus tree for two mutation matrices."""
     good_cells1 = sc1.index[(sc1 != 0).sum(axis=1) > 0]
     good_cells2 = sc2.index[(sc2 != 0).sum(axis=1) > 0]
     common_cells = np.intersect1d(good_cells1, good_cells2)
