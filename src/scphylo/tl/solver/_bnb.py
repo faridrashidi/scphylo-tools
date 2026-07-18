@@ -14,7 +14,7 @@ import scphylo as scp
 rec_num = 0
 
 
-def bnb(df_input, bounding, time_limit=86400):
+def bnb(df_input, bounding, time_limit=86400, comm=None):
     """Solving using PhISCS-BnB.
 
     PhISCS-BnB: a fast branch and bound algorithm for the perfect tumor phylogeny
@@ -31,6 +31,9 @@ def bnb(df_input, bounding, time_limit=86400):
         The bounding strategy {'simulated', 'real'}
     time_limit : :obj:`int`, optional
         Time limit of the BnB core running in seconds, by default 86400 (one day)
+    comm : :obj:`object`, optional
+        MPI communicator for a distributed solve. The default ``None`` runs locally
+        and does not require ``mpi4py``.
 
     Returns
     -------
@@ -38,10 +41,6 @@ def bnb(df_input, bounding, time_limit=86400):
         A conflict-free matrix in which rows are cells and columns are mutations.
         Values inside this matrix show the presence (1) and absence (0).
     """
-    _, mpi4py_is_not_imporeted = scp.ul.import_mpi4py()
-    if mpi4py_is_not_imporeted:
-        scp.logg.error("Unable to import a package!")
-
     if bounding not in ["simulated", "real"]:
         scp.logg.error("Wrong choice of bounding!")
 
@@ -67,7 +66,7 @@ def bnb(df_input, bounding, time_limit=86400):
     bounding_alg = bounding_algs[bounding]
 
     s_time = time.time()
-    flips = solve_by_BnB(matrix_input, na_value, bounding_alg, time_limit)
+    flips = solve_by_BnB(matrix_input, na_value, bounding_alg, time_limit, comm)
     e_time = time.time()
     running_time = e_time - s_time
 
@@ -85,13 +84,14 @@ def bnb(df_input, bounding, time_limit=86400):
     return df_output
 
 
-def solve_by_BnB(matrix_in, na_value, bounding_alg, time_limit):
+def solve_by_BnB(matrix_in, na_value, bounding_alg, time_limit, comm=None):
     """Solve a matrix-correction problem and return the required flips."""
     result = bnb_solve(
         matrix_in,
         bounding_algorithm=bounding_alg,
         na_value=na_value,
         time_limit=time_limit,
+        comm=comm,
     )
     matrix_output = result[0]
     flips = []
@@ -988,10 +988,16 @@ class BnB(pybnb.Problem):
                 yield node
 
 
-def bnb_solve(matrix, bounding_algorithm, na_value=None, time_limit=None):
+def bnb_solve(
+    matrix,
+    bounding_algorithm,
+    na_value=None,
+    time_limit=None,
+    comm=None,
+):
     """Run the branch-and-bound solver and return its corrected matrix."""
     problem1 = BnB(matrix, bounding_algorithm, na_value=na_value)
-    solver = pybnb.solver.Solver()
+    solver = pybnb.solver.Solver(comm=comm)
     results1 = solver.solve(
         problem1, queue_strategy="custom", log=None, time_limit=time_limit
     )

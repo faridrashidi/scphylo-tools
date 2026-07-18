@@ -144,9 +144,28 @@ def hill_climbing(
     return current_tree, current_dict
 
 
-def gpps_hc(input_matrix, ilp_matrix, alpha, beta, k_dollo, mut_names, ns=30, mi=100):
+def gpps_hc(
+    input_matrix,
+    ilp_matrix,
+    alpha,
+    beta,
+    k_dollo,
+    mut_names,
+    ns=30,
+    mi=100,
+    tree_script=None,
+    ruby_executable=None,
+    tools_dir=None,
+):
     """Refine a GPPS ILP solution with hill climbing."""
-    imported_tree, imported_nid_dict = import_ilp_out(ilp_matrix, k_dollo, mut_names)
+    imported_tree, imported_nid_dict = import_ilp_out(
+        ilp_matrix,
+        k_dollo,
+        mut_names,
+        tree_script=tree_script,
+        ruby_executable=ruby_executable,
+        tools_dir=tools_dir,
+    )
 
     hc_best_tree, hc_best_dict = hill_climbing(
         imported_tree,

@@ -1,5 +1,7 @@
 """Verify phylogeny solver implementations and booster backends."""
 
+import builtins
+
 import scphylo as scp
 
 from ._helpers import skip_gurobi, skip_rpy2
@@ -23,6 +25,23 @@ class TestSolvers:
     def test_bnb_simulated(self):
         """Verify branch-and-bound with simulated-data bounds."""
         df_out = scp.tl.bnb(self.df_in, bounding="simulated")
+        assert scp.ul.is_conflict_free_gusfield(df_out)
+
+    def test_bnb_serial_does_not_import_mpi(self, monkeypatch):
+        """Verify that serial branch-and-bound does not require mpi4py."""
+        original_import = builtins.__import__
+
+        def reject_mpi_import(name, *args, **kwargs):
+            if name == "mpi4py" or name.startswith("mpi4py."):
+                raise AssertionError("serial BnB attempted to import mpi4py")
+            return original_import(name, *args, **kwargs)
+
+        monkeypatch.setattr(builtins, "__import__", reject_mpi_import)
+        df_out = scp.tl.bnb(
+            self.df_in,
+            bounding="simulated",
+            time_limit=20,
+        )
         assert scp.ul.is_conflict_free_gusfield(df_out)
 
     def test_bnb_real(self):

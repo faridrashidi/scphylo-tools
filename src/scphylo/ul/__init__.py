@@ -1,6 +1,14 @@
 """Utils Module."""
 
 from scphylo.ul._caller import get_samples_df, is_paired
+from scphylo.ul._external import (
+    ExternalToolError,
+    ExternalToolExecutionError,
+    ExternalToolNotFoundError,
+    resolve_executable,
+    resolve_external_file,
+    run_external,
+)
 from scphylo.ul._hclustering import (
     dist_cosine_ignore_na,
     dist_dendro,
@@ -99,4 +107,10 @@ __all__ = (
     count_flips,
     is_paired,
     get_samples_df,
+    ExternalToolError,
+    ExternalToolExecutionError,
+    ExternalToolNotFoundError,
+    resolve_executable,
+    resolve_external_file,
+    run_external,
 )

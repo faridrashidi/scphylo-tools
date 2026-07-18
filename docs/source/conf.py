@@ -209,6 +209,31 @@ def reset_matplotlib(gallery_conf, fname):
 example_dir = HERE.parent.parent / "examples"
 rel_example_dir = Path("..") / ".." / "examples"
 
+# Sphinx Gallery renders every example, but executes only files matching
+# ``filename_pattern``. Keep integrations with external runtimes or licensed
+# solvers visible in the gallery without requiring them in regular docs builds.
+_OPTIONAL_EXTERNAL_EXAMPLES = {"gpps", "onconem", "siclonefit", "sphyr"}
+_EXTERNAL_EXAMPLES_SETTING = os.environ.get("SCPHYLO_RUN_EXTERNAL_EXAMPLES", "")
+if _EXTERNAL_EXAMPLES_SETTING == "1":
+    _ENABLED_EXTERNAL_EXAMPLES = _OPTIONAL_EXTERNAL_EXAMPLES
+else:
+    _ENABLED_EXTERNAL_EXAMPLES = {
+        name.strip()
+        for name in _EXTERNAL_EXAMPLES_SETTING.split(",")
+        if name.strip() in _OPTIONAL_EXTERNAL_EXAMPLES
+    }
+_DISABLED_EXTERNAL_EXAMPLES = sorted(
+    _OPTIONAL_EXTERNAL_EXAMPLES - _ENABLED_EXTERNAL_EXAMPLES
+)
+_ALL_GALLERY_EXAMPLES_PATTERN = r"[\\/](?:plot_|compute_)"
+if _DISABLED_EXTERNAL_EXAMPLES:
+    _DISABLED_EXTERNAL_PATTERN = "|".join(_DISABLED_EXTERNAL_EXAMPLES)
+    _GALLERY_FILENAME_PATTERN = (
+        rf"[\\/](?!compute_(?:{_DISABLED_EXTERNAL_PATTERN})\.py$)(?:plot_|compute_)"
+    )
+else:
+    _GALLERY_FILENAME_PATTERN = _ALL_GALLERY_EXAMPLES_PATTERN
+
 
 sphinx_gallery_conf = {
     "image_scrapers": "matplotlib",
@@ -216,7 +241,7 @@ sphinx_gallery_conf = {
         "seaborn",
         reset_matplotlib,
     ),
-    "filename_pattern": f"{os.path.sep}(plot_|compute_)",
+    "filename_pattern": _GALLERY_FILENAME_PATTERN,
     "examples_dirs": example_dir,
     "gallery_dirs": "auto_examples",  # path to where to save gallery generated output
     "abort_on_example_error": True,

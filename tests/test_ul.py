@@ -1,5 +1,7 @@
 """Verify general-purpose matrix and tree utilities."""
 
+import subprocess
+
 import numpy as np
 import pandas as pd
 import pytest
@@ -120,3 +122,41 @@ class TestUtils:
         _test()
 
         assert True
+
+    def test_external_tool_resolution_and_execution(self, tmp_path, monkeypatch):
+        """Resolve and safely execute a tool whose path contains spaces."""
+        tools_dir = tmp_path / "external tools"
+        tools_dir.mkdir()
+        executable = tools_dir / "fake-tool"
+        executable.write_text(
+            "#!/usr/bin/env python3\n"
+            "import sys\n"
+            "if sys.argv[1:] == ['fail']:\n"
+            "    print('useful failure', file=sys.stderr)\n"
+            "    raise SystemExit(7)\n"
+            "print('|'.join(sys.argv[1:]))\n"
+        )
+        executable.chmod(0o755)
+
+        resolved = scp.ul.resolve_executable(
+            "fake-tool", "Fake Tool", tools_dir=tools_dir
+        )
+        result = scp.ul.run_external(
+            [resolved, "argument with spaces"],
+            "Fake Tool",
+            stdout=subprocess.PIPE,
+        )
+        assert result.stdout.strip() == "argument with spaces"
+
+        with pytest.raises(scp.ul.ExternalToolExecutionError, match="exit code 7"):
+            scp.ul.run_external([resolved, "fail"], "Fake Tool")
+
+        artifact = tools_dir / "tool.jar"
+        artifact.write_text("not executable")
+        artifact.chmod(0o600)
+        assert scp.ul.resolve_external_file(
+            "tool.jar", "Fake Tool", tools_dir=tools_dir
+        ) == str(artifact.resolve())
+
+        monkeypatch.setattr(scp.settings, "tools_dir", str(tools_dir))
+        assert scp.ul.executable("fake-tool", "Fake Tool") == resolved

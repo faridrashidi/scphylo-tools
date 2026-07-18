@@ -40,6 +40,27 @@ complete development setup with::
 The locked Pixi environments support Linux and macOS. Windows users can use WSL
 for the complete native and R plotting stack.
 
+External solver backends
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+Some reconstruction methods depend on software that scPhylo-tools cannot install
+through pip: SPhyR uses ``sphyr_kDPFC``; SiCloneFit uses Java and
+``SiCloneFiTComplete.jar``; GPPS uses Gurobi, Ruby, and ``gpps_tree``; and OncoNEM
+uses R packages. scPhylo-tools never downloads these tools while a solver is running.
+
+Executable-backed solvers accept explicit path arguments. They otherwise search a
+per-call ``tools_dir``, the ``SCPHYLO_TOOLS_DIR`` environment variable,
+``scphylo.settings.tools_dir``, and finally ``PATH``. For example::
+
+    import scphylo as scp
+
+    scp.settings.tools_dir = "/opt/scphylo-tools/bin"
+    result = scp.tl.sphyr(data, alpha=1e-7, beta=0.1)
+
+Missing tools, non-zero exit codes, and timeouts raise dedicated
+``scp.ul.ExternalToolError`` subclasses. Solver adapters also validate their required
+output files before returning results.
+
 Development Version
 ^^^^^^^^^^^^^^^^^^^
 

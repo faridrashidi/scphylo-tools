@@ -8,6 +8,7 @@ from scphylo.settings._settings import (
     mm10,
     refs,
     tools,
+    tools_dir,
     verbosity,
 )
 
@@ -19,5 +20,6 @@ __all__ = (
     mm10,
     refs,
     tools,
+    tools_dir,
     verbosity,
 )

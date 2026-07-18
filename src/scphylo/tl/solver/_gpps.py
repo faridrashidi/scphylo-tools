@@ -16,6 +16,9 @@ def gpps(
     n_iters=100,
     time_limit=86400,
     n_threads=1,
+    tree_script=None,
+    ruby_executable=None,
+    tools_dir=None,
 ):
     """Solving using gpps.
 
@@ -44,6 +47,13 @@ def gpps(
         Time limit (in seconds), by default 86400
     n_threads : :obj:`int`, optional
         Number of threads, by default 1
+    tree_script : :obj:`str`, optional
+        Explicit path to the GPPS ``gpps_tree`` Ruby script.
+    ruby_executable : :obj:`str`, optional
+        Explicit path to Ruby, by default ``ruby`` from the configured external tools
+        directories or ``PATH``.
+    tools_dir : :obj:`str`, optional
+        Directory to search before ``SCPHYLO_TOOLS_DIR`` and ``PATH``.
 
     Returns
     -------
@@ -81,6 +91,9 @@ def gpps(
         mut_names=snvs,
         ns=neighbor_size,
         mi=n_iters,
+        tree_script=tree_script,
+        ruby_executable=ruby_executable,
+        tools_dir=tools_dir,
     )
     e_time = time.time()
     running_time = e_time - s_time

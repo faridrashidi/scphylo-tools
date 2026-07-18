@@ -360,15 +360,9 @@ def mkdir(indir):
 
 def executable(binary, appname):
     """Locate an executable in PATH or the configured tools directory."""
-    executable = shutil.which(binary)
-    if executable is None:
-        if not os.path.exists(f"{scp.settings.tools}/{binary}"):
-            scp.logg.error(
-                f"Cannot find the binary file of {appname} with `{binary}` name!"
-            )
-        else:
-            executable = f"{scp.settings.tools}/{binary}"
-    return executable
+    from scphylo.ul._external import resolve_executable
+
+    return resolve_executable(binary, appname)
 
 
 def timeit(f):

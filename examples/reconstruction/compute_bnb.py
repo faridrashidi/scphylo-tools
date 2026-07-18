@@ -17,14 +17,13 @@ df_in.head()
 # Next, using :func:`scphylo.tl.bnb` we remove the single-cell noises from the
 # input.
 
-# TODO: fix
-# df_out = scp.tl.bnb(df_in, bounding="simulated")
-# df_out.head()
+df_out = scp.tl.bnb(df_in, bounding="simulated")
+df_out.head()
 
 
 # %%
 # Finally, using :func:`scphylo.ul.is_conflict_free_gusfield` we check whether the
 # inferred genotype matrix is conflict-free or not.
 
-# is_cf = scp.ul.is_conflict_free_gusfield(df_out)
-# is_cf
+is_cf = scp.ul.is_conflict_free_gusfield(df_out)
+print(is_cf)

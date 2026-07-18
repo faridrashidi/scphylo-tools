@@ -4,8 +4,8 @@ verbosity = 3
 logfile = ""
 #: Name of logfile. By default is set to '' and writes to standard output.
 
-tools = ""
-#: Path to the directory where external tools are. By default is set to '$PATH'.
+tools_dir = ""
+#: Optional directory containing external solver executables and artifacts.
 
 refs = ["hg19", "hg38", "mm10", "m10x"]
 HUMAN = "/fdb/igenomes/Homo_sapiens/UCSC"
@@ -51,6 +51,7 @@ m10x = {}
 m10x["ref"] = "/data/rashidimehrabf2/_database/refdata-gex-mm10/fasta/genome.fa"
 
 tools = {}
+#: HPC module names used by the sequencing command generators.
 tools["email"] = "farid.rsh@gmail.com"
 tools["bwa"] = "bwa/0.7.17"
 tools["samtools"] = "samtools/1.11"

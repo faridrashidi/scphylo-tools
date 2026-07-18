@@ -1,4 +1,5 @@
-from subprocess import PIPE, Popen
+import subprocess
+from pathlib import Path
 
 import numpy as np
 
@@ -169,19 +170,42 @@ def contains(col1, col2):
     return True
 
 
-def build_tree_from_file(ilp_matrix, mutations_names, mutations_ids, tot_mutations):
+def build_tree_from_file(
+    ilp_matrix,
+    mutations_names,
+    mutations_ids,
+    tot_mutations,
+    tree_script=None,
+    ruby_executable=None,
+    tools_dir=None,
+):
     """Build a mutation tree from a GPPS ILP matrix."""
-    executable = scp.ul.executable("gpps_tree", "gpps tree scripts")
-    tmpdir = scp.ul.tmpdirsys(suffix=".gpps")
-    np.savetxt(
-        f"{tmpdir.name}/input.mtx", ilp_matrix.values, delimiter=" ", fmt="%1.0f"
+    tree_script = scp.ul.resolve_external_file(
+        tree_script or "gpps_tree",
+        "GPPS",
+        tools_dir=tools_dir,
+        path_option="tree_script",
+    )
+    ruby_executable = scp.ul.resolve_executable(
+        ruby_executable or "ruby",
+        "GPPS",
+        tools_dir=tools_dir,
+        path_option="ruby_executable",
     )
 
-    rb_tree = Popen(["ruby", executable, "-m", f"{tmpdir.name}/input.mtx"], stdout=PIPE)
-    stdout, _ = rb_tree.communicate()
-    tree = stdout.decode("utf-8").strip()
-
-    tmpdir.cleanup()
+    with scp.ul.tmpdirsys(suffix=".gpps") as tmpdirname:
+        input_path = Path(tmpdirname) / "input.mtx"
+        np.savetxt(input_path, ilp_matrix.values, delimiter=" ", fmt="%1.0f")
+        result = scp.ul.run_external(
+            [ruby_executable, tree_script, "-m", input_path],
+            "GPPS",
+            stdout=subprocess.PIPE,
+        )
+        tree = result.stdout.strip()
+    if not tree:
+        raise scp.ul.ExternalToolExecutionError(
+            "GPPS tree conversion completed without producing a Newick tree."
+        )
 
     node_dict, edges = newick_to_edgelist(tree)
 
@@ -326,7 +350,14 @@ def check_subtree_losses(node, nid_dict):
         check_subtree_losses(child, nid_dict)
 
 
-def import_ilp_out(ilp_matrix, k_dollo, mutation_names):
+def import_ilp_out(
+    ilp_matrix,
+    k_dollo,
+    mutation_names,
+    tree_script=None,
+    ruby_executable=None,
+    tools_dir=None,
+):
     """Convert an ILP output matrix into a GPPS mutation tree."""
     mut_names = []
     mut_ids = []
@@ -341,7 +372,13 @@ def import_ilp_out(ilp_matrix, k_dollo, mutation_names):
         mut_index += 1
 
     imported_tree, imported_dict = build_tree_from_file(
-        ilp_matrix, mut_names, mut_ids, len(mutation_names)
+        ilp_matrix,
+        mut_names,
+        mut_ids,
+        len(mutation_names),
+        tree_script=tree_script,
+        ruby_executable=ruby_executable,
+        tools_dir=tools_dir,
     )
 
     return imported_tree, imported_dict
