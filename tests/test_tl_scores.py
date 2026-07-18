@@ -1,6 +1,7 @@
 """Verify tree and genotype reconstruction scores."""
 
 import numpy as np
+import pandas as pd
 
 import scphylo as scp
 
@@ -43,6 +44,44 @@ class TestScores:
         tpted = scp.tl.tpted(grnd, sol)
         assert np.abs(tpted - 0.8811) < 0.0001
 
+    def test_tpted_ignores_sibling_order(self):
+        """Ignore sibling order introduced by differing clone frequencies."""
+        columns = ["a", "b", "c"]
+        ground = pd.DataFrame(
+            [
+                [1, 1, 0],
+                [1, 0, 1],
+                [1, 0, 1],
+                [0, 0, 0],
+            ],
+            columns=columns,
+        ).rename(index=str)
+        reordered = pd.DataFrame(
+            [
+                [1, 1, 0],
+                [1, 1, 0],
+                [1, 0, 1],
+                [0, 0, 0],
+            ],
+            columns=columns,
+        ).rename(index=str)
+        chain = pd.DataFrame(
+            [
+                [1, 0, 0],
+                [1, 0, 0],
+                [1, 0, 1],
+                [0, 1, 0],
+                [0, 1, 0],
+                [0, 0, 0],
+            ],
+            columns=columns,
+        ).rename(index=str)
+
+        assert scp.tl.tpted(ground, reordered) == 1.0
+        assert scp.tl.tpted(reordered, ground) == 1.0
+        assert scp.tl.tpted(ground, chain) == 0.75
+        assert scp.tl.tpted(chain, ground) == 0.75
+
     def test_caset(self, test_cf_data_1, test_cf_data_2):
         """Verify the CASet score."""
         grnd = scp.io.read(test_cf_data_1)
@@ -55,7 +94,24 @@ class TestScores:
         grnd = scp.io.read(test_cf_data_1)
         sol = scp.io.read(test_cf_data_2)
         disc = scp.tl.disc(grnd, sol)
-        assert np.abs(disc - 0.7762) < 0.0001
+        assert np.abs(disc - 0.8226) < 0.0001
+
+    def test_disc_mutations_in_same_node(self):
+        """Treat matching empty distinctly inherited sets as identical."""
+        same_node = pd.DataFrame(
+            [[1, 1], [0, 0]],
+            index=["tumor", "normal"],
+            columns=["a", "b"],
+        )
+        chain = pd.DataFrame(
+            [[1, 1], [1, 0], [0, 0]],
+            index=["both", "a_only", "normal"],
+            columns=["a", "b"],
+        )
+
+        assert scp.tl.disc(same_node, same_node) == 1.0
+        assert scp.tl.disc(same_node, chain) == 0.5
+        assert scp.tl.disc(chain, same_node) == 0.5
 
     def test_mp3(self, test_cf_data_1, test_cf_data_2):
         """Verify the MP3 similarity score."""

@@ -279,7 +279,8 @@ def disc(df_grnd, df_sol):
     )
 
     final = []
-    for x, y in itertools.combinations(inter, 2):
+    # D(x, y) is directional, so DISC averages over ordered mutation pairs.
+    for x, y in itertools.permutations(inter, 2):
         a = len(
             np.intersect1d(
                 distinctly_inherited_set_grnd[(x, y)],
@@ -292,10 +293,8 @@ def disc(df_grnd, df_sol):
                 distinctly_inherited_set_sol[(x, y)],
             )
         )
-        if (
-            b > 0
-        ):  # FIXME: if a and b are in the same node distinctly_inherited_set is empty
-            final.append(a / b)
+        # Matching empty sets have a Jaccard similarity of one.
+        final.append(a / b if b > 0 else 1.0)
 
     return np.mean(final)
 

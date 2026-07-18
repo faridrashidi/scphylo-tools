@@ -1,6 +1,7 @@
 import time
 
 import apted
+import networkx as nx
 import numpy as np
 
 import scphylo as scp
@@ -282,6 +283,11 @@ def tpted(df_grnd, df_sol):
 
     sl_grnd, sl_sol = _split_labels(mt_grnd, mt_sol)
 
+    # APTED treats sibling order as significant, but mutation trees are unordered.
+    node_match = nx.algorithms.isomorphism.categorical_node_match("label", None)
+    if nx.is_isomorphic(sl_grnd, sl_sol, node_match=node_match):
+        return 1.0
+
     apted_grnd = _to_apted(sl_grnd)
     apted_sol = _to_apted(sl_sol)
 
@@ -291,6 +297,4 @@ def tpted(df_grnd, df_sol):
     ap = apted.APTED(tree1, tree2)
     ed = ap.compute_edit_distance()
 
-    # FIXME: `python -m apted -t {a{b}{c}} {a{c}{b}}` returns 2!
-    # looks like the above isomorphic trees have TED of 2!
     return 1 - ed / (2 * (len(inter) + 1))
