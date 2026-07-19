@@ -86,25 +86,41 @@ def colorectal2(readcount=False):
     * :cite:`SiCloneFit` Figure 4.
     * :cite:`SCARLET` Figure 4.
 
-    The size is n_cells × n_muts = 78 × 25
+    The dataset has size n_cells × n_muts = 182 × 36.
 
     Parameters
     ----------
-    readcount : :obj:`str`
-        Return the readcount information of the data.
+    readcount : :obj:`bool`, optional
+        Include mutant and total single-cell read-count layers.
 
     Returns
     -------
     :class:`anndata.AnnData`
-        An anndata in which `.X` is the input noisy.
+        An AnnData object in which `.X` contains the observed genotype calls: 0 is
+        wild type, 1 is mutant, and 3 is missing.
 
-            - `.layers['solution_fig7a']` is the solution presented in Figure 7a of
-                PhISCS paper.
-            - `.layers['solution_fig7b']` is the solution presented in Figure 7b of
-                PhISCS paper.
-            - `.uns['params_fig7a']` is parameters used as input to get 'solution_7a'.
-            - `.uns['params_fig7b']` is parameters used as input to get 'solution_7b'.
-            - `.var` includes information of the bulk samples.
+            - `.layers['mutant']` and `.layers['total']` contain read counts when
+                ``readcount=True``.
+            - `.obs['copy_number_profile']` contains the SCARLET copy-number profile.
+            - `.obs['phiscs_fig7']` and `.var['phiscs_fig7']` identify the historical
+                78 × 25 PhISCS subset.
+            - `.uns['phiscs_fig7']` contains that subset's cell and mutation names,
+                Figure 7 solutions, and parameters.
+            - `.var` contains genomic coordinates and available bulk-sample counts.
+            - `.uns['provenance']` records the genotype and read-count sources.
+
+    Notes
+    -----
+    The full genotype matrix is reconstructed from Supplementary Figure 7 of
+    :cite:`Leung_2017`. The historical 78 × 25 matrix and PhISCS solutions remain
+    available as the name-indexed ``.uns['phiscs_fig7']`` derivative. Bulk counts
+    are unavailable for the 11 loci excluded from that derivative and are stored as
+    missing values in ``.var``.
+
+    The read counts come from the processed SCARLET data. That source labels SRA run
+    SRR3472637 as MA-84, whereas the Leung tables and Figure 7 label the same sample
+    MA_94. The source-only low-coverage cells PA_31, PDD_21, PDD_29, and PDD_66 are
+    excluded to match the 182 post-QC Figure 7 cells.
     """
     if readcount:
         adata = scp.io.read(
@@ -112,9 +128,6 @@ def colorectal2(readcount=False):
         )
     else:
         adata = scp.io.read(scp.ul.get_file("scphylo.datasets/real/colorectal2.h5ad"))
-    # FIXME: (86 x 25 in B-SCITE) (182 x 36 SiCloneFit)
-    # https://github.com/cbg-ethz/infSCITE/blob/master/pat_2.csv
-    # https://github.com/hzi-bifo/scelestial-paper-materials-devel/tree/master/testing/
     return adata
 
 

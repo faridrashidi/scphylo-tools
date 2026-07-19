@@ -7,6 +7,14 @@ import scphylo as scp
 from ._helpers import skip_gurobi, skip_rpy2
 
 
+def _phiscs_fig7_subset(adata):
+    """Select the historical CRC2 input described by the stored Figure 7 result."""
+    phiscs_fig7 = adata.uns["phiscs_fig7"]
+    obs_names = phiscs_fig7["obs_names"].astype(str).tolist()
+    var_names = phiscs_fig7["var_names"].astype(str).tolist()
+    return adata[obs_names, var_names].copy(), phiscs_fig7
+
+
 class TestSolvers:
     """Exercise solver APIs on a shared genotype matrix."""
 
@@ -106,9 +114,10 @@ class TestSolvers:
     def test_phiscsi_bulk_2(self):
         """Verify bulk-aware PhISCS against the figure 7a solution."""
         adata = scp.datasets.colorectal2()
+        adata, phiscs_fig7 = _phiscs_fig7_subset(adata)
         df_in = adata.to_df()
-        alpha = adata.uns["params_fig7a"]["alpha"]
-        beta = adata.uns["params_fig7a"]["beta"]
+        alpha = phiscs_fig7["params_fig7a"]["alpha"]
+        beta = phiscs_fig7["params_fig7a"]["beta"]
         df_out = scp.tl.phiscsi_bulk(df_in, alpha, beta, time_limit=120)
         is_cf = scp.ul.is_conflict_free_gusfield(df_out)
         flips_0_1, _, _, _ = scp.ul.count_flips(df_in.values, df_out.values)
@@ -119,10 +128,11 @@ class TestSolvers:
     def test_phiscsi_bulk_3(self):
         """Verify bulk-aware PhISCS against the figure 7b solution."""
         adata = scp.datasets.colorectal2()
+        adata, phiscs_fig7 = _phiscs_fig7_subset(adata)
         df_in = adata.to_df()
-        alpha = adata.uns["params_fig7b"]["alpha"]
-        beta = adata.uns["params_fig7b"]["beta"]
-        kmax = adata.uns["params_fig7b"]["kmax"]
+        alpha = phiscs_fig7["params_fig7b"]["alpha"]
+        beta = phiscs_fig7["params_fig7b"]["beta"]
+        kmax = phiscs_fig7["params_fig7b"]["kmax"]
         df_out = scp.tl.phiscsi_bulk(df_in, alpha, beta, kmax, time_limit=120)
         assert df_out.columns[df_out.sum() == 0][0] == "ATP7B_chr13_52534322"
 
@@ -130,6 +140,7 @@ class TestSolvers:
     def test_phiscs_readcount(self):
         """Verify PhISCS correction of read-count data."""
         adata = scp.datasets.colorectal2(readcount=True)
+        adata, _ = _phiscs_fig7_subset(adata)
         df_out = scp.tl.phiscs_readcount(adata, alpha=0.01, beta=0.19)
         is_cf = scp.ul.is_conflict_free_gusfield(df_out)
         assert is_cf
