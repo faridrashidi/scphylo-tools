@@ -1,13 +1,141 @@
 """Exercise experimental and optional solver integrations."""
 
+import importlib
 import subprocess
+from contextlib import contextmanager
+from io import BytesIO
 from pathlib import Path
+from types import SimpleNamespace
 
+import numpy as np
 import pandas as pd
+from anndata import AnnData
 
 import scphylo as scp
 
-from ._helpers import skip_rpy2, skip_slow
+
+def _small_readcount_adata():
+    """Return a tiny annotated matrix for optional R-wrapper tests."""
+    adata = AnnData(
+        np.array([[0, 1], [1, 0]], dtype=np.int8),
+        layers={
+            "genotype": np.array([[0, 1], [1, 0]], dtype=np.int8),
+            "mutant": np.array([[0, 6], [4, 0]], dtype=np.int8),
+            "total": np.full((2, 2), 10, dtype=np.int8),
+            "tpm": np.array([[1.0, 2.0], [3.0, 4.0]]),
+        },
+    )
+    adata.obs_names = ["normal", "tumor"]
+    adata.var_names = ["gene-a", "gene-b"]
+    return adata
+
+
+def _use_fake_infercna(monkeypatch):
+    """Install a deterministic InferCNA package double."""
+    import rpy2.robjects as ro
+
+    class InferCNA:
+        heatCols = ro.StrVector(["#0000ff", "#ff0000"])
+        genome = None
+        cells = None
+        genes = None
+
+        def useGenome(self, genome):
+            self.genome = genome
+
+        def infercna(self, data, **kwargs):
+            references = {str(cell) for group in kwargs["refCells"] for cell in group}
+            self.cells = [str(cell) for cell in data.colnames if cell not in references]
+            self.genes = [str(gene) for gene in data.rownames]
+            return data
+
+        def cnaPlot(self, cna, **kwargs):
+            cells = self.cells
+            genes = self.genes
+            assert cells is not None
+            assert genes is not None
+            values = np.asarray(cna)
+            plot_data = ro.DataFrame(
+                {
+                    "Cell": ro.StrVector(
+                        [cell for cell in cells for _ in range(len(genes))]
+                    ),
+                    "Gene": ro.StrVector(genes * len(cells)),
+                    "CNA": ro.FloatVector(values.ravel(order="F")),
+                }
+            )
+            return ro.ListVector({"data": plot_data, "p": ro.NULL})
+
+    backend = InferCNA()
+    monkeypatch.setattr(scp.ul, "import_rpy2", lambda *args, **kwargs: (backend, False))
+    return backend
+
+
+def _use_fake_dendro(monkeypatch):
+    """Install doubles for DENDRO's R computation and plotting boundary."""
+    import rpy2.robjects as ro
+    import rpy2.robjects.packages as rpackages
+    from rpy2.robjects.lib import grdevices
+
+    class Dendro:
+        def DENDRO_dist(self, *args, **kwargs):
+            return ro.FloatVector([0.5])
+
+    class R:
+        def __call__(self, command):
+            ro.globalenv["p"] = ro.IntVector([1])
+            return ro.NULL
+
+        def show(self, value):
+            return None
+
+    @contextmanager
+    def image_bytes(*args, **kwargs):
+        yield BytesIO(b"png")
+
+    dendro_module = importlib.import_module("scphylo.tl.solver._dendro")
+    backend = Dendro()
+    monkeypatch.setattr(
+        scp.ul,
+        "import_rpy2",
+        lambda name, *args, **kwargs: (backend, False),
+    )
+    monkeypatch.setattr(
+        rpackages,
+        "importr",
+        lambda name: SimpleNamespace(
+            hclust=lambda distance, **kwargs: ro.IntVector([1])
+        ),
+    )
+    monkeypatch.setattr(ro, "r", R())
+    monkeypatch.setattr(grdevices, "render_to_bytesio", image_bytes)
+    monkeypatch.setattr(dendro_module, "Image", lambda *args, **kwargs: "image")
+    monkeypatch.setattr(dendro_module, "display", lambda image: image)
+
+
+def _use_fake_cardelino(monkeypatch, n_cells):
+    """Install a deterministic Cardelino package double."""
+    import rpy2.robjects as ro
+
+    class Cardelino:
+        clone_kwargs = None
+
+        def clone_id(self, mutant, total, **kwargs):
+            self.clone_kwargs = kwargs
+            probabilities = ro.r.matrix(
+                ro.FloatVector([0.9, 0.1] * n_cells),
+                nrow=n_cells,
+                ncol=2,
+                byrow=True,
+            )
+            return ro.ListVector({"prob": probabilities})
+
+        def assign_cells_to_clones(self, probabilities):
+            return ro.IntVector(range(1, n_cells + 1))
+
+    backend = Cardelino()
+    monkeypatch.setattr(scp.ul, "import_rpy2", lambda *args, **kwargs: (backend, False))
+    return backend
 
 
 class TestSolversTmp:
@@ -123,10 +251,6 @@ class TestSolversTmp:
 
         pd.testing.assert_frame_equal(df_out, expected)
 
-    def test_infscite(self):
-        """Reserve coverage for the optional infSCITE integration."""
-        assert True
-
     def test_sbm(self):
         """Verify SBM preserves labels and resolves genotype conflicts."""
         data = scp.datasets.test()
@@ -135,27 +259,25 @@ class TestSolversTmp:
         assert out.columns.equals(data.columns)
         assert scp.ul.is_conflict_free_gusfield(out)
 
-    @skip_rpy2("infercna")
-    def test_infercna(self):
-        """Verify InferCNA integration when its R package is available."""
-        expr = scp.datasets.example(is_expression=True)
-        df_cna = scp.tl.infercna(expr, ref_cells={"normal": ["C15_1"]}, genome="mm10")
-        df_cna.loc["C15_1"] = 0
-        expr.obsm["cna"] = df_cna.loc[expr.obs_names]
-        scp.pl.heatmap(expr, layer="cna")
+    def test_infercna(self, monkeypatch):
+        """Verify InferCNA conversion and normal-cell filtering."""
+        backend = _use_fake_infercna(monkeypatch)
+        expr = _small_readcount_adata()
+        df_cna = scp.tl.infercna(expr, ref_cells={"normal": ["normal"]}, genome="mm10")
+        assert backend.genome == "mm10"
+        assert df_cna.index.tolist() == ["tumor"]
+        assert df_cna.columns.tolist() == expr.var_names.tolist()
 
-    @skip_rpy2("dendro")
-    @skip_rpy2("ggtree")
-    def test_dendro(self):
-        """Verify DENDRO integration when its R package is available."""
-        adata = scp.datasets.example()
-        scp.tl.dendro(adata)
-        assert True
+    def test_dendro(self, monkeypatch):
+        """Verify DENDRO's data-conversion and plotting plumbing."""
+        _use_fake_dendro(monkeypatch)
+        result = scp.tl.dendro(_small_readcount_adata(), width=20, height=20)
+        assert result == "image"
 
-    @skip_rpy2("cardelino")
-    @skip_slow
-    def test_cardelino(self):
-        """Verify Cardelino integration in the long-running test suite."""
-        adata = scp.datasets.example()
-        scp.tl.cardelino(adata, mode="free", n_clones=11)
-        assert True
+    def test_cardelino(self, monkeypatch):
+        """Verify the fast Cardelino free-mode adapter path."""
+        adata = _small_readcount_adata()
+        backend = _use_fake_cardelino(monkeypatch, adata.n_obs)
+        result = scp.tl.cardelino(adata, mode="free", n_clones=2)
+        np.testing.assert_array_equal(result, [1, 2])
+        assert backend.clone_kwargs == {"n_clone": 2}

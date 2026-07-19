@@ -2,18 +2,36 @@
 
 import scphylo as scp
 
-from ._helpers import skip_gurobi
+from ._helpers import fake_gurobi
 
 
 class TestPreProcessing:
     """Exercise binary, read-count, and tree preprocessing helpers."""
 
-    @skip_gurobi
-    def test_bifiltering(self):
-        """Verify the shape produced by bidirectional filtering."""
+    def test_bifiltering(self, monkeypatch):
+        """Verify bidirectional-filtering model construction and selection."""
         df_in = scp.datasets.test()
+        n_cells, n_sites = df_in.shape
+        matrix_variable_count = n_cells * n_sites
+        final_site_variables = matrix_variable_count + (n_cells - 1) * (n_sites + 1)
+
+        def selected_variables(model, index, name):
+            offset = index - matrix_variable_count
+            selected_cell = (
+                offset >= 0
+                and offset % (n_sites + 1) == 0
+                and offset // (n_sites + 1) < 10
+            )
+            selected_site = final_site_variables < index <= final_site_variables + 4
+            return int(selected_cell or selected_site)
+
+        gurobi = fake_gurobi(selected_variables)
+        monkeypatch.setattr(scp.ul, "import_gurobi", lambda: (gurobi, False))
+
         df_filtered = scp.pp.bifiltering(df_in, 0.5, 0.2)
-        assert df_filtered.shape == (10, 4)
+        assert df_filtered.index.tolist() == df_in.index[:10].tolist()
+        assert df_filtered.columns.tolist() == df_in.columns[:4].tolist()
+        assert gurobi.models[0].Params.TimeLimit == 3600
 
     def test_binary(self):
         """Verify binary-matrix filters and consensus combination."""

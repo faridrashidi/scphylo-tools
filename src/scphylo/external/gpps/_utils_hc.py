@@ -74,7 +74,7 @@ class Node:
 
     def print_node_dot(self):
         """Print this node and its parent edge in DOT syntax."""
-        if self.parent is None:
+        if self.parent is not None:
             print(f'\t"{self.parent.id_node}" -> "{self.id_node}";')
             if "-" not in self.name:
                 print(f'\t"{self.id_node}" [label="{self.name}"];')
@@ -86,7 +86,7 @@ class Node:
 
     def print_node_dot_file(self, fout):
         """Write this node and its parent edge in DOT syntax."""
-        if self.parent is None:
+        if self.parent is not None:
             fout.write(f'\t"{self.parent.id_node}" -> "{self.id_node}";\n')
             if "-" not in self.name:
                 fout.write(f'\t"{self.id_node}" [label="{self.name}"];\n')

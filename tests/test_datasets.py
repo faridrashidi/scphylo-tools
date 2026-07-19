@@ -2,34 +2,61 @@
 
 import hashlib
 from pathlib import Path
+from types import SimpleNamespace
 
 import numpy as np
 import pytest
 
 import scphylo as scp
 
-from ._helpers import skip_rpy2
+
+def _use_fake_onconem(monkeypatch):
+    """Install a deterministic stand-in for OncoNEM's simulation entry point."""
+    import rpy2.robjects as ro
+
+    class OncoNEM:
+        def simulateData(self, **kwargs):
+            n_cells = kwargs["N_cells"]
+            n_muts = kwargs["N_sites"]
+            n_clones = kwargs["N_clones"]
+            values = np.zeros((n_cells, n_muts), dtype=int)
+            for cell in range(n_cells):
+                values[cell, : min(cell % n_clones, n_muts)] = 1
+            if kwargs["p_missing"]:
+                values[-1, -1] = 2
+            r_matrix = ro.r.matrix(
+                ro.IntVector(values.T.ravel(order="F")),
+                nrow=n_muts,
+                ncol=n_cells,
+            )
+            return SimpleNamespace(rx2=lambda name: r_matrix)
+
+    monkeypatch.setattr(
+        scp.ul, "import_rpy2", lambda *args, **kwargs: (OncoNEM(), False)
+    )
 
 
 class TestDatasets:
     """Exercise dataset generation and loading helpers."""
 
-    @skip_rpy2("oncoNEM")
-    def test_simulate_1(self):
-        """Verify that noisy OncoNEM simulation creates conflicts."""
+    def test_simulate_1(self, monkeypatch):
+        """Verify conversion of noisy OncoNEM simulation output."""
+        _use_fake_onconem(monkeypatch)
         df_in = scp.datasets.simulate(
-            n_cells=100, n_muts=100, n_clones=5, alpha=0.001, beta=0.4, missing=0.2
+            n_cells=6, n_muts=4, n_clones=3, alpha=0.001, beta=0.4, missing=0.2
         )
-        is_cf = scp.ul.is_conflict_free_gusfield(df_in)
-        assert not is_cf
+        assert df_in.shape == (6, 4)
+        assert 3 in df_in.to_numpy()
+        assert not scp.ul.is_conflict_free_gusfield(df_in)
 
-    @skip_rpy2("oncoNEM")
-    def test_simulate_2(self):
+    def test_simulate_2(self, monkeypatch):
         """Verify that adding noise to a clean simulation creates conflicts."""
+        _use_fake_onconem(monkeypatch)
         df_ground = scp.datasets.simulate(
-            n_cells=100, n_muts=100, n_clones=5, alpha=0, beta=0, missing=0
+            n_cells=6, n_muts=4, n_clones=3, alpha=0, beta=0, missing=0
         )
         df_noisy = scp.datasets.add_noise(df_ground, alpha=0.001, beta=0.4, missing=0.2)
+        assert scp.ul.is_conflict_free_gusfield(df_ground)
         assert not scp.ul.is_conflict_free_gusfield(df_noisy)
 
     def test_add_noise(self):
