@@ -108,6 +108,76 @@ class TestDatasets:
             .all()
         )
 
+    def test_acute_lymphocytic_leukemia2_variants(self):
+        """Verify the full ALL2 input and historical PhISCS derivative."""
+        adata = scp.datasets.acute_lymphocytic_leukemia2()
+
+        assert adata.shape == (115, 16)
+        assert adata.obs_names.tolist() == [f"cell{i}" for i in range(115)]
+        values, counts = np.unique(adata.X, return_counts=True)
+        assert dict(zip(values, counts, strict=True)) == {0: 1139, 1: 701}
+        np.testing.assert_array_equal(
+            adata.X.sum(axis=0),
+            [18, 48, 27, 20, 40, 50, 27, 11, 41, 91, 89, 48, 99, 18, 38, 36],
+        )
+
+        excluded = [
+            "cell2",
+            "cell8",
+            "cell18",
+            "cell24",
+            "cell30",
+            "cell36",
+            "cell40",
+            "cell43",
+            "cell46",
+            "cell100",
+            "cell102",
+            "cell105",
+            "cell107",
+        ]
+        assert adata.obs["phiscs_fig9"].sum() == 102
+        assert adata.var["phiscs_fig9"].all()
+        assert adata.obs_names[~adata.obs["phiscs_fig9"]].tolist() == excluded
+        np.testing.assert_array_equal(
+            adata[excluded].X.sum(axis=1),
+            [9, 7, 10, 16, 6, 6, 5, 9, 8, 10, 7, 15, 7],
+        )
+
+        phiscs_fig9 = adata.uns["phiscs_fig9"]
+        obs_names = phiscs_fig9["obs_names"].astype(str).tolist()
+        var_names = phiscs_fig9["var_names"].astype(str).tolist()
+        assert obs_names == adata.obs_names[adata.obs["phiscs_fig9"]].tolist()
+        assert var_names == adata.var_names[adata.var["phiscs_fig9"]].tolist()
+
+        historical = adata[obs_names, var_names]
+        values, counts = np.unique(historical.X, return_counts=True)
+        assert dict(zip(values, counts, strict=True)) == {0: 1046, 1: 586}
+
+        solution = phiscs_fig9["solution_fig9"]
+        assert solution.shape == (102, 16)
+        assert np.isnan(solution).sum() == 306
+        eliminated = np.isnan(solution).all(axis=0)
+        assert adata.var_names[eliminated].tolist() == ["CMTM8", "RIMS2", "RRP8"]
+        solution_df = historical.to_df().loc[:, ~eliminated]
+        solution_df.iloc[:, :] = solution[:, ~eliminated]
+        assert scp.ul.is_conflict_free_gusfield(solution_df)
+        assert scp.ul.count_flips(historical.X, solution)[:2] == (62, 4)
+
+        assert "solution_fig9" not in adata.layers
+        assert "params_fig9" not in adata.uns
+        assert phiscs_fig9["params_fig9"] == {
+            "alpha": 0.001,
+            "beta": 0.181749,
+            "delta": 0.2,
+            "kmax": 3,
+            "w": 0,
+        }
+        assert (
+            adata.uns["provenance"]["genotype"]["infscite_sha256"]
+            == "088d754af50dcc1f8f6cc2b08aa3c878eca311461328e61c81959ac56da94e21"
+        )
+
     def test_load_datasets(self):
         """Verify the expected shapes of all bundled datasets."""
         adata = scp.datasets.example()
@@ -118,7 +188,7 @@ class TestDatasets:
         adata = scp.datasets.acute_lymphocytic_leukemia1()
         assert adata.shape == (111, 20)
         adata = scp.datasets.acute_lymphocytic_leukemia2()
-        assert adata.shape == (102, 16)
+        assert adata.shape == (115, 16)
         adata = scp.datasets.acute_lymphocytic_leukemia3()
         assert adata.shape == (150, 49)
         adata = scp.datasets.acute_lymphocytic_leukemia4()

@@ -467,6 +467,10 @@ def phiscsi_bulk(
     Examples
     --------
     >>> adata = scp.datasets.acute_lymphocytic_leukemia2()
+    >>> params = adata.uns["phiscs_fig9"]["params_fig9"]
+    >>> adata = adata[
+        adata.obs["phiscs_fig9"], adata.var["phiscs_fig9"]
+    ].copy()
     >>> adata.var["VAF"] = (
         2
         * adata.var["MutantCount"]
@@ -474,10 +478,10 @@ def phiscsi_bulk(
     )
     >>> df_out = scp.tl.phiscsi_bulk(
         adata.to_df(),
-        alpha=0.001,
-        beta=0.181749,
-        delta=0.2,
-        kmax=3,
+        alpha=params["alpha"],
+        beta=params["beta"],
+        delta=params["delta"],
+        kmax=params["kmax"],
         vaf_info=adata.var[["VAF"]],
     )
     """

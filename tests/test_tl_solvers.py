@@ -15,6 +15,14 @@ def _phiscs_fig7_subset(adata):
     return adata[obs_names, var_names].copy(), phiscs_fig7
 
 
+def _phiscs_fig9_subset(adata):
+    """Select the historical ALL2 input described by the stored Figure 9 result."""
+    phiscs_fig9 = adata.uns["phiscs_fig9"]
+    obs_names = phiscs_fig9["obs_names"].astype(str).tolist()
+    var_names = phiscs_fig9["var_names"].astype(str).tolist()
+    return adata[obs_names, var_names].copy(), phiscs_fig9
+
+
 class TestSolvers:
     """Exercise solver APIs on a shared genotype matrix."""
 
@@ -94,6 +102,8 @@ class TestSolvers:
     def test_phiscsi_bulk_1(self):
         """Verify bulk-aware PhISCS with explicit VAF information."""
         adata = scp.datasets.acute_lymphocytic_leukemia2()
+        adata, phiscs_fig9 = _phiscs_fig9_subset(adata)
+        params = phiscs_fig9["params_fig9"]
         adata.var["VAF"] = (
             2
             * adata.var["MutantCount"]
@@ -101,10 +111,10 @@ class TestSolvers:
         )
         df_out = scp.tl.phiscsi_bulk(
             adata.to_df(),
-            alpha=0.001,
-            beta=0.181749,
-            delta=0.2,
-            kmax=3,
+            alpha=params["alpha"],
+            beta=params["beta"],
+            delta=params["delta"],
+            kmax=params["kmax"],
             vaf_info=adata.var[["VAF"]],
         )
         is_cf = scp.ul.is_conflict_free_gusfield(df_out)

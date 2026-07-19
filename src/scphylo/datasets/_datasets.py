@@ -181,22 +181,32 @@ def acute_lymphocytic_leukemia2():
     * :cite:`infSCITE` Figure S17.
     * :cite:`Phyolin` Table 2.
 
-    The size is n_cells × n_muts = 102 × 16
+    The dataset has size n_cells × n_muts = 115 × 16.
 
     Returns
     -------
     :class:`anndata.AnnData`
-        An anndata in which `.X` is the input noisy.
+        An AnnData object in which `.X` contains the complete noisy genotype matrix.
 
-            - `.layers['solution_fig9']` is the solution presented in Figure 9 of PhISCS
-                paper.
-            - `.uns['params_fig9']` is parameters used as input to get 'solution_fig9'.
-            - `.var` includes information of the bulk samples.
+            - `.obs['phiscs_fig9']` and `.var['phiscs_fig9']` identify the historical
+                102 × 16 PhISCS subset.
+            - `.uns['phiscs_fig9']` contains that subset's cell and mutation names,
+                Figure 9 solution, and parameters.
+            - `.var` contains genomic coordinates and bulk-sample counts.
+            - `.uns['provenance']` records the genotype and PhISCS preprocessing
+                sources.
+
+    Notes
+    -----
+    The complete 115-cell input was analyzed in :cite:`B-SCITE` Figure 6 and
+    :cite:`infSCITE` Figure S17. Before running PhISCS, Single Cell Genotyper
+    identified and removed 13 predicted doublets, leaving the 102 cells used in
+    :cite:`PhISCS` Figure 9. That name-indexed input, solution, and parameter set
+    remain available in ``.uns['phiscs_fig9']`` without padding the published result.
     """
     adata = scp.io.read(
         scp.ul.get_file("scphylo.datasets/real/acute_lymphocytic_leukemia2.h5ad")
     )
-    # FIXME: 115 x 16 in B-SCITE?
     return adata
 
 
