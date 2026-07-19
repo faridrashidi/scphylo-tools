@@ -157,6 +157,7 @@ This module provides functions for simulating data and accessing published datas
     datasets.high_grade_serous_ovarian_cancer2
     datasets.high_grade_serous_ovarian_cancer3
     datasets.high_grade_serous_ovarian_cancer_3celllines
+    datasets.isogenic_fibroblast_cell_line
     datasets.myeloproliferative_neoplasms18
     datasets.myeloproliferative_neoplasms78
     datasets.myeloproliferative_neoplasms712

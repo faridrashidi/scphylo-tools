@@ -904,6 +904,153 @@ class TestDatasets:
             == "3a750b7fcaedd6587084a54c653221d1a6ecb1c682dcd953d98b439b7d832847"
         )
 
+    def test_isogenic_fibroblast_figure_s9(self):
+        """Verify the lossless SCIPhI Figure S9 fibroblast extraction."""
+        adata = scp.datasets.isogenic_fibroblast_cell_line()
+
+        assert adata.shape == (19, 52995)
+        assert adata.obs_names.tolist() == [
+            "SKN2-4-G1",
+            "SKN2-6-G1",
+            "SKN2-7-G1",
+            "SKN2-7-G2",
+            "SKN2-8-G2",
+            "SKN2-1-G2",
+            "SKN2-2-G1",
+            "SKN2-2-G2",
+            "SKN2-1-G1",
+            "SKN2-9-G1",
+            "SKN2-3-G2",
+            "SKN2-3-G1",
+            "SKN2-4-G2",
+            "SKN2-10-G2",
+            "SKN2-5-G2",
+            "SKN2-9-G2",
+            "SKN2-6-G2",
+            "SKN2-8-G1",
+            "SKN2-5-G1",
+        ]
+        assert adata.obs["cell_cycle_gate"].value_counts(sort=False).to_dict() == {
+            "G1/0": 9,
+            "G2/M": 10,
+        }
+        assert adata.obs["sra_run"].tolist() == [
+            "SRR1663132",
+            "SRR1663134",
+            "SRR1663135",
+            "SRR1663140",
+            "SRR1663142",
+            "SRR1661707",
+            "SRR1661705",
+            "SRR1661708",
+            "SRR1661704",
+            "SRR1663137",
+            "SRR1661709",
+            "SRR1661706",
+            "SRR1661710",
+            "SRR1663144",
+            "SRR1663138",
+            "SRR1663143",
+            "SRR1663139",
+            "SRR1663136",
+            "SRR1663133",
+        ]
+        np.testing.assert_array_equal(
+            adata.obs["figure_column"], np.arange(1, 20, dtype=np.int16)
+        )
+        assert adata.obs.loc["SKN2-3-G1", "source_cell_id"] == "cell1"
+        assert adata.obs.loc["SKN2-3-G1", "coverage_depth"] == 92
+        assert adata.obs.loc["SKN2-10-G2", "source_cell_id"] == "cell19"
+        assert adata.obs.loc["SKN2-10-G2", "coverage_depth"] == 47
+        obs_payload = (
+            "\n".join(
+                f"{index}\t{row.source_cell_id}\t{row.source_sample_id}\t"
+                f"{row.cell_cycle_gate}\t{row.sra_run}\t{row.coverage_depth}\t"
+                f"{row.coverage_breadth:.4f}\t{row.on_target_fraction:.6f}\t"
+                f"{row.off_target_fraction:.6f}\t{row.mapped_reads}\t"
+                f"{row.duplicates}\t{row.duplicate_fraction:.7f}\t"
+                f"{row.source_table_order}\t{row.figure_column}\t{row.figure_label}"
+                for index, row in zip(
+                    adata.obs_names, adata.obs.itertuples(), strict=True
+                )
+            )
+            + "\n"
+        )
+        assert (
+            hashlib.sha256(obs_payload.encode()).hexdigest()
+            == "80ed75d96e8f65f63a000b7bb1b7cbc3d994dd2e3608a49b9244bbfe3c12e2ae"
+        )
+
+        values, counts = np.unique(adata.X, return_counts=True)
+        assert dict(zip(values, counts, strict=True)) == {
+            0: 26797,
+            1: 973715,
+            3: 6393,
+        }
+        assert adata.X.dtype == np.int8
+        assert (
+            hashlib.sha256(np.asarray(adata.X).tobytes(order="C")).hexdigest()
+            == "4c08a33dd037994e4d16e98fc74b1891adc9e2e7a9edd4a9e36b30f1b0d1e0ef"
+        )
+
+        rgb24 = np.asarray(adata.layers["fig_s9_rgb24"], dtype="<u4")
+        posterior = np.asarray(adata.layers["sciphi_posterior_midpoint"], dtype="<f4")
+        assert rgb24.dtype == np.dtype("<u4")
+        assert posterior.dtype == np.dtype("<f4")
+        assert (
+            hashlib.sha256(rgb24.tobytes(order="C")).hexdigest()
+            == "b6d6e7c694b6168b9bebb4cbec062a94bd055df2b69ba53b84368e624dd50163"
+        )
+        assert (
+            hashlib.sha256(posterior.tobytes(order="C")).hexdigest()
+            == "68ba295f69300b91286baf06e33cb88ca0f2271a264ce37aafa0360f83ba1957"
+        )
+        assert np.isfinite(posterior).sum() == 1006901
+        assert np.argwhere(~np.isfinite(posterior)).tolist() == [
+            [0, 46226],
+            [1, 4156],
+            [1, 52181],
+            [18, 15365],
+        ]
+
+        palette = adata.uns["posterior_palette"]
+        raw_colours = palette["raw_rgb24"]
+        assert len(raw_colours) == 381
+        assert palette["exact_match"].sum() == 379
+        assert palette["pixel_count"].sum() == adata.n_obs * adata.n_vars
+        indices = np.searchsorted(raw_colours, rgb24)
+        lower = palette["lower"][indices]
+        upper = palette["upper"][indices]
+        expected = np.full(adata.shape, 3, dtype=np.int8)
+        expected[np.isfinite(upper) & (upper < 0.5)] = 0
+        expected[np.isfinite(lower) & (lower >= 0.5)] = 1
+        np.testing.assert_array_equal(adata.X, expected)
+        assert (rgb24 == int("A7BED9", 16)).sum() == 6389
+
+        assert adata.var_names[0] == "fig_s9_mutation_00001"
+        assert adata.var_names[-1] == "fig_s9_mutation_52995"
+        np.testing.assert_array_equal(
+            adata.var["figure_row"], np.arange(1, 52996, dtype=np.int32)
+        )
+
+        provenance = adata.uns["provenance"]
+        assert (
+            provenance["sciphi_figure_s9"]["supplement_pdf_sha256"]
+            == "3a750b7fcaedd6587084a54c653221d1a6ecb1c682dcd953d98b439b7d832847"
+        )
+        assert (
+            provenance["sciphi_figure_s9"]["raw_rgb_sha256"]
+            == "b357715a36de350c30e04cc4739a599a4ee29f285f667ea0277dc3ff68983c47"
+        )
+        assert (
+            provenance["leung_2015"]["table_s2_sha256"]
+            == "f9f443184ba1a4f7487f706a5a1cc1b31d774d85415e1b56fbadcd33bdd4229e"
+        )
+        assert (
+            "do not expose mutation identifiers"
+            in provenance["scope"]["coordinate_status"]
+        )
+
     def test_load_datasets(self):
         """Verify the expected shapes of all bundled datasets."""
         adata = scp.datasets.example()
@@ -939,6 +1086,8 @@ class TestDatasets:
         assert adata.shape == (672, 84)
         adata = scp.datasets.high_grade_serous_ovarian_cancer3()
         assert adata.shape == (420, 43)
+        adata = scp.datasets.isogenic_fibroblast_cell_line()
+        assert adata.shape == (19, 52995)
         adata = scp.datasets.melanoma20()
         assert adata.shape == (20, 2367)
         adata = scp.datasets.muscle_invasive_bladder()

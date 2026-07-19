@@ -747,21 +747,51 @@ def acute_lymphocytic_leukemia_many():
 
 
 def isogenic_fibroblast_cell_line():
-    """Isogenic Fibroblast cell line dataset.
+    """Isogenic human fibroblast cell line (SKN2).
 
     This dataset was introduced in :cite:`Leung_2015` and was used in:
 
     * :cite:`SCIPhI` Figure S9.
 
-    The size is n_cells × n_muts = 19 × ?
+    The published SCIPhI Figure S9b view has size
+    n_cells × n_muts = 19 × 52,995.
 
     Returns
     -------
     :class:`anndata.AnnData`
-        An anndata in which `.X` is the input noisy.
+        An AnnData object containing the published Figure S9b SCIPhI heatmap.
+        ``.X`` is a conservative 0/1/3 projection of the raster-encoded
+        posterior: 0 means its complete decoded interval is below 0.5, 1 means
+        the interval is at least 0.5, and 3 marks an interval crossing 0.5 or an
+        unmatched source colour.
+
+            - ``.layers['sciphi_posterior_midpoint']`` contains the approximate
+                midpoint of each inverse-palette interval.
+            - ``.layers['fig_s9_rgb24']`` losslessly preserves every published
+                RGB8 pixel packed as ``0xRRGGBB``.
+            - ``.obs`` preserves Figure S9 order, SRA accessions, cell-cycle
+                gates, and the sequencing metrics in Leung Supplementary Table S2.
+            - ``.var['figure_row']`` preserves top-to-bottom Figure S9 row order.
+            - ``.uns['posterior_palette']`` contains the complete reproducible
+                RGB-to-posterior interval lookup.
+            - ``.uns['provenance']`` records source hashes, extraction scope, and
+                the limits of the published artifact.
+
+    Notes
+    -----
+    The coordinate-indexed SCIPhI map, exact posterior matrix, read counts, and
+    VCF were not deposited with the article or in the authors' public repository.
+    Consequently, this loader returns the complete 19 × 52,995 tree-mapped view
+    embedded in Figure S9b, not the unpublished caller input or the complete exome
+    candidate pool. Mutation names are ordered synthetic identifiers because the
+    raster contains no genomic coordinates. RGB8 quantization also means exact
+    source posterior values cannot be recovered; the exact source colours remain
+    available in ``fig_s9_rgb24``.
     """
-    # TODO: extract
-    return None
+    adata = scp.io.read(
+        scp.ul.get_file("scphylo.datasets/real/isogenic_fibroblast_cell_line.h5ad")
+    )
+    return adata
 
 
 def acute_myeloid_leukemia1():
