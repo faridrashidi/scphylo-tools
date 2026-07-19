@@ -1,3 +1,10 @@
+import copy
+import json
+
+import anndata as ad
+import numpy as np
+import pandas as pd
+
 import scphylo as scp
 
 
@@ -730,20 +737,135 @@ def oligodendroglioma_idh_mutated_tumor():
     return adata
 
 
-def acute_lymphocytic_leukemia_many():
-    """Human Acute Lymphocytic Leukemia datasets.
+_AML_MANY_ASSET = "scphylo.datasets/real/acute_myeloid_leukemia_many.npz"
+_AML_MANY_ASSET_SHA256 = (
+    "edd2caea3ce7750a3c0f9f7ec1ba4dfaedc9ed2c52f32b958551f12d17dcafd5"
+)
 
-    This dataset was introduced in :cite:`Morita_2020` and was used in:
 
-    * :cite:`Phyolin` Figure 3 and Table 1.
+def _phyolin_aml_simulation(archive, metadata, instance):
+    """Construct one Phyolin AML simulation from the compressed collection."""
+    instance_id = instance["instance_id"]
+    matrix = np.array(archive[f"input__{instance_id}"], dtype=np.int8, copy=True)
+    phyolin = np.array(archive[f"phyolin__{instance_id}"], dtype=np.int8, copy=True)
+    n_cells, n_mutations = matrix.shape
+
+    obs_names = pd.Index(
+        (f"source_cell_{row:05d}" for row in range(1, n_cells + 1)),
+        name="cell",
+    )
+    categorical_codes = np.zeros(n_cells, dtype=np.int8)
+    obs = pd.DataFrame(index=obs_names)
+    obs["source_row"] = np.arange(1, n_cells + 1, dtype=np.int32)
+    obs["instance_id"] = pd.Categorical.from_codes(
+        categorical_codes, categories=[instance_id]
+    )
+    obs["patient_id"] = pd.Categorical.from_codes(
+        categorical_codes, categories=[instance["patient_id"]]
+    )
+    obs["replicate"] = np.full(n_cells, instance["replicate"], dtype=np.int8)
+    obs["published_topology"] = pd.Categorical.from_codes(
+        categorical_codes, categories=[instance["published_topology"]]
+    )
+
+    labels = instance["mutation_labels"]
+    var = pd.DataFrame(
+        {
+            "source_label": labels,
+            "source_column": np.arange(1, n_mutations + 1, dtype=np.int16),
+            "gene_as_reported": [
+                label.split("_", 1)[0].split(".", 1)[0].removesuffix("-ITD")
+                for label in labels
+            ],
+        },
+        index=pd.Index(labels, name="mutation"),
+    )
+
+    adata = ad.AnnData(X=matrix, obs=obs, var=var)
+    adata.layers["phyolin"] = phyolin
+    adata.uns["simulation"] = copy.deepcopy(instance)
+    adata.uns["simulation"]["simulated_false_negative_rate"] = metadata["collection"][
+        "simulated_false_negative_rate"
+    ]
+    adata.uns["provenance"] = copy.deepcopy(metadata["provenance"])
+    adata.uns["provenance"]["collection"] = copy.deepcopy(metadata["collection"])
+    adata.uns["provenance"]["asset"] = {
+        "package_resource": _AML_MANY_ASSET,
+        "sha256": _AML_MANY_ASSET_SHA256,
+        "schema_version": metadata["schema_version"],
+    }
+    return adata
+
+
+def acute_myeloid_leukemia_many(instance=None):
+    """Load the Phyolin simulations approximating an AML cohort.
+
+    :cite:`Phyolin` Figure 3 and Table 1 used 12 acute myeloid leukemia
+    (AML) topologies derived from :cite:`Morita_2020`, with 10 independently
+    simulated replicates per patient and a false-negative rate of 0.05. The
+    complete public collection therefore contains 120 matrices, 872,740
+    simulated cell rows, and 3,494,950 binary genotype calls.
+
+    Parameters
+    ----------
+    instance : :obj:`str`, optional
+        Return one simulation, identified for example by ``"AML-2_rep1"``.
+        When omitted, return all 120 simulations as a dictionary in Figure 3/
+        Table 1 patient order and then replicate order.
 
     Returns
     -------
-    :class:`anndata.AnnData`
-        An anndata in which `.X` is the input noisy.
+    :obj:`dict` of :class:`anndata.AnnData` or :class:`anndata.AnnData`
+        A dictionary keyed by simulation identifier, or the selected simulation.
+        In every object:
+
+            - ``.X`` is the exact noisy binary input.
+            - ``.layers['phyolin']`` is the corresponding deposited Phyolin
+                inferred linear solution, not biological ground truth.
+            - ``.obs`` records the source row, patient, replicate, and published
+                linear/branched topology.
+            - ``.var_names`` preserves the source mutation labels verbatim,
+                including their original spelling.
+            - ``.uns['simulation']`` contains the introduced false-negative
+                count, Phyolin estimate, runtime, deep-learning probability,
+                and per-file hashes.
+            - ``.uns['provenance']`` records the pinned source and collection
+                validation.
+
+    Notes
+    -----
+    These are independent simulations, not observed cells from 12 patients, so
+    they are intentionally returned as separate objects rather than padded and
+    concatenated into one phylogeny. The error-free matrices used to generate
+    them were not deposited publicly.
+
+    Phyolin used the February 2020 Morita preprint cohort (77 AML patients),
+    before the final article expanded the cohort to 123 patients. The final
+    article's cohort totals therefore do not describe these simulations.
+
+    The source matrices contain 6,497 AML-47 rows in every replicate, although
+    Table 1 prints 6,491. No rows are removed here. The 99 observed baseline
+    matrices later added under the source repository's ``aml_patients``
+    directory belong to a different experiment and are not silently substituted
+    for the cited Figure 3/Table 1 inputs.
     """
-    # TODO: extract all
-    return None
+    resource = scp.ul.get_file(_AML_MANY_ASSET)
+    with np.load(resource, allow_pickle=False) as archive:
+        metadata = json.loads(archive["__metadata__"].tobytes())
+        instances = metadata["instances"]
+        by_id = {item["instance_id"]: item for item in instances}
+        if instance is not None:
+            if instance not in by_id:
+                examples = ", ".join(list(by_id)[:3])
+                raise ValueError(
+                    f"unknown AML simulation {instance!r}; expected an identifier "
+                    f"such as {examples}"
+                )
+            return _phyolin_aml_simulation(archive, metadata, by_id[instance])
+        return {
+            item["instance_id"]: _phyolin_aml_simulation(archive, metadata, item)
+            for item in instances
+        }
 
 
 def isogenic_fibroblast_cell_line():

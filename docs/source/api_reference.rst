@@ -147,6 +147,7 @@ This module provides functions for simulating data and accessing published datas
     datasets.colorectal3
     datasets.acute_myeloid_leukemia1
     datasets.acute_myeloid_leukemia2
+    datasets.acute_myeloid_leukemia_many
     datasets.acute_lymphocytic_leukemia1
     datasets.acute_lymphocytic_leukemia2
     datasets.acute_lymphocytic_leukemia3

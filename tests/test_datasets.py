@@ -1,6 +1,7 @@
 """Verify simulation, noise generation, and bundled dataset loaders."""
 
 import hashlib
+from pathlib import Path
 
 import numpy as np
 import pytest
@@ -300,6 +301,224 @@ class TestDatasets:
             "beta": 0.2521591,
             "gama": 0,
         }
+
+    def test_acute_myeloid_leukemia_many_collection(self):
+        """Verify all 120 independent Phyolin Figure 3 AML simulations."""
+        assert not hasattr(scp.datasets, "acute_lymphocytic_leukemia_many")
+        simulations = scp.datasets.acute_myeloid_leukemia_many()
+
+        assert len(simulations) == 120
+        assert list(simulations)[:3] == [
+            "AML-2_rep1",
+            "AML-2_rep2",
+            "AML-2_rep3",
+        ]
+        assert list(simulations)[-3:] == [
+            "AML-74_rep8",
+            "AML-74_rep9",
+            "AML-74_rep10",
+        ]
+        assert sum(adata.n_obs for adata in simulations.values()) == 872740
+        assert (
+            sum(adata.n_obs * adata.n_vars for adata in simulations.values()) == 3494950
+        )
+        assert sum(adata.n_vars for adata in simulations.values()) == 490
+        assert sum(np.sum(adata.X == 0) for adata in simulations.values()) == 1908984
+        assert sum(np.sum(adata.X == 1) for adata in simulations.values()) == 1585966
+        assert (
+            sum(np.sum(adata.layers["phyolin"] == 0) for adata in simulations.values())
+            == 1716567
+        )
+        assert (
+            sum(np.sum(adata.layers["phyolin"] == 1) for adata in simulations.values())
+            == 1778383
+        )
+        assert all(adata.X.dtype == np.int8 for adata in simulations.values())
+        assert all(
+            adata.layers["phyolin"].dtype == np.int8 for adata in simulations.values()
+        )
+
+        patient_shapes = {
+            "AML-2": (7931, 5),
+            "AML-8": (4675, 3),
+            "AML-10": (8729, 4),
+            "AML-33": (8120, 3),
+            "AML-47": (6497, 3),
+            "AML-58": (8170, 3),
+            "AML-53": (8013, 3),
+            "AML-62": (4027, 6),
+            "AML-63": (8347, 4),
+            "AML-67": (6024, 7),
+            "AML-69": (7462, 3),
+            "AML-74": (9279, 5),
+        }
+        for patient, expected_shape in patient_shapes.items():
+            patient_data = [
+                adata
+                for adata in simulations.values()
+                if adata.uns["simulation"]["patient_id"] == patient
+            ]
+            assert len(patient_data) == 10
+            assert {adata.shape for adata in patient_data} == {expected_shape}
+
+        provenance = simulations["AML-2_rep1"].uns["provenance"]
+        assert provenance["collection"] == {
+            "branched_instances": 60,
+            "correct_topology_classifications": 120,
+            "distinct_mutation_labels": 37,
+            "input_ones": 1585966,
+            "input_zeros": 1908984,
+            "linear_instances": 60,
+            "n_instances": 120,
+            "n_patients": 12,
+            "output_ones": 1778383,
+            "output_zeros": 1716567,
+            "phyolin_classification_threshold": 0.05,
+            "phyolin_flips_0_to_1": 192417,
+            "replicates_per_patient": 10,
+            "runtime_limit_reached": 24,
+            "runtime_limit_seconds": 500,
+            "simulated_false_negative_rate": 0.05,
+            "simulated_false_negatives": 127275,
+            "total_cells": 872740,
+            "total_entries": 3494950,
+            "total_patient_local_mutations": 490,
+        }
+        assert (
+            sum(
+                adata.uns["simulation"]["simulated_false_negatives"]
+                for adata in simulations.values()
+            )
+            == 127275
+        )
+        assert (
+            sum(
+                adata.uns["simulation"]["phyolin_flips_0_to_1"]
+                for adata in simulations.values()
+            )
+            == 192417
+        )
+        assert (
+            sum(
+                adata.uns["simulation"]["phyolin_runtime_limit_reached"]
+                for adata in simulations.values()
+            )
+            == 24
+        )
+        assert all(
+            adata.uns["simulation"]["phyolin_classification_correct"]
+            for adata in simulations.values()
+        )
+        assert provenance["study"]["disease"] == "acute myeloid leukemia"
+        assert "not observed patient cells" in provenance["study"]["scope"]
+        assert "no LICENSE" in provenance["source"]["license_status"]
+        assert (
+            provenance["source"]["matrix_file_manifest_sha256"]
+            == "14f888a131bee9358d0797e2fbea50d80bf7d6496ecc6e2cc1da3e4f64bd10d0"
+        )
+        assert (
+            provenance["source"]["input_aggregate_sha256"]
+            == "c127fe0e28cb0bf7e7d540b5f5e409c717a490861ea751f1a0961526e00dbb09"
+        )
+        assert (
+            provenance["source"]["output_aggregate_sha256"]
+            == "7068cb0ace756d16078bfea48a9f83b40880b05f5db9e9d65a775b19d7fc61ee"
+        )
+        assert "99 observed baseline" in provenance["excluded"]["observed_cohort"]
+        assert "6,491" in provenance["representation"]["table_1_correction"]
+        assert "0.53" in provenance["representation"]["aml_74_generation_quirk"]
+        assert (
+            provenance["asset"]["sha256"]
+            == "edd2caea3ce7750a3c0f9f7ec1ba4dfaedc9ed2c52f32b958551f12d17dcafd5"
+        )
+        assert simulations["AML-47_rep1"].shape == (6497, 3)
+        assert simulations["AML-74_rep1"].var_names.tolist() == [
+            "NPM1_p.L287fs",
+            "WTI_p.S381X",
+            "KRAS_p.G60D",
+            "NRAS_p_G12D",
+            "PTPN11_p.D61A",
+        ]
+
+        for adata in simulations.values():
+            simulation = adata.uns["simulation"]
+            assert (
+                hashlib.sha256(adata.X.tobytes(order="C")).hexdigest()
+                == simulation["canonical_input_sha256"]
+            )
+            assert (
+                hashlib.sha256(adata.layers["phyolin"].tobytes(order="C")).hexdigest()
+                == simulation["canonical_output_sha256"]
+            )
+            changed = adata.X != adata.layers["phyolin"]
+            assert np.all(adata.X[changed] == 0)
+            assert np.all(adata.layers["phyolin"][changed] == 1)
+            for left in range(adata.n_vars):
+                for right in range(left + 1, adata.n_vars):
+                    left_only = np.any(
+                        (adata.layers["phyolin"][:, left] == 1)
+                        & (adata.layers["phyolin"][:, right] == 0)
+                    )
+                    right_only = np.any(
+                        (adata.layers["phyolin"][:, left] == 0)
+                        & (adata.layers["phyolin"][:, right] == 1)
+                    )
+                    assert not (left_only and right_only)
+
+    def test_acute_myeloid_leukemia_many_instance(self, tmp_path):
+        """Verify selective loading, source labels, and serialization."""
+        adata = scp.datasets.acute_myeloid_leukemia_many("AML-2_rep1")
+
+        asset = Path(
+            scp.ul.get_file("scphylo.datasets/real/acute_myeloid_leukemia_many.npz")
+        )
+        assert hashlib.sha256(asset.read_bytes()).hexdigest() == (
+            "edd2caea3ce7750a3c0f9f7ec1ba4dfaedc9ed2c52f32b958551f12d17dcafd5"
+        )
+
+        assert adata.shape == (7931, 5)
+        assert adata.var_names.tolist() == [
+            "DNMT3A_p.R882H",
+            "SF3B1_p.K666N",
+            "FLT3_p.D835V",
+            "RUNX1_p.S141fs",
+            "JAK2_p.V617F",
+        ]
+        assert adata.obs_names[[0, -1]].tolist() == [
+            "source_cell_00001",
+            "source_cell_07931",
+        ]
+        assert adata.obs["source_row"].iloc[[0, -1]].tolist() == [1, 7931]
+        assert adata.obs["patient_id"].cat.categories.tolist() == ["AML-2"]
+        assert adata.obs["published_topology"].cat.categories.tolist() == ["linear"]
+        assert adata.obs["replicate"].unique().tolist() == [1]
+        assert set(np.unique(adata.X)) == {0, 1}
+
+        changed = adata.X != adata.layers["phyolin"]
+        assert changed.sum() == 1090
+        assert np.all(adata.X[changed] == 0)
+        assert np.all(adata.layers["phyolin"][changed] == 1)
+        assert (
+            hashlib.sha256(adata.X.tobytes(order="C")).hexdigest()
+            == "fde7e69cc0bf617ddd1294047d227552540cbfe9e58b05d210fc881aee070452"
+        )
+        simulation = adata.uns["simulation"]
+        assert simulation["simulated_false_negative_rate"] == 0.05
+        assert simulation["simulated_false_negatives"] == 1874
+        assert simulation["phyolin_classification"] == "linear"
+        assert simulation["phyolin_classification_correct"]
+        assert not simulation["phyolin_runtime_limit_reached"]
+        assert simulation["phyolin_runtime_seconds"] == 77.14
+        assert simulation["deep_learning_linear_probability"] == 0.70013463
+
+        output = tmp_path / "aml-2-rep1.h5ad"
+        adata.write_h5ad(output)
+        roundtrip = scp.io.read(output)
+        np.testing.assert_array_equal(roundtrip.X, adata.X)
+        assert roundtrip.uns["simulation"]["instance_id"] == "AML-2_rep1"
+
+        with pytest.raises(ValueError, match="unknown AML simulation"):
+            scp.datasets.acute_myeloid_leukemia_many("AML-4_rep1")
 
     def test_high_grade_serous_ovarian_cancer1_derivatives(self):
         """Verify the full HGSOC1 assay and the infSCITE Figure S22 view."""
@@ -1104,4 +1323,5 @@ class TestDatasets:
         assert adata.shape == (17, 35)
         adata = scp.datasets.tnbc()
         assert adata.shape == (16, 20)
-        # adata = scp.datasets.acute_lymphocytic_leukemia_many()
+        simulations = scp.datasets.acute_myeloid_leukemia_many()
+        assert len(simulations) == 120
