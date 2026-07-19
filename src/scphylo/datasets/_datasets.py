@@ -213,23 +213,37 @@ def acute_lymphocytic_leukemia2():
 def acute_lymphocytic_leukemia3():
     """Human Acute Lymphocytic Leukemia dataset (Patient 3).
 
-    This dataset was introduced in :cite:`Gawad_2014` and was used in:
+    The bundled binary genotype matrix was introduced in :cite:`Gawad_2014`
+    and was used in:
 
     * :cite:`infSCITE` Figure S18.
-    * :cite:`SCIPhI` Figure 5.
-    * :cite:`ScisTree` Figure S3.
 
-    The size is n_cells × n_muts = 150 × 49
+    The dataset has size n_cells × n_muts = 150 × 49.
 
     Returns
     -------
     :class:`anndata.AnnData`
-        An anndata in which `.X` is the input noisy.
+        An AnnData object in which `.X` contains the complete published noisy
+        genotype matrix.
+
+            - `.obs['gawad_cluster']` contains the source's five cluster labels.
+            - `.var` contains genomic coordinates and bulk-sample counts.
+            - `.uns['provenance']` records the genotype source and the later
+                255-cell raw-read reanalysis.
+
+    Notes
+    -----
+    :cite:`Gawad_2014` retained the 150 Patient 3 cells whose estimated allelic
+    dropout was below 30%. :cite:`SCIPhI` Figure 5 and :cite:`ScisTree` Figure S3
+    instead reanalyzed 255 Patient 3 raw-read libraries from accession SRP044380
+    and independently called variants. Those data are not 105 omitted rows of
+    this 49-mutation matrix; ScisTree, for example, reports 406 called SNV sites.
+    A 255-cell read-count or probability dataset would therefore be a separate
+    dataset, not a dimension correction to this one.
     """
     adata = scp.io.read(
         scp.ul.get_file("scphylo.datasets/real/acute_lymphocytic_leukemia3.h5ad")
     )
-    # FIXME: 255 x 49 in SCIPhI and ScisTree?
     return adata
 
 

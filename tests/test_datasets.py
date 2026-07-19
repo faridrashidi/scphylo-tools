@@ -1,5 +1,7 @@
 """Verify simulation, noise generation, and bundled dataset loaders."""
 
+import hashlib
+
 import numpy as np
 import pytest
 
@@ -177,6 +179,48 @@ class TestDatasets:
             adata.uns["provenance"]["genotype"]["infscite_sha256"]
             == "088d754af50dcc1f8f6cc2b08aa3c878eca311461328e61c81959ac56da94e21"
         )
+
+    def test_acute_lymphocytic_leukemia3_provenance(self):
+        """Verify the published ALL3 matrix and distinct raw-cell cohort."""
+        adata = scp.datasets.acute_lymphocytic_leukemia3()
+
+        assert adata.shape == (150, 49)
+        assert adata.obs_names.tolist() == [f"cell{i}" for i in range(150)]
+        values, counts = np.unique(adata.X, return_counts=True)
+        assert dict(zip(values, counts, strict=True)) == {0: 4399, 1: 2951}
+        matrix_hash = hashlib.sha256(
+            np.asarray(adata.X, dtype="<i8").tobytes(order="C")
+        ).hexdigest()
+        assert (
+            matrix_hash
+            == "5ebfcfbe915970bb754e09d37345f657672afcc861174c4713600040cda7dd79"
+        )
+        assert adata.obs["gawad_cluster"].value_counts(sort=False).to_dict() == {
+            1: 31,
+            2: 46,
+            3: 9,
+            4: 34,
+            5: 30,
+        }
+
+        provenance = adata.uns["provenance"]
+        assert (
+            provenance["genotype"]["source_sha256"]
+            == "ad25e8216801c79b0043b4c8eefd2e7a371d4c63e6feefcb350a168b6dd12723"
+        )
+        reanalysis = provenance["later_255_cell_reanalysis"]
+        assert reanalysis["accession"] == "SRP044380"
+        assert (
+            reanalysis["sciphi_sample_map_sha256"]
+            == "d41672fea422d9adbe74d75dca8c701532036e184ded1eeafb15ffb606b0bc91"
+        )
+        assert reanalysis["scistree_called_snv_sites"] == 406
+        assert "not a 255 x 49 extension" in reanalysis["relationship"]
+        assert adata.uns["params_scite"] == {
+            "alpha": 0.000001,
+            "beta": 0.2521591,
+            "gama": 0,
+        }
 
     def test_load_datasets(self):
         """Verify the expected shapes of all bundled datasets."""
