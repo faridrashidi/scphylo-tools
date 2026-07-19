@@ -550,21 +550,45 @@ def high_grade_serous_ovarian_cancer3():
     * :cite:`scVILP` Figure 5.
     * :cite:`SCIPhI` Figure S10.
 
-    The size is n_cells × n_muts = 420 × 37
+    The complete targeted single-nucleotide-locus assay has size
+    n_cells × n_loci = 420 × 43.
 
     Returns
     -------
     :class:`anndata.AnnData`
-        An anndata in which `.X` is the input noisy.
+        An AnnData object in which ``.X`` is a binary alternate-allele-presence
+        projection of the published allele calls: 0 is reference-only (A), 1 means
+        the alternate allele is present (AB or B), and 3 is uncalled or missing.
+
+            - ``.layers['allele_state']`` preserves the original calls as 0=A,
+                1=AB, 2=B, and 3=missing.
+            - ``.layers['mutant']`` and ``.layers['total']`` contain
+                alternate-supporting and total source read counts, respectively.
+            - ``.layers['ref_p_value']`` and ``.layers['alt_p_value']`` contain the
+                source binomial exact-test p-values for allele presence.
+            - ``.obs['mcpherson_clonal_analysis']`` identifies the 402 nuclei used
+                in the original clonal analysis.
+            - ``.obs['sciphi_scvilp']`` identifies the later 370-cell read-depth
+                subset.
+            - ``.var['infscite_fig_s24']`` identifies the 37 somatic-SNV targets
+                used in the primary infSCITE analysis.
+            - ``.uns['provenance']`` records the source and derivative filters.
+
+    Notes
+    -----
+    The apparent published dimensions describe different, reproducible views of
+    the same assay. The source contains 420 nuclei and 43 targeted loci: 37 somatic
+    SNVs and six germline heterozygous normal-marker SNPs putatively lost in tumor
+    cells. :cite:`infSCITE` Figure S24 excluded the six normal markers, giving
+    420 × 37. :cite:`SCIPhI` Figure S10 retained all 43 loci but selected nuclei
+    with more than 10,000 reads summed across them, giving 370 × 43;
+    :cite:`scVILP` Figure 5 uses the same read-count matrix. Both derivatives are
+    retained as name-indexed masks rather than replacing the full source panel.
     """
-    # adata = scp.io.read(
-    #     scp.ul.get_file(
-    #         "scphylo.datasets/real/high_grade_serous_ovarian_cancer3.h5ad"
-    #     )
-    # )
-    # TODO: extract
-    # FIXME: 370 x 43 in scVILP and SCIPhI?
-    return None
+    adata = scp.io.read(
+        scp.ul.get_file("scphylo.datasets/real/high_grade_serous_ovarian_cancer3.h5ad")
+    )
+    return adata
 
 
 def high_grade_serous_ovarian_cancer_3celllines():

@@ -222,6 +222,202 @@ class TestDatasets:
             "gama": 0,
         }
 
+    def test_high_grade_serous_ovarian_cancer3_derivatives(self):
+        """Verify the full HGSOC3 assay and its published subset dimensions."""
+        adata = scp.datasets.high_grade_serous_ovarian_cancer3()
+
+        assert adata.shape == (420, 43)
+        values, counts = np.unique(adata.X, return_counts=True)
+        assert dict(zip(values, counts, strict=True)) == {0: 8099, 1: 4390, 3: 5571}
+        matrix_hash = hashlib.sha256(
+            np.asarray(adata.X, dtype=np.int8).tobytes(order="C")
+        ).hexdigest()
+        assert (
+            matrix_hash
+            == "7e59ef1d8c004f09b6cff293639a2af2dbc523fc400ea413963538ec1341d792"
+        )
+
+        assert adata.obs_names.is_unique
+        assert adata.var_names.is_unique
+        assert adata.obs["sample_id"].value_counts(sort=False).to_dict() == {
+            "left_ovary_site_1": 84,
+            "left_ovary_site_2": 84,
+            "omentum_site_1": 84,
+            "omentum_site_2": 84,
+            "right_ovary_site_1": 84,
+        }
+        obs_payload = (
+            "\n".join(
+                f"{str(index)}\t{str(row.sample_id)}\t{int(row.well_id)}\t"
+                f"{int(row.library)}\t{int(row.total_depth)}\t"
+                f"{int(bool(row.mcpherson_clonal_analysis))}\t"
+                f"{int(bool(row.sciphi_scvilp))}"
+                for index, row in zip(
+                    adata.obs_names, adata.obs.itertuples(), strict=True
+                )
+            )
+            + "\n"
+        )
+        assert (
+            hashlib.sha256(obs_payload.encode()).hexdigest()
+            == "87e4298d0970005bb711fe898ed698cabd844b1d3d1bac1360ae7c1f18366a79"
+        )
+
+        assert {
+            "allele_state",
+            "alt_p_value",
+            "mutant",
+            "ref_p_value",
+            "total",
+        } <= set(adata.layers)
+        allele_state = adata.layers["allele_state"]
+        values, counts = np.unique(allele_state, return_counts=True)
+        assert dict(zip(values, counts, strict=True)) == {
+            0: 8099,
+            1: 3804,
+            2: 586,
+            3: 5571,
+        }
+        state_hash = hashlib.sha256(
+            np.asarray(allele_state, dtype=np.int8).tobytes(order="C")
+        ).hexdigest()
+        assert (
+            state_hash
+            == "fe368c36858bee47973b5f5ea1f360789d93a91af5d73cc995acca4953b5aa7b"
+        )
+        np.testing.assert_array_equal(
+            adata.X,
+            np.where(allele_state == 3, 3, (allele_state > 0).astype(np.int8)),
+        )
+
+        mutant = adata.layers["mutant"]
+        total = adata.layers["total"]
+        called = total >= 50
+        ref_present = adata.layers["ref_p_value"] < 1e-6
+        alt_present = adata.layers["alt_p_value"] < 1e-6
+        expected_state = np.full(adata.shape, 3, dtype=np.int8)
+        expected_state[called & ref_present & ~alt_present] = 0
+        expected_state[called & ref_present & alt_present] = 1
+        expected_state[called & ~ref_present & alt_present] = 2
+        np.testing.assert_array_equal(allele_state, expected_state)
+        assert (
+            hashlib.sha256(
+                np.asarray(adata.layers["ref_p_value"], dtype="<f8").tobytes(order="C")
+            ).hexdigest()
+            == "8ac765021982d29527c77212ee23d3b91cf237bfec5e3377f1fff8af2c42bcd9"
+        )
+        assert (
+            hashlib.sha256(
+                np.asarray(adata.layers["alt_p_value"], dtype="<f8").tobytes(order="C")
+            ).hexdigest()
+            == "19c8bf9c999334b3819129fcbe6e0ed242ae6956682bf7eabf578a469ddbd708"
+        )
+        assert mutant.sum() == 11979881
+        assert total.sum() == 50114355
+        assert np.all(mutant >= 0)
+        assert np.all(mutant <= total)
+        assert (
+            hashlib.sha256(
+                np.asarray(mutant, dtype="<i8").tobytes(order="C")
+            ).hexdigest()
+            == "666c8d56112dc5e1ebae49176d4f9483bdb782e16068833240dc3610eaac15fc"
+        )
+        assert (
+            hashlib.sha256(
+                np.asarray(total, dtype="<i8").tobytes(order="C")
+            ).hexdigest()
+            == "cb847f65ac6919d2a88253f2d3e73ea0d9de812c8dbb220899ac75a989101d47"
+        )
+
+        mcpherson = adata.obs["mcpherson_clonal_analysis"].to_numpy()
+        np.testing.assert_array_equal(mcpherson, (total >= 50).any(axis=1))
+        assert mcpherson.sum() == 402
+        assert np.all(adata.X[~mcpherson] == 3)
+
+        sciphi_scvilp = adata.obs["sciphi_scvilp"].to_numpy()
+        cell_depth = total.sum(axis=1)
+        np.testing.assert_array_equal(sciphi_scvilp, cell_depth > 10000)
+        assert sciphi_scvilp.sum() == 370
+        assert cell_depth[~sciphi_scvilp].max() == 9993
+        assert cell_depth[sciphi_scvilp].min() == 10649
+        assert adata.obs.loc[sciphi_scvilp, "sample_id"].value_counts(
+            sort=False
+        ).to_dict() == {
+            "left_ovary_site_1": 76,
+            "left_ovary_site_2": 73,
+            "omentum_site_1": 67,
+            "omentum_site_2": 83,
+            "right_ovary_site_1": 71,
+        }
+
+        assert adata.var["category"].value_counts(sort=False).to_dict() == {
+            "normal_marker": 6,
+            "snv": 37,
+        }
+        infscite = adata.var["infscite_fig_s24"].to_numpy()
+        np.testing.assert_array_equal(infscite, adata.var["category"] == "snv")
+        assert infscite.sum() == 37
+        infscite_matrix = adata[:, infscite].X
+        values, counts = np.unique(infscite_matrix, return_counts=True)
+        assert dict(zip(values, counts, strict=True)) == {0: 6354, 1: 4212, 3: 4974}
+        assert (
+            hashlib.sha256(
+                np.asarray(infscite_matrix, dtype=np.int8).tobytes(order="C")
+            ).hexdigest()
+            == "ca719fa00fd47844c5ae50e9d655de4d3f708f16d7afaac96d0893d0ae885ea9"
+        )
+
+        normal_markers = {
+            (str(row.chrom), int(row.position), str(row.ref), str(row.alt))
+            for row in adata.var.loc[~infscite].itertuples()
+        }
+        assert normal_markers == {
+            ("17", 41245466, "G", "A"),
+            ("17", 57754591, "A", "G"),
+            ("17", 78333840, "T", "C"),
+            ("17", 79511135, "A", "G"),
+            ("22", 50869692, "G", "C"),
+            ("X", 100395663, "G", "T"),
+        }
+        var_payload = (
+            "\n".join(
+                f"{str(index)}\t{str(row.chrom)}\t{int(row.position)}\t"
+                f"{str(row.ref)}\t{str(row.alt)}\t{str(row.gene_name)}\t"
+                f"{str(row.effect)}\t{str(row.category)}\t"
+                f"{int(bool(row.infscite_fig_s24))}"
+                for index, row in zip(
+                    adata.var_names, adata.var.itertuples(), strict=True
+                )
+            )
+            + "\n"
+        )
+        assert (
+            hashlib.sha256(var_payload.encode()).hexdigest()
+            == "30ec96fe2c1a41f944835723db290054b73ec184548789d970d7683eacaf54ed"
+        )
+
+        provenance = adata.uns["provenance"]
+        assert (
+            provenance["source"]["workbook_sha256"]
+            == "166bf71ae2c8f686fa11e97784de1619ef1b6339becc65a647c2a66fc78bdbd6"
+        )
+        assert (
+            provenance["source"]["methods_pdf_sha256"]
+            == "7915b4e3772878a1ddb568abd574e6b868ac7fd130cab497de7be3e9deec6844"
+        )
+        assert (
+            provenance["infscite_fig_s24"]["supplement_pdf_sha256"]
+            == "c1a07a492a40d117884d43fd6c90077709ce16498babebbfe2aed0e1907a7de5"
+        )
+        assert (
+            provenance["sciphi_scvilp"]["scvilp_counts_sha256"]
+            == "540cdef971fd0dc1508338960f9d5a5a08aeeb6747e57138be28a2cb100468b8"
+        )
+        assert (
+            provenance["sciphi_scvilp"]["sciphi_supplement_sha256"]
+            == "3a750b7fcaedd6587084a54c653221d1a6ecb1c682dcd953d98b439b7d832847"
+        )
+
     def test_load_datasets(self):
         """Verify the expected shapes of all bundled datasets."""
         adata = scp.datasets.example()
@@ -250,6 +446,8 @@ class TestDatasets:
         assert adata.shape == (47, 40)
         adata = scp.datasets.high_grade_serous_ovarian_cancer_3celllines()
         assert adata.shape == (891, 14068)
+        adata = scp.datasets.high_grade_serous_ovarian_cancer3()
+        assert adata.shape == (420, 43)
         adata = scp.datasets.melanoma20()
         assert adata.shape == (20, 2367)
         adata = scp.datasets.muscle_invasive_bladder()
@@ -268,5 +466,4 @@ class TestDatasets:
         assert adata.shape == (16, 20)
         # adata = scp.datasets.high_grade_serous_ovarian_cancer1()
         # adata = scp.datasets.high_grade_serous_ovarian_cancer2()
-        # adata = scp.datasets.high_grade_serous_ovarian_cancer3()
         # adata = scp.datasets.acute_lymphocytic_leukemia_many()
