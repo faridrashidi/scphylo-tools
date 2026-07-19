@@ -569,20 +569,45 @@ def high_grade_serous_ovarian_cancer2():
 
     * :cite:`infSCITE` Figure S23.
 
-    The size is n_cells × n_muts = 672 × 60
+    The complete targeted single-nucleotide-locus assay has size
+    n_cells × n_loci = 672 × 84.
 
     Returns
     -------
     :class:`anndata.AnnData`
-        An anndata in which `.X` is the input noisy.
+        An AnnData object in which ``.X`` is a binary alternate-allele-presence
+        projection of the published allele calls: 0 is reference-only (A), 1 means
+        the alternate allele is present (AB or B), and 3 is uncalled or missing.
+
+            - ``.layers['allele_state']`` preserves the original calls as 0=A,
+                1=AB, 2=B, and 3=missing.
+            - ``.layers['mutant']`` and ``.layers['total']`` contain
+                alternate-supporting and total source read counts, respectively.
+            - ``.layers['ref_p_value']`` and ``.layers['alt_p_value']`` contain the
+                source binomial exact-test p-values for allele presence.
+            - ``.obs['mcpherson_clonal_analysis']`` identifies the 636 nuclei with
+                at least one callable locus.
+            - ``.var['infscite_fig_s23']`` identifies the 60 targets used in the
+                primary infSCITE analysis.
+            - ``.var['source_category']`` preserves the literal S17 category.
+            - ``.uns['provenance']`` records the source and derivative filters.
+
+    Notes
+    -----
+    The former 672 × 60 documentation described the :cite:`infSCITE` Figure S23
+    derivative, not the complete source assay. McPherson et al. targeted 84 loci:
+    a 24-target heterozygous-SNP normal-cell-marker block followed by 60 somatic
+    SNVs. Figure S23 excluded the first block because those loci were present in
+    normal cells. S17 generically labels all 84 targets as ``snv``; this literal
+    value is retained in ``source_category``, while ``category`` normalizes the
+    first block to ``normal_marker`` consistently with the other McPherson patient
+    datasets. The complete 672 × 84 assay is returned, and the published 60-locus
+    view remains available through the name-indexed ``infscite_fig_s23`` mask.
     """
-    # adata = scp.io.read(
-    #     scp.ul.get_file(
-    #         "scphylo.datasets/real/high_grade_serous_ovarian_cancer2.h5ad"
-    #     )
-    # )
-    # TODO: extract
-    return None
+    adata = scp.io.read(
+        scp.ul.get_file("scphylo.datasets/real/high_grade_serous_ovarian_cancer2.h5ad")
+    )
+    return adata
 
 
 def high_grade_serous_ovarian_cancer3():
