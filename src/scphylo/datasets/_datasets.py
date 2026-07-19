@@ -524,20 +524,42 @@ def high_grade_serous_ovarian_cancer1():
 
     * :cite:`infSCITE` Figure S22.
 
-    The size is n_cells × n_muts = 588 × 37
+    The complete targeted single-nucleotide-locus assay has size
+    n_cells × n_loci = 588 × 43.
 
     Returns
     -------
     :class:`anndata.AnnData`
-        An anndata in which `.X` is the input noisy.
+        An AnnData object in which ``.X`` is a binary alternate-allele-presence
+        projection of the published allele calls: 0 is reference-only (A), 1 means
+        the alternate allele is present (AB or B), and 3 is uncalled or missing.
+
+            - ``.layers['allele_state']`` preserves the original calls as 0=A,
+                1=AB, 2=B, and 3=missing.
+            - ``.layers['mutant']`` and ``.layers['total']`` contain
+                alternate-supporting and total source read counts, respectively.
+            - ``.layers['ref_p_value']`` and ``.layers['alt_p_value']`` contain the
+                source binomial exact-test p-values for allele presence.
+            - ``.obs['variation']`` preserves the source standard/barcode flag.
+            - ``.obs['mcpherson_clonal_analysis']`` identifies the 491 nuclei with
+                at least one callable locus.
+            - ``.var['infscite_fig_s22']`` identifies the 37 somatic-SNV targets
+                used in the primary infSCITE analysis.
+            - ``.uns['provenance']`` records the source and derivative filters.
+
+    Notes
+    -----
+    The former 588 × 37 documentation described the :cite:`infSCITE` Figure S22
+    derivative, not the complete source assay. McPherson et al. targeted 43 loci:
+    37 somatic SNVs and six germline heterozygous normal-marker SNPs putatively
+    lost in tumor cells. Figure S22 excluded those six normal markers. The complete
+    588 × 43 assay is returned, and the published 37-locus view remains available
+    through the name-indexed ``infscite_fig_s22`` mask.
     """
-    # adata = scp.io.read(
-    #     scp.ul.get_file(
-    #         "scphylo.datasets/real/high_grade_serous_ovarian_cancer1.h5ad"
-    #     )
-    # )
-    # TODO: extract
-    return None
+    adata = scp.io.read(
+        scp.ul.get_file("scphylo.datasets/real/high_grade_serous_ovarian_cancer1.h5ad")
+    )
+    return adata
 
 
 def high_grade_serous_ovarian_cancer2():
