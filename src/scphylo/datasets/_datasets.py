@@ -132,22 +132,44 @@ def colorectal2(readcount=False):
 
 
 def colorectal3():
-    """Human Colorectal Cancer.
+    """Human Colorectal Cancer (Patient CRC0827).
 
     This dataset was introduced in :cite:`Wu_2016` and was used in:
 
     * :cite:`SiFit` Figure 5.
 
-    The size is n_cells × n_muts = 48 × 77
+    The complete published matrix has size n_cells × n_muts = 61 × 77.
 
     Returns
     -------
     :class:`anndata.AnnData`
-        An anndata in which `.X` is the input noisy.
+        An AnnData object in which ``.X`` contains the observed genotype calls:
+        0 is reference, 1 is mutation present, and 3 is missing/no coverage.
+
+            - ``.obs['source_tissue']`` distinguishes the 35 cancer-biopsy,
+                13 adenomatous-polyp, and 13 matched-normal colorectal cells.
+            - ``.obs['non_normal_tissue']`` identifies the historical 48 × 77
+                view obtained by excluding the 13 matched-normal cells.
+            - ``.var['sifit_index']`` preserves the mutation numbering in
+                Supplementary Figure S4a.
+            - ``.uns['provenance']`` records the source figures, exact raster
+                extraction, validation, and archival SiFit code.
+
+    Notes
+    -----
+    The previous 48 × 77 documentation described the non-normal-tissue slice,
+    not the input to :cite:`SiFit` Figure 5. Both the paper and its archived
+    CRC0827 runner use all 61 cells: 35 cancer-biopsy cells, 13
+    adenomatous-polyp cells, and 13 matched-normal controls. The complete matrix
+    is therefore returned by default, while the 48-cell view remains available
+    through the name-indexed ``non_normal_tissue`` mask.
+
+    The calls were decoded from the lossless raster embedded in :cite:`SiFit`
+    Supplementary Figure S4a. The extraction reproduces the paper's 9.4% missing
+    rate and 1,847 four-gamete violations among all 2,926 mutation pairs.
     """
-    # adata = scp.io.read(scp.ul.get_file("scphylo.datasets/real/colorectal3.h5ad"))
-    # TODO: extract
-    return None
+    adata = scp.io.read(scp.ul.get_file("scphylo.datasets/real/colorectal3.h5ad"))
+    return adata
 
 
 def acute_lymphocytic_leukemia1():

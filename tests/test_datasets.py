@@ -110,6 +110,85 @@ class TestDatasets:
             .all()
         )
 
+    def test_colorectal3_complete_matrix_and_subset(self):
+        """Verify the full SiFit input and historical 48-cell view."""
+        adata = scp.datasets.colorectal3()
+
+        assert adata.shape == (61, 77)
+        assert adata.obs_names.tolist() == (
+            [f"c{i}" for i in range(1, 36)]
+            + [f"ap{i}" for i in range(1, 14)]
+            + [f"n{i}" for i in range(1, 14)]
+        )
+        assert adata.var_names.tolist() == [f"mutation_{i}" for i in range(1, 78)]
+        np.testing.assert_array_equal(adata.var["sifit_index"], np.arange(1, 78))
+        assert adata.obs_names.is_unique
+        assert adata.var_names.is_unique
+
+        values, counts = np.unique(adata.X, return_counts=True)
+        assert dict(zip(values, counts, strict=True)) == {0: 2867, 1: 1388, 3: 442}
+        matrix_hash = hashlib.sha256(
+            np.asarray(adata.X, dtype=np.int8).tobytes(order="C")
+        ).hexdigest()
+        assert (
+            matrix_hash
+            == "b57bff2721e598facc04e0a628846a343dc94a2cb486458f6c08ee91859701cd"
+        )
+
+        assert adata.obs["source_tissue"].value_counts(sort=False).to_dict() == {
+            "cancer_biopsy": 35,
+            "adenomatous_polyp": 13,
+            "matched_normal_colorectal": 13,
+        }
+        non_normal = adata.obs["non_normal_tissue"].to_numpy()
+        assert non_normal.sum() == 48
+        assert adata.obs_names[non_normal].tolist() == (
+            [f"c{i}" for i in range(1, 36)] + [f"ap{i}" for i in range(1, 14)]
+        )
+
+        historical = np.asarray(adata[non_normal].X, dtype=np.int8)
+        values, counts = np.unique(historical, return_counts=True)
+        assert dict(zip(values, counts, strict=True)) == {0: 1996, 1: 1387, 3: 313}
+        assert (
+            hashlib.sha256(historical.tobytes(order="C")).hexdigest()
+            == "bda1fb67cea6789754c3478ca79dd274442df23b8cbe61c82a631b4c3b1d119a"
+        )
+        derivative = adata.uns["non_normal_tissue_48"]
+        assert (
+            derivative["obs_names"].astype(str).tolist()
+            == adata.obs_names[non_normal].tolist()
+        )
+        assert "SiFit Figure 5 itself used all 61 cells" in derivative["relationship"]
+
+        four_gamete_violations = 0
+        for first in range(adata.n_vars):
+            for second in range(first + 1, adata.n_vars):
+                pair = np.asarray(adata.X[:, [first, second]], dtype=np.int8)
+                pair = pair[(pair != 3).all(axis=1)]
+                observed = {tuple(row) for row in pair}
+                four_gamete_violations += len(observed) == 4
+        assert four_gamete_violations == 1847
+
+        provenance = adata.uns["provenance"]
+        assert (
+            provenance["wu_fig3a"]["figure_sha256"]
+            == "661cf7b640139c7c0b506c42011434730dc5e8ca7e8038e91ace651c88af8690"
+        )
+        assert (
+            provenance["sifit_fig5"]["supplement_pdf_sha256"]
+            == "019015b66bf82757fc1c1bf0d23e5b1bb4c625c49ccfbc7dd75205d53ab2a865"
+        )
+        assert (
+            provenance["sifit_fig5"]["embedded_image_sha256"]
+            == "b0214a5f8e02d1d5fd3f6ed7b3f32c9bb1742a4cad1190e65344fc95f2da0219"
+        )
+        assert provenance["sifit_fig5"]["missing_entries"] == 442
+        assert provenance["sifit_fig5"]["four_gamete_violations"] == 1847
+        assert (
+            provenance["sifit_archive"]["runner_sha256"]
+            == "33dcaa43b18eb5e4edf1a88cc3135df277fdfdc01cc14b76213541709e6188d4"
+        )
+
     def test_acute_lymphocytic_leukemia2_variants(self):
         """Verify the full ALL2 input and historical PhISCS derivative."""
         adata = scp.datasets.acute_lymphocytic_leukemia2()
@@ -441,7 +520,8 @@ class TestDatasets:
         assert adata.shape == (178, 16)
         adata = scp.datasets.colorectal2()
         assert adata.shape == (182, 36)
-        # adata = scp.datasets.colorectal3()
+        adata = scp.datasets.colorectal3()
+        assert adata.shape == (61, 77)
         adata = scp.datasets.erbc()
         assert adata.shape == (47, 40)
         adata = scp.datasets.high_grade_serous_ovarian_cancer_3celllines()
