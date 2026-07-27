@@ -7,7 +7,7 @@ import scphylo as scp
 
 def is_paired(indir):
     """Describe FASTQ samples and whether they contain paired reads."""
-    files = glob.glob(f"{indir}/*.fastq.gz")
+    files = sorted(glob.glob(f"{indir}/*.fastq.gz"))
     last_char_set = {x.removesuffix(".fastq.gz")[-2:] for x in files}
     temp = []
     if last_char_set == {"_1", "_2"}:

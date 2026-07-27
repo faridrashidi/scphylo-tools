@@ -21,6 +21,7 @@ import pytest
 import scphylo as scp
 import scphylo.io._genotype as genotype_io
 import scphylo.logging._logging as logging_impl
+import scphylo.ul._caller as caller
 import scphylo.ul._external as external
 import scphylo.ul._servers as servers
 import scphylo.ul._trees as tree_utils
@@ -444,17 +445,24 @@ def test_sample_discovery_and_command_file_generation(tmp_path, monkeypatch):
     """Cover paired-read discovery and local and Biowulf command generation."""
     paired = tmp_path / "paired"
     paired.mkdir()
-    for name in [
+    fastq_paths = [
         "one_1.fastq.gz",
         "one_2.fastq.gz",
         "two_1.fastq.gz",
         "two_2.fastq.gz",
-    ]:
-        (paired / name).touch()
-    assert scp.ul.is_paired(paired) == [
-        {"sample": "one", "is_paired": True},
-        {"sample": "two", "is_paired": True},
     ]
+    for name in fastq_paths:
+        (paired / name).touch()
+    with monkeypatch.context() as patcher:
+        patcher.setattr(
+            caller.glob,
+            "glob",
+            lambda _: [str(paired / name) for name in reversed(fastq_paths)],
+        )
+        assert scp.ul.is_paired(paired) == [
+            {"sample": "one", "is_paired": True},
+            {"sample": "two", "is_paired": True},
+        ]
 
     single = tmp_path / "single"
     single.mkdir()
