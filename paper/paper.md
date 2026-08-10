@@ -51,29 +51,25 @@ Several tools exist for tumor phylogeny inference, but none provide the unified 
 
 # Software Design
 
-`scphylo-tools` follows a modular architecture inspired by established bioinformatics packages like SCANPY. The design philosophy prioritizes:
+`scphylo-tools` follows a modular architecture inspired by SCANPY. Modules mirror the analysis workflow: `io` (genotype and tree I/O, VCF export), `pp` (filtering of binary and read-count matrices, node collapsing, subsampling), `tl` (solvers, tree-comparison scores, consensus trees, partition functions, ancestral-state reconstruction), `pl` (tree rendering and genotype heatmaps), `ul` (utilities), and `datasets`. A `scphylo` console script exposes the same operations to shell users and workflow managers.
 
-**Modular Organization**: The package is organized into functional modules (`io`, `pp`, `tl`, `pl`, `ul`, `datasets`) that mirror the phylogenetic analysis workflow. This separation allows users to engage only with the components relevant to their needs.
+A single data model spans the package: genotype matrices are pandas `DataFrames` encoding presence, absence, and missing entries; read counts are AnnData objects; trees are NetworkX `DiGraph` objects. Over twenty solvers share the call shape `scp.tl.<method>(df_input, ...)` and return a conflict-free matrix, so switching methods is a one-line change; serialization, execution, parsing, and logging are internal. The ten tree-comparison metrics take the same two arguments, reducing a benchmark to a short loop.
 
-**Consistent Abstractions**: All solver wrappers expose a uniform interface, handling input formatting, binary execution, and output parsing internally. Trees are represented as NetworkX `DiGraph` objects, enabling interoperability with the broader Python ecosystem.
+To remove the main installation barrier, performance-critical C++ codebases (SCITE, ScisTree, MLTD, and the partition-function sampler) are vendored, compiled as Cython extensions, and shipped as prebuilt wheels. Non-redistributable tools stay optional, located by one resolution layer (explicit path, `SCPHYLO_TOOLS_DIR`, `scphylo.settings.tools_dir`, `PATH`) raising typed exceptions that name the missing artifact and how to supply it. Heavy optional dependencies (Gurobi, rpy2, graph-tool, Graphviz) load lazily.
 
-**Extensibility**: New inference methods can be added by implementing a standard wrapper interface, making the package straightforward to extend as new algorithms emerge.
-
-**Reproducibility**: The `datasets` module provides versioned access to published datasets, and the simulation engine enables controlled generation of synthetic data with known ground truths for algorithm validation.
-
-Key implementation decisions include using pandas DataFrames for genotype matrices (facilitating data manipulation), NetworkX for tree structures (enabling standard graph algorithms), and Matplotlib/Graphviz for visualization (providing publication-quality outputs).
+Adding a method requires one module under `tl/solver` and no changes elsewhere, as with the existing wrappers. For validation, `datasets` retrieves published SCS datasets by identifier and the simulation engine generates ground-truth genotypes under configurable false-positive, false-negative, missing-value, and doublet noise.
 
 # Research Impact Statement
 
-`scphylo-tools` has supported several published studies by providing unified access to the standalone Trisicell application:
+`scphylo-tools` has enabled published research in three ways.
 
-- Analysis of melanoma subclonal evolution and immunotherapy resistance mechanisms [@Gruen_2023]
-- Development of the Trisicell-PartF algorithm for evaluating inferred subclonal structures [@Trisicell-PartF]
-- Investigation of expressed mutation profiles in single cells [@Trisicell-Boost]
-- Metastatic migration pattern analysis using single-cell methylation sequencing [@Liu_2025; @Sgootr]
-- Stochastic modeling of gene expression adaptation in tumor evolution [@Hirsch_2025]
+First, it provided the interface through which Trisicell and ScisTree were applied to build tumor phylogenies. These reconstructions underpinned the analysis of clonal sublines that uncovered heterogeneity-driven immunotherapy resistance in melanoma [@Gruen_2023], the comparison of genomic and epigenomic evolutionary trajectories in long-read sequencing of single cell-derived subclones [@Liu_2025], the stochastic modeling that quantified the non-genomic contribution to subclone evolution [@Hirsch_2025], and the recovery of metastatic migration histories from single-cell methylation sequencing [@Sgootr].
 
-The package is available on PyPI. Documentation and tutorials are hosted on Read the Docs, providing comprehensive guidance for new users.
+Second, it supported the identification of expressed mutation profiles in single cells, which revealed subclonal expansion patterns and the therapeutic impact of intratumor heterogeneity [@Trisicell-Boost].
+
+Third, its uniform solver interface, simulation engine, and tree-comparison metrics were used to benchmark competing inference methods on common inputs during the evaluation of HUNTRESS [@HUNTRESS].
+
+The package therefore serves as both the analysis layer for biological studies and the comparison harness for methods development. It is distributed on PyPI with source on GitHub and documentation on Read the Docs.
 
 # AI Usage Disclosure
 
