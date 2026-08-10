@@ -1,110 +1,98 @@
-[build-system]
-requires = ["setuptools>=61.0", "setuptools_scm>=8.0", "wheel"]
-build-backend = "setuptools.build_meta"
-
 [project]
 name = "scphylo-tools"
 version = "0.1.0"
 description = "A python toolkit for single-cell tumor phylogenetic analysis"
+readme = "README.rst"
 requires-python = ">=3.11"
-dependencies = [
-    "anndata",
-    "apted",
-    "biopython",
-    "click",
-    "cyvcf2",
-    "ete3",
-    "graphviz",
-    "ipython",
-    "joblib",
-    "legacy-cgi; python_version >= '3.13'",
-    "matplotlib",
-    "natsort",
-    "networkx",
-    "numba",
-    "numpy",
-    "pandas",
-    "pybnb",
-    "pydot<2.0.0",
-    "python_sat",
-    "pyyaml",
-    "scikit_learn",
-    "scipy",
-    "seaborn",
-    "termcolor",
-    "tqdm",
-]
+license = "BSD-3-Clause"
 authors = [{ name = "Farid Rashidi", email = "farid.rsh@gmail.com" }]
 maintainers = [{ name = "Farid Rashidi", email = "farid.rsh@gmail.com" }]
-license = { text = "BSD-3-Clause" }
-readme = "README.rst"
+keywords = ["single cell", "tools", "tumor phylogeny"]
 classifiers = [
-    "Development Status :: 5 - Production/Stable",
-    "Intended Audience :: Developers",
-    "Intended Audience :: Science/Research",
-    "Natural Language :: English",
-    "Framework :: Jupyter",
-    "Operating System :: MacOS :: MacOS X",
-    "Operating System :: Microsoft :: Windows",
-    "Operating System :: POSIX :: Linux",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
-    "Topic :: Scientific/Engineering :: Bio-Informatics",
-    "Topic :: Scientific/Engineering :: Visualization",
+  "Development Status :: 5 - Production/Stable",
+  "Framework :: Jupyter",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
+  "Natural Language :: English",
+  "Operating System :: MacOS :: MacOS X",
+  "Operating System :: Microsoft :: Windows",
+  "Operating System :: POSIX :: Linux",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Scientific/Engineering :: Bio-Informatics",
+  "Topic :: Scientific/Engineering :: Visualization",
 ]
-keywords = ["tumor phylogeny", "single cell", "tools"]
+dependencies = [
+  "anndata",
+  "apted",
+  "biopython",
+  "click",
+  "cyvcf2",
+  "ete3",
+  "graphviz",
+  "ipython",
+  "joblib",
+  "legacy-cgi; python_version >= '3.13'",
+  "matplotlib",
+  "natsort",
+  "networkx",
+  "numba",
+  "numpy",
+  "pandas",
+  "pybnb",
+  "pydot<2.0.0",
+  "python_sat",
+  "pyyaml",
+  "scikit_learn",
+  "scipy",
+  "seaborn",
+  "termcolor",
+  "tqdm",
+]
 
 [project.urls]
-Homepage = "https://github.com/faridrashidi/scphylo-tools"
 Documentation = "https://scphylo-tools.readthedocs.io/en/latest"
-"Source Code" = "https://github.com/faridrashidi/scphylo-tools"
 Download = "https://github.com/faridrashidi/scphylo-tools"
+Homepage = "https://github.com/faridrashidi/scphylo-tools"
+"Source Code" = "https://github.com/faridrashidi/scphylo-tools"
 
 [project.scripts]
 scphylo = "scphylo.commands._cli:cli"
 
 [project.optional-dependencies]
 dev = [
-    "pre-commit",
-    "pytest-cov",
-    "pytest-xdist",
-    "bump-my-version",
-    "ipykernel",
+  "pre-commit",
+  "pytest-cov",
+  "pytest-xdist",
+  "bump-my-version",
+  "ipykernel",
 ]
 docs = [
-    "furo",
-    "ipython",
-    "memory_profiler",
-    "nbsphinx",
-    "nbsphinx-link",
-    "pydata_sphinx_theme",
-    "pyenchant",
-    "pypandoc",
-    "sphinx<6",
-    "sphinx-autodoc-typehints",
-    "sphinx-click",
-    "sphinx-paramlinks",
-    "sphinx_copybutton",
-    "sphinx_gallery",
-    "sphinx_rtd_theme",
-    "sphinxcontrib-bibtex",
-    "truststore",
-    "typing_extensions",
+  "furo",
+  "ipython",
+  "memory_profiler",
+  "nbsphinx",
+  "nbsphinx-link",
+  "pydata_sphinx_theme",
+  "pyenchant",
+  "pypandoc",
+  "sphinx<6",
+  "sphinx-autodoc-typehints",
+  "sphinx-click",
+  "sphinx-paramlinks",
+  "sphinx_copybutton",
+  "sphinx_gallery",
+  "sphinx_rtd_theme",
+  "sphinxcontrib-bibtex",
+  "truststore",
+  "typing_extensions",
 ]
 
-[tool.setuptools]
-include-package-data = true
-
-[tool.setuptools.packages.find]
-where = ["src"]
-
-[tool.setuptools_scm]
-
-[tool.cibuildwheel]
-# Publish wheels only for the CPython versions covered by the locked CI matrix.
-build = "cp31{1,2,3}-*"
+[build-system]
+requires = ["setuptools>=77.0", "setuptools_scm>=8.0", "wheel"]
+build-backend = "setuptools.build_meta"
 
 [tool.bumpversion]
 current_version = "0.1.0"
@@ -127,58 +115,9 @@ filename = "src/scphylo/__init__.py"
 search = '__version__ = "{current_version}"'
 replace = '__version__ = "{new_version}"'
 
-[tool.ruff]
-line-length = 88
-target-version = "py311"
-
-[tool.ruff.format]
-docstring-code-format = true
-
-[tool.ruff.lint]
-explicit-preview-rules = true
-preview = true
-select = [
-    "B",
-    "BLE",
-    "C4",
-    "D",
-    "E4",
-    "E7",
-    "E9",
-    "E501",
-    "F",
-    "I",
-    "PGH004",
-    "PYI033",
-    "RUF100",
-    "S307",
-    "TID",
-    "UP",
-    "W605",
-]
-
-[tool.ruff.lint.pydocstyle]
-convention = "numpy"
-
-[tool.ty.src]
-include = ["src", "tests", "examples"]
-
-# The existing codebase is largely untyped. Keep its current diagnostic
-# categories visible as warnings while allowing new categories to block commits.
-[tool.ty.rules]
-invalid-argument-type = "warn"
-invalid-assignment = "warn"
-no-matching-overload = "warn"
-not-subscriptable = "warn"
-parameter-already-assigned = "warn"
-too-many-positional-arguments = "warn"
-unresolved-attribute = "warn"
-unresolved-import = "warn"
-unsupported-operator = "warn"
-
-[tool.ty.terminal]
-error-on-warning = false
-output-format = "concise"
+[tool.cibuildwheel]
+# Publish wheels only for the CPython versions covered by the locked CI matrix.
+build = "cp31{1,2,3}-*"
 
 [tool.pixi.workspace]
 channels = ["conda-forge", "bioconda"]
@@ -186,7 +125,10 @@ platforms = ["linux-64", "osx-64", "osx-arm64"]
 requires-pixi = ">=0.73.0,<0.74"
 
 [tool.pixi.workspace.conda-pypi-map]
+# SchemaStore's Pixi schema predates rich mapping configurations from Pixi 0.71.
+# tombi: lint.rules.type-mismatch.disabled = true
 conda-forge = { location = "https://raw.githubusercontent.com/prefix-dev/parselmouth/main/files/compressed_mapping.json", mapping-mode = "replace" }
+# tombi: lint.rules.type-mismatch.disabled = true
 bioconda = { mapping = { cyvcf2 = "cyvcf2" }, mapping-mode = "replace", same-name-heuristic = false }
 
 # Prefer pre-built conda packages for the Python runtime dependencies that are
@@ -194,7 +136,7 @@ bioconda = { mapping = { cyvcf2 = "cyvcf2" }, mapping-mode = "replace", same-nam
 [tool.pixi.dependencies]
 python = ">=3.11,<3.14"
 cxx-compiler = "*"
-setuptools = ">=61"
+setuptools = ">=77"
 setuptools-scm = ">=8"
 wheel = "*"
 anndata = "*"
@@ -239,9 +181,6 @@ bioconductor-graph = "*"
 graph-tool = ">=2.98,<3"
 mpi4py = "*"
 
-[tool.pixi.pypi-dependencies]
-scphylo-tools = { path = ".", editable = true }
-
 [tool.pixi.feature.dev.dependencies]
 cython = "*"
 pre-commit = "*"
@@ -275,6 +214,9 @@ python = "3.12.*"
 [tool.pixi.feature.py313.dependencies]
 python = "3.13.*"
 
+[tool.pixi.pypi-dependencies]
+scphylo-tools = { path = ".", editable = true }
+
 [tool.pixi.environments]
 default = { features = ["dev", "plotting", "solvers"], solve-group = "default" }
 lint = { features = ["dev", "py311"], solve-group = "py311" }
@@ -289,7 +231,9 @@ lint = { cmd = "pre-commit run --all-files", default-environment = "lint" }
 test = { cmd = "pytest --cov=scphylo --cov-report=html tests", default-environment = "default" }
 test-plotting = { cmd = "pytest tests/test_pl.py", default-environment = "default" }
 docs = { cmd = "sphinx-build -M html docs/source docs/build -W --keep-going", default-environment = "docs" }
-docs-serve = { cmd = "python -m http.server 8080", cwd = "docs/build/html", depends-on = ["docs"], default-environment = "docs" }
+docs-serve = { cmd = "python -m http.server 8080", cwd = "docs/build/html", depends-on = [
+  "docs"
+], default-environment = "docs" }
 pre-commit-install = { cmd = "pre-commit install --hook-type pre-commit --hook-type pre-push", default-environment = "default" }
 cythonize = { cmd = "python setup.py build_ext --inplace", env = { CYTHONIZE = "1" }, default-environment = "default" }
 _clean-dist = "rm -rf dist build"
@@ -297,3 +241,64 @@ build = { cmd = "python -m build", depends-on = ["_clean-dist"], default-environ
 check-dist = { cmd = "twine check dist/*", depends-on = ["build"], default-environment = "default" }
 package = { depends-on = ["check-dist"] }
 release = { cmd = "bump-my-version bump {{ part }}", args = [{ arg = "part" }], default-environment = "default" }
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[tool.ruff.lint]
+explicit-preview-rules = true
+preview = true
+select = [
+  "B",
+  "BLE",
+  "C4",
+  "D",
+  "E4",
+  "E7",
+  "E9",
+  "E501",
+  "F",
+  "I",
+  "PGH004",
+  "PYI033",
+  "RUF100",
+  "S307",
+  "TID",
+  "UP",
+  "W605",
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools_scm]
+
+[tool.ty.src]
+include = ["src", "tests", "examples"]
+
+# The existing codebase is largely untyped. Keep its current diagnostic
+# categories visible as warnings while allowing new categories to block commits.
+[tool.ty.rules]
+invalid-argument-type = "warn"
+invalid-assignment = "warn"
+no-matching-overload = "warn"
+not-subscriptable = "warn"
+parameter-already-assigned = "warn"
+too-many-positional-arguments = "warn"
+unresolved-attribute = "warn"
+unresolved-import = "warn"
+unsupported-operator = "warn"
+
+[tool.ty.terminal]
+error-on-warning = false
+output-format = "concise"
