@@ -1,0 +1,12 @@
+{
+  "title": "scphylo-tools: A Python toolkit for single-cell tumor phylogenetic analysis",
+  "upload_type": "software",
+  "creators": [
+    {
+      "name": "Mehrabadi, Farid Rashidi",
+      "orcid": "0000-0003-4103-4904",
+      "affiliation": "Laboratory of Human Carcinogenesis, Center for Cancer Research, National Cancer Institute, National Institutes of Health, Bethesda, MD, United States of America"
+    }
+  ],
+  "license": "BSD-3-Clause"
+}
