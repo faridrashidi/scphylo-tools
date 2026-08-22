@@ -122,7 +122,7 @@ build = "cp31{1,2,3}-*"
 [tool.pixi.workspace]
 channels = ["conda-forge", "bioconda"]
 platforms = ["linux-64", "osx-64", "osx-arm64"]
-requires-pixi = ">=0.73.0,<0.74"
+requires-pixi = ">=0.73.0"
 
 [tool.pixi.workspace.conda-pypi-map]
 # SchemaStore's Pixi schema predates rich mapping configurations from Pixi 0.71.
@@ -231,9 +231,7 @@ lint = { cmd = "pre-commit run --all-files", default-environment = "lint" }
 test = { cmd = "pytest --cov=scphylo --cov-report=html tests", default-environment = "default" }
 test-plotting = { cmd = "pytest tests/test_pl.py", default-environment = "default" }
 docs = { cmd = "sphinx-build -M html docs/source docs/build -W --keep-going", default-environment = "docs" }
-docs-serve = { cmd = "python -m http.server 8080", cwd = "docs/build/html", depends-on = [
-  "docs"
-], default-environment = "docs" }
+docs-serve = { cmd = "python -m http.server 8080", cwd = "docs/build/html", depends-on = ["docs"], default-environment = "docs" }
 pre-commit-install = { cmd = "pre-commit install --hook-type pre-commit --hook-type pre-push", default-environment = "default" }
 cythonize = { cmd = "python setup.py build_ext --inplace", env = { CYTHONIZE = "1" }, default-environment = "default" }
 _clean-dist = "rm -rf dist build"
