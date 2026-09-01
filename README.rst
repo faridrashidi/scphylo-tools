@@ -4,9 +4,14 @@
 scphylo-tools: a python toolkit for single-cell tumor phylogenetic analysis
 ===========================================================================
 
-.. image:: https://raw.githubusercontent.com/faridrashidi/scphylo-tools/main/docs/source/_static/images/overview.png
+.. image:: https://raw.githubusercontent.com/faridrashidi/scphylo-tools/main/docs/source/_static/images/overview-light.png#gh-light-mode-only
    :target: https://github.com/faridrashidi/scphylo-tools
-   :alt: overview
+   :alt: Overview of scphylo-tools in light mode
+   :align: center
+
+.. image:: https://raw.githubusercontent.com/faridrashidi/scphylo-tools/main/docs/source/_static/images/overview-dark.png#gh-dark-mode-only
+   :target: https://github.com/faridrashidi/scphylo-tools
+   :alt: Overview of scphylo-tools in dark mode
    :align: center
 
 **scphylo-tools** is a comprehensive Python toolkit designed for single-cell tumor
