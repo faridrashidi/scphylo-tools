@@ -4,15 +4,11 @@
 scphylo-tools: a python toolkit for single-cell tumor phylogenetic analysis
 ===========================================================================
 
-.. image:: https://raw.githubusercontent.com/faridrashidi/scphylo-tools/main/docs/source/_static/images/overview-light.png#gh-light-mode-only
+.. image:: https://raw.githubusercontent.com/faridrashidi/scphylo-tools/main/docs/source/_static/images/overview.png
    :target: https://github.com/faridrashidi/scphylo-tools
-   :alt: Overview of scphylo-tools in light mode
+   :alt: Overview of scphylo-tools
    :align: center
-
-.. image:: https://raw.githubusercontent.com/faridrashidi/scphylo-tools/main/docs/source/_static/images/overview-dark.png#gh-dark-mode-only
-   :target: https://github.com/faridrashidi/scphylo-tools
-   :alt: Overview of scphylo-tools in dark mode
-   :align: center
+   :class: overview-image
 
 **scphylo-tools** is a comprehensive Python toolkit designed for single-cell tumor
 phylogenetic analysis. It integrates efficient implementations of state-of-the-art
@@ -85,7 +81,7 @@ If you use **scphylo-tools** in your research, please cite the following article
       url = {https://joss.theoj.org/papers/10.21105/joss.10589}
     }
 
-For machine-readable citation metadata, see `CITATION.cff <CITATION.cff>`_.
+For machine-readable citation metadata, see `CITATION.cff <https://github.com/faridrashidi/scphylo-tools/blob/main/CITATION.cff>`_.
 
 .. |Tests| image:: https://img.shields.io/github/actions/workflow/status/faridrashidi/scphylo-tools/ci.yml?branch=main&logo=github&logoColor=white&style=flat-square&label=tests&labelColor=000000&cacheSeconds=0
     :target: https://github.com/faridrashidi/scphylo-tools/actions/workflows/ci.yml

@@ -9,6 +9,10 @@ dt:target, span.highlighted {
     background-color: #f0f0f0;
 }
 
+img.overview-image {
+    background-color: #fff;
+}
+
 code.docutils.literal.notranslate.xref, a code {
     background: transparent;
     font-weight: bold;

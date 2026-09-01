@@ -1,7 +1,7 @@
 Documentation
 =============
 
-.. include:: ../../README.rst
+.. include:: readme.rst
 
 .. toctree::
    :maxdepth: 1

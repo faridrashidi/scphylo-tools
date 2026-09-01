@@ -2,7 +2,6 @@
 
 import os
 import sys
-from pathlib import Path
 
 from setuptools import find_packages, setup
 from setuptools.extension import Extension
@@ -120,7 +119,7 @@ if __name__ == "__main__":
     setup(
         name="scphylo-tools",
         ext_modules=extensions,
-        description=Path("README.rst").read_text("utf-8").split("\n")[3],
+        description="A python toolkit for single-cell tumor phylogenetic analysis",
         package_dir={"": "src"},
         packages=find_packages(where="src"),
     )

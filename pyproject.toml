@@ -2,7 +2,7 @@
 name = "scphylo-tools"
 version = "0.1.1"
 description = "A python toolkit for single-cell tumor phylogenetic analysis"
-readme = "README.rst"
+readme = "docs/source/readme.rst"
 requires-python = ">=3.11"
 license = "BSD-3-Clause"
 authors = [{ name = "Farid Rashidi", email = "farid.rsh@gmail.com" }]

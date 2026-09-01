@@ -1,0 +1,75 @@
+[![Tests](https://img.shields.io/github/actions/workflow/status/faridrashidi/scphylo-tools/ci.yml?branch=main&logo=github&logoColor=white&style=flat-square&label=tests&labelColor=000000&cacheSeconds=0)](https://github.com/faridrashidi/scphylo-tools/actions/workflows/ci.yml) [![Docs](https://img.shields.io/website?url=https%3A%2F%2Fscphylo-tools.readthedocs.io%2F&up_message=online&down_message=offline&logo=readthedocs&logoColor=white&style=flat-square&label=docs&labelColor=000000&cacheSeconds=0)](https://scphylo-tools.readthedocs.io/) [![PyPI](https://img.shields.io/pypi/v/scphylo-tools?logo=pypi&logoColor=white&style=flat-square&labelColor=000000&cacheSeconds=0)](https://pypi.org/project/scphylo-tools/) [![Python Version](https://img.shields.io/pypi/pyversions/scphylo-tools?logo=python&logoColor=white&style=flat-square&labelColor=000000&cacheSeconds=0)](https://pypi.org/project/scphylo-tools/) [![License](https://img.shields.io/pypi/l/scphylo-tools?logo=creativecommons&logoColor=white&style=flat-square&labelColor=000000&color=blueviolet&cacheSeconds=0)](https://github.com/faridrashidi/scphylo-tools/blob/main/LICENSE.md)
+
+# scphylo-tools: a python toolkit for single-cell tumor phylogenetic analysis
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/faridrashidi/scphylo-tools/main/docs/source/_static/images/overview-dark.png">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/faridrashidi/scphylo-tools/main/docs/source/_static/images/overview-light.png">
+  <img alt="Overview of scphylo-tools" src="https://raw.githubusercontent.com/faridrashidi/scphylo-tools/main/docs/source/_static/images/overview-light.png">
+</picture>
+
+**scphylo-tools** is a comprehensive Python toolkit designed for single-cell tumor
+phylogenetic analysis. It integrates efficient implementations of state-of-the-art
+methods to infer evolutionary trees from single-cell genotype data.
+
+## Features
+
+- **Phylogenetic Inference**: Wrappers and implementations for state-of-the-art
+  inference methods.
+- **API & CLI**: Provides a Python API as well as command-line tools.
+- **Visualization**: Built-in visualization tools.
+- **Datasets**: Access to available datasets.
+- **Ease of Use**: A unified Python interface for complex phylogenetic workflows.
+
+## Installation
+
+Install the Python package from PyPI:
+
+```bash
+pip install scphylo-tools
+```
+
+For development and the complete native stack, use
+[Pixi](https://pixi.prefix.dev/latest/installation/). Pixi installs Python together
+with Graphviz, R, `rpy2`, `ggtree`, `ggtreeExtra`, `graph-tool`, and MPI from the
+lockfile:
+
+```bash
+git clone https://github.com/faridrashidi/scphylo-tools
+cd scphylo-tools
+pixi install --locked
+pixi run test
+```
+
+The locked Pixi environments support Linux and macOS. On Windows, use WSL for
+the complete native and R plotting stack.
+
+The regular PyPI wheel and source distribution remain available for users who
+only need the Python package. See the
+[installation guide](https://scphylo-tools.readthedocs.io/en/latest/installation.html)
+for the complete development environment and plotting details.
+
+## Documentation
+
+Detailed documentation and tutorials are available at
+[Read the Docs](https://scphylo-tools.readthedocs.io).
+
+## Citation
+
+If you use **scphylo-tools** in your research, please cite the following article:
+
+```bibtex
+@article{Mehrabadi2026,
+  author = {Mehrabadi, Farid Rashidi},
+  title = {scphylo-tools: A Python toolkit for single-cell tumor phylogenetic analysis},
+  journal = {Journal of Open Source Software},
+  year = {2026},
+  volume = {11},
+  number = {125},
+  pages = {10589},
+  doi = {10.21105/joss.10589},
+  url = {https://joss.theoj.org/papers/10.21105/joss.10589}
+}
+```
+
+For machine-readable citation metadata, see [CITATION.cff](CITATION.cff).
