@@ -61,6 +61,27 @@ Documentation
 
 Detailed documentation and tutorials are available at `Read the Docs <https://scphylo-tools.readthedocs.io>`_.
 
+Citation
+--------
+
+If you use **scphylo-tools** in your research, please cite the following article:
+
+.. code-block:: bibtex
+
+    @article{Mehrabadi2026,
+      author = {Mehrabadi, Farid Rashidi},
+      title = {scphylo-tools: A Python toolkit for single-cell tumor phylogenetic analysis},
+      journal = {Journal of Open Source Software},
+      year = {2026},
+      volume = {11},
+      number = {125},
+      pages = {10589},
+      doi = {10.21105/joss.10589},
+      url = {https://joss.theoj.org/papers/10.21105/joss.10589}
+    }
+
+For machine-readable citation metadata, see `CITATION.cff <CITATION.cff>`_.
+
 .. |Tests| image:: https://img.shields.io/github/actions/workflow/status/faridrashidi/scphylo-tools/ci.yml?branch=main&logo=github&logoColor=white&style=flat-square&label=tests&labelColor=000000&cacheSeconds=0
     :target: https://github.com/faridrashidi/scphylo-tools/actions/workflows/ci.yml
     :alt: Tests
