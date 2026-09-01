@@ -1,0 +1,28 @@
+cff-version: "1.2.0"
+authors:
+  - family-names: Mehrabadi
+    given-names: Farid Rashidi
+    orcid: "https://orcid.org/0000-0003-4103-4904"
+doi: 10.5281/zenodo.22051975
+message: If you use this software, please cite our article in the
+  Journal of Open Source Software.
+preferred-citation:
+  authors:
+    - family-names: Mehrabadi
+      given-names: Farid Rashidi
+      orcid: "https://orcid.org/0000-0003-4103-4904"
+  date-published: 2026-09-01
+  doi: 10.21105/joss.10589
+  issn: 2475-9066
+  issue: 125
+  journal: Journal of Open Source Software
+  publisher:
+    name: Open Journals
+  start: 10589
+  title: "scphylo-tools: A Python toolkit for single-cell tumor
+    phylogenetic analysis"
+  type: article
+  url: "https://joss.theoj.org/papers/10.21105/joss.10589"
+  volume: 11
+title: "scphylo-tools: A Python toolkit for single-cell tumor
+  phylogenetic analysis"
